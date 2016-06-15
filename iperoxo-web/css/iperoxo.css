@@ -1,0 +1,97 @@
+/* ---------------------------------------------- */
+/*
+    Copyright (C) 2016 José Flávio de Souza Dias Júnior
+    This file is part of Ipê-roxo - <http://www.joseflavio.com/iperoxo/>.
+*/
+/* ---------------------------------------------- */
+
+@font-face {
+    font-family: "Cantarell";
+    src: url("../fonts/Cantarell/Cantarell-Regular.ttf") format("truetype");
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "Cantarell";
+    src: url("../fonts/Cantarell/Cantarell-Bold.ttf") format("truetype");
+    font-weight: bold;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "Cantarell";
+    src: url("../fonts/Cantarell/Cantarell-Italic.ttf") format("truetype");
+    font-weight: normal;
+    font-style: italic;
+}
+
+/* ---------------------------------------------- */
+
+@keyframes aparecimento {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+@keyframes desaparecimento {
+    from { opacity: 1; }
+    to   { opacity: 0; }
+}
+
+.alert {
+    animation-name: aparecimento;
+    animation-duration: 0.5s;
+}
+
+/* ---------------------------------------------- */
+
+.tamanho_flexivel {
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+@media (min-width: 800px) {
+    .tamanho_flexivel {
+        padding-right: 15vw;
+        padding-left: 15vw;
+    }
+}
+
+/* ---------------------------------------------- */
+
+.tamanho_cheio {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    overflow: visible;
+}
+
+/* ---------------------------------------------- */
+
+.logotipo {
+    width: 32px;
+    height: 32px;
+    margin-top: -7px;
+}
+
+.tela_titulo {
+    text-align: center;
+}
+
+/* ---------------------------------------------- */
+
+img.bandeira_linguagem {
+    width: 24px;
+    padding-top: 12px;
+}
+
+img.bandeira_linguagem:hover {
+    width: 32px;
+    padding-top: 8px;
+}
+
+/* ---------------------------------------------- */

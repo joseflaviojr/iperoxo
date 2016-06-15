@@ -1,0 +1,73 @@
+<!-- 
+Copyright (C) 2016 José Flávio de Souza Dias Júnior
+This file is part of Ipê-roxo - <http://www.joseflavio.com/iperoxo/>.
+ -->
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <title>&nbsp;</title>
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/bootstrap-theme.min.css" rel="stylesheet">
+    <link href="../css/jasny-bootstrap.min.css" rel="stylesheet">
+    <link href="../css/iperoxo.css" rel="stylesheet">
+  </head>
+
+  <body>
+
+    <!-- Tela a ser importada pelo Ipê-roxo, no processo de abertura. -->
+    <div class="tela tamanho_flexivel hidden" id="" funcInicio="inicioTela">
+
+      <!-- Título da tela -->
+      <h3 class="tela_titulo texto_dinamico" chave="tela_exemplo_titulo">TELA</h3>
+
+      <!-- Formulário para encaminhamento através de Uxi-amarelo. -->
+      <form class="uxiamarelo_form" action="/uxiamarelo/servlet/solicitar" method="post" role="form" funcInicio="" funcPreEnvio="" funcExito="mensagensCopaiba" funcErro="mensagemErroUxiamarelo">
+
+        <!-- Mensagens -->
+        <div class="mensagens">
+        </div>
+        
+        <!-- Especificação da Copaíba, classe e método a ser executado remotamente. -->
+        <input type="hidden" name="copaiba" value="copaiba@com.joseflavio.iperoxo.Exemplo@executar">
+
+        <!-- Identificador da sessão. Atualização automática. -->
+        <input class="sid" type="hidden" name="sid" value="">
+
+        <!-- Identificador da tela corrente. Atualização automática. -->
+        <input class="tid" type="hidden" name="tid" value="">
+
+        <!-- Linguagem do usuário. Atualização automática. -->
+        <input class="lid" type="hidden" name="lid" value="pt-BR">
+
+        <!-- Texto -->
+        <div class="form-group">
+          <label for="texto"><span class="texto_dinamico" chave="texto" origem="/uxiamarelo/rest/copaiba/solicitar/com.joseflavio.iperoxo.Exemplo/toString">TEXTO</span>:</label>
+          <input type="text" class="form-control" name="texto">
+        </div>
+
+        <!-- Arquivo -->
+        <div class="form-group">
+          <label for="arquivo"><span class="texto_dinamico" chave="arquivo">ARQUIVO</span>:</label>
+          <div class="fileinput fileinput-new" style="display:block;" data-provides="fileinput">
+            <span class="btn btn-default btn-file">
+              <span class="fileinput-new texto_dinamico" chave="selecionar">SELECIONAR</span>
+              <span class="fileinput-exists texto_dinamico" chave="alterar">ALTERAR</span>
+              <input type="file" name="arquivo">
+            </span>
+            <span class="fileinput-filename"></span>
+            <a href="#" class="close fileinput-exists" data-dismiss="fileinput" style="float: none">&times;</a>
+          </div>
+        </div>
+
+        <!-- Botão de submissão -->
+        <input type="submit" class="btn btn-default texto_dinamico" chave="enviar" value="ENVIAR">
+
+      </form>
+
+    </div>
+
+  </body>
+
+</html>

@@ -1,0 +1,85 @@
+<!-- 
+Copyright (C) 2016 José Flávio de Souza Dias Júnior
+This file is part of Ipê-roxo - <http://www.joseflavio.com/iperoxo/>.
+ -->
+<!DOCTYPE html>
+<html>
+
+  <head>
+    
+    <!-- Configurações gerais -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, minimum-scale=1, maximum-scale=1">
+
+    <!-- Configurações de segurança -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *">
+
+    <title>Ipê-roxo</title>
+    
+    <!-- Estilo gráfico -->
+    <link type="image/x-icon" href="img/icone.ico" rel="shortcut icon">
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/bootstrap-theme.min.css" rel="stylesheet">
+    <link href="css/jasny-bootstrap.min.css" rel="stylesheet">
+    <link href="css/iperoxo.css" rel="stylesheet">
+
+  </head>
+
+  <body>
+
+    <!-- Barra de navegação -->
+    <nav class="navbar navbar-default">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navegacao_div">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#"><img class="logotipo" src="img/icone.jpg"></a>
+          <a class="navbar-brand texto_dinamico" chave="aplicacao_titulo" href="#">&nbsp;</a>
+        </div>
+        <div class="collapse navbar-collapse" id="navegacao_div">
+          <ul class="nav navbar-nav" id="navegacao">
+          </ul>
+          <ul class="nav navbar-nav navbar-right">
+            <li><img class="bandeira_linguagem" src="img/bandeira/BR.png" onclick="setLinguagem('pt-BR')"></li>
+            <li><img class="bandeira_linguagem" src="img/bandeira/US.png" onclick="setLinguagem('en-US')"></li>
+            <li><a href="#"><span class="glyphicon glyphicon-off"></span></a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Mensagens globais -->
+    <div id="mensagens">
+    </div>
+
+    <!-- Bibliotecas -->
+    <script src="js/terceiro/jquery.min.js"></script>
+    <script src="js/terceiro/jquery.form.js"></script>
+    <script src="js/terceiro/bootstrap.min.js"></script>
+    <script src="js/terceiro/jasny-bootstrap.min.js"></script>
+    <script src="js/terceiro/hammer.min.js"></script>
+    <script src="js/terceiro/hammer-time.min.js"></script>
+    <script src="js/terceiro/velocity.min.js"></script>
+
+    <!-- Recursos culturais -->
+    <script src="js/aplicacao/Dicionario_pt.js"></script>
+    <script src="js/aplicacao/Dicionario_en.js"></script>
+
+    <!-- Ipê-roxo -->
+    <script src="js/iperoxo/geral.js"></script>
+    <script src="js/iperoxo/linguagem.js"></script>
+    <script src="js/iperoxo/mensagem.js"></script>
+    <script src="js/iperoxo/uxiamarelo.js"></script>
+    <script src="js/iperoxo/tela.js"></script>
+
+    <!-- Aplicação -->
+    <script src="js/aplicacao/aplicacao.js"></script>
+
+  </body>
+
+</html>
