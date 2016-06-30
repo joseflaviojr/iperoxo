@@ -39,6 +39,7 @@
 
 package com.joseflavio.iperoxo;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.Locale;
 
@@ -99,6 +100,13 @@ public abstract class Servico <T extends Serializable> {
 
 	public void setLid( String lid ) {
 		this.lid = lid;
+	}
+	
+	/**
+	 * Atalho para {@link IpeRoxo#getMensagem(String, String, Object...)}, em conjunto com {@link #getLid()}.
+	 */
+	protected String getMensagem( String mensagem, Object... parametros ) throws IOException {
+		return IpeRoxo.getMensagem( lid, mensagem, parametros );
 	}
 	
 }

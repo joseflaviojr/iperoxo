@@ -18,13 +18,18 @@ public abstract class BasicoServico <T extends Serializable> extends Servico<T> 
 	public final Resposta<T> executar() {
 		Resposta<T> resp = new Resposta<T>();
 		try{
-			BancoDeDados bd = IpeRoxo.getEntityManagerFactory() != null ? new BancoDeDados() : null;
+			BancoDeDados bd = null;
+			if( isNecessarioBancoDeDados() && IpeRoxo.getEntityManagerFactory() != null ){
+				bd = new BancoDeDados();
+			}
 			try{
 				executar( resp, bd, IpeRoxo.getResourceBundle( lid ) );
-				if( bd != null ) bd.commit();
+				if( bd != null && isNecessarioAutoCommit() ) bd.commit();
 			}catch( Exception e ){
-				if( bd != null ) bd.rollback();
+				if( bd != null && isNecessarioAutoCommit() ) bd.rollback();
 				throw e;
+			}finally{
+				if( bd != null ) bd.close();
 			}
 			resp.setExito( true );
 		}catch( Exception e ){
@@ -37,14 +42,28 @@ public abstract class BasicoServico <T extends Serializable> extends Servico<T> 
 	}
 	
 	/**
-	 * Montagem da {@link Resposta}.<br>
+	 * Montagem da {@link Resposta} deste {@link Servico}.<br>
 	 * {@link Resposta#setExito(boolean)} será determinada automaticamente, sendo <code>false</code>
 	 * quando este método disparar uma {@link Exception}.<br>
-	 * Se êxito, será feito um {@link BancoDeDados#commit()}, caso contrário, {@link BancoDeDados#rollback()}.
+	 * Se {@link #isNecessarioAutoCommit()}, será feito um {@link BancoDeDados#commit()} (se êxito) ou um {@link BancoDeDados#rollback()}.
 	 * @param resp {@link Resposta} que será enviada ao {@link CopaibaConexao cliente}.
-	 * @param bd {@link BancoDeDados} do {@link IpeRoxo}, se existente.
+	 * @param bd {@link BancoDeDados} do {@link IpeRoxo}, se existente e {@link #isNecessarioBancoDeDados() necessário}.
 	 * @param rb {@link ResourceBundle} correspondente ao {@link #getLid()}.
 	 */
 	public abstract void executar( Resposta<T> resp, BancoDeDados bd, ResourceBundle rb ) throws IOException;
+	
+	/**
+	 * Este {@link Servico} necessita de {@link BancoDeDados}?
+	 */
+	protected boolean isNecessarioBancoDeDados() {
+		return true;
+	}
+	
+	/**
+	 * Este {@link Servico} necessita de {@link BancoDeDados#commit()} ou {@link BancoDeDados#rollback()} automático?
+	 */
+	protected boolean isNecessarioAutoCommit() {
+		return true;
+	}
 
 }

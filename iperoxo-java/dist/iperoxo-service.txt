@@ -1,0 +1,26 @@
+#!/bin/bash
+# description: Ipe-roxo
+# processname: iperoxo
+# chkconfig: 2345 91 91
+
+case $1 in
+start)
+cd /usr/local/iperoxo
+./iperoxo.sh Configuracao.properties &
+;;
+stop)
+pkill -f \\-jar\ iperoxo\\-.*\.jar\ Configuracao\.properties
+;;
+teste)
+echo "Teste";;
+esac
+exit 0
+
+# cp /usr/local/iperoxo/iperoxo-service.txt /etc/init.d/iperoxo
+# chmod 755 /etc/init.d/iperoxo
+
+# chkconfig --add iperoxo
+# chkconfig --level 2345 iperoxo on
+
+# systemctl start iperoxo
+# service iperoxo start

@@ -67,13 +67,13 @@ public class Exemplo extends BasicoServico<String> {
 		
 		try{
 			
-			if( ValidacaoUtil.validar( this, resp.getMensagens(), true, null, rb ) ){
-				resp.mais( Tipo.EXITO, null, IpeRoxo.getMensagem( lid, "$IpeRoxo.Exemplo.Exito" ) );
-				resp.mais( Tipo.INFORMACAO, null, texto );
-				resp.mais( Tipo.INFORMACAO, null, arquivo );	
-			}else{
+			if( ! ValidacaoUtil.validar( this, resp.getMensagens(), true, null, rb ) ){
 				throw new IOException();
 			}
+			
+			resp.mais( Tipo.EXITO, null, getMensagem( "$IpeRoxo.Exemplo.Exito" ) );
+			resp.mais( Tipo.INFORMACAO, null, texto );
+			resp.mais( Tipo.INFORMACAO, null, arquivo );
 			
 		}catch( IOException e ){
 			throw e;
@@ -86,7 +86,7 @@ public class Exemplo extends BasicoServico<String> {
 	@Override
 	public String toString() {
 		try{
-			return IpeRoxo.getMensagem( lid, "$IpeRoxo.Exemplo.Texto" );
+			return getMensagem( "$IpeRoxo.Exemplo.Texto" );
 		}catch( Exception e ){
 			return "Texto";
 		}

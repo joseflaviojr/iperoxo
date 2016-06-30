@@ -6,7 +6,7 @@ Modelo de aplicação de [Copaíba](http://joseflavio.com/copaiba).
 
 ## Versão Atual / Current Version
 
-1.0-A1
+1.0-A2
 
 Padrão de versionamento: http://joseflavio.com/jfv/
 

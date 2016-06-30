@@ -60,9 +60,9 @@ import javax.persistence.metamodel.Metamodel;
 
 /**
  * Mesclagem de {@link EntityManager} e {@link EntityTransaction}.<br>
- * O {@link BancoDeDados} sempre mantém a {@link EntityTransaction} {@link EntityTransaction#begin() iniciada},
+ * O {@link BancoDeDados} convenientemente manterá uma {@link EntityTransaction} {@link EntityTransaction#begin() iniciada},
  * mesmo após {@link #commit()} ou {@link #rollback()}.<br>
- * O método {@link #close()} efetua um último {@link #commit()}.<br>
+ * O método {@link #close()} efetua, se {@link EntityTransaction#isActive() necessário}, um último {@link #commit()}.<br>
  * Uso típico de {@link BancoDeDados}:
  * <pre>
  * try( {@link BancoDeDados} bd = new {@link BancoDeDados}() ){
@@ -89,15 +89,32 @@ public class BancoDeDados implements EntityManager, EntityTransaction, Closeable
 	
 	private EntityTransaction et;
 	
+	private int transacoes;
+	
 	/**
+	 * @param transacoes Número de {@link EntityTransaction#begin()} automáticas.
 	 * @see IpeRoxo#getEntityManagerFactory()
 	 * @see EntityManagerFactory#createEntityManager()
 	 * @see EntityTransaction#begin()
 	 */
+	public BancoDeDados( int transacoes ) {
+		
+		this.em = IpeRoxo.getEntityManagerFactory().createEntityManager();
+		this.et = em.getTransaction();
+		this.transacoes = transacoes;
+		
+		if( transacoes > 0 ){
+			transacoes--;
+			et.begin();
+		}
+		
+	}
+	
+	/**
+	 * {@link BancoDeDados#BancoDeDados(int)} para uma única {@link EntityTransaction} {@link EntityTransaction#begin() automática}.
+	 */
 	public BancoDeDados() {
-		em = IpeRoxo.getEntityManagerFactory().createEntityManager();
-		et = em.getTransaction();
-		et.begin();
+		this( 1 );
 	}
 
 	@Override
@@ -313,8 +330,10 @@ public class BancoDeDados implements EntityManager, EntityTransaction, Closeable
 	@Override
 	public void close() {
 		
-		et.commit();
-		et = null;
+		if( et.isActive() ){
+			et.commit();
+			et = null;			
+		}
 
 		em.close();
 		em = null;
@@ -374,13 +393,19 @@ public class BancoDeDados implements EntityManager, EntityTransaction, Closeable
 	@Override
 	public void commit() {
 		et.commit();
-		et.begin();
+		if( transacoes > 0 ){
+			transacoes--;
+			et.begin();
+		}
 	}
 	
 	@Override
 	public void rollback() {
 		et.rollback();
-		et.begin();
+		if( transacoes > 0 ){
+			transacoes--;
+			et.begin();
+		}
 	}
 	
 	@Override

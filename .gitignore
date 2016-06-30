@@ -7,11 +7,30 @@
 ehthumbs.db
 Thumbs.db
 
+# Local
+projeto/
+proj/
+
 # Java
 *.class
 *.jar
 *.war
 *.ear
+
+# Gradle
+.gradle/
+build/
+
+# Maven
+target/
+test-output/
+
+# Eclipse
+.project
+.classpath
+.settings/
+binario/
+bin/
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*

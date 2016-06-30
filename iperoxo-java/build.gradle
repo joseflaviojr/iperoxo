@@ -10,7 +10,19 @@ String descricao = "Ipê-roxo: Modelo de aplicação de Copaíba."
 
 group = "com.joseflavio"
 archivesBaseName = "iperoxo"
-version = "1.0-A1"
+version = "1.0-A2"
+
+//------------------------------------------------------
+
+[
+
+"biblioteca",
+"binario",
+"dist",
+"fonte",
+"recurso"
+
+].each { new File(it).mkdirs() }
 
 //------------------------------------------------------
 
@@ -33,7 +45,7 @@ repositories {
 
 dependencies {
     compile fileTree(dir:"biblioteca", include:["*.jar"])
-    compile "com.joseflavio:copaiba:1.0-A1"
+    compile "com.joseflavio:copaiba:1.0-A2"
     compile "org.apache.tomcat:tomcat-catalina:8.0.35"
     compile "org.apache.tomee:javaee-api:7.0"
     compile "org.apache.geronimo.specs:geronimo-osgi-locator:1.1"
