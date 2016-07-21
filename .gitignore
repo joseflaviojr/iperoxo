@@ -32,5 +32,6 @@ test-output/
 binario/
 bin/
 
-# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
+# Logs
+*.log
 hs_err_pid*

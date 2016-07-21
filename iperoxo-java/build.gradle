@@ -10,7 +10,7 @@ String descricao = "Ipê-roxo: Modelo de aplicação de Copaíba."
 
 group = "com.joseflavio"
 archivesBaseName = "iperoxo"
-version = "1.0-A2"
+version = "1.0-A3"
 
 //------------------------------------------------------
 
@@ -45,7 +45,7 @@ repositories {
 
 dependencies {
     compile fileTree(dir:"biblioteca", include:["*.jar"])
-    compile "com.joseflavio:copaiba:1.0-A2"
+    compile "com.joseflavio:copaiba:1.0-A3"
     compile "org.apache.tomcat:tomcat-catalina:8.0.35"
     compile "org.apache.tomee:javaee-api:7.0"
     compile "org.apache.geronimo.specs:geronimo-osgi-locator:1.1"
@@ -85,7 +85,7 @@ task distExe << {
     destino.mkdirs()
     def comando = new File( "build/exe/" + archivesBaseName + ".sh" )
     def nomeJar = archivesBaseName + "-" + version + ".jar"
-    comando << "#!/bin/bash\n\n"
+    comando << "#!/bin/sh\n\n"
     comando << "java -server "
     comando << "-jar $nomeJar \"\$@\"\n"
 }
