@@ -10,7 +10,7 @@ String descricao = "Ipê-roxo: Modelo de aplicação de Copaíba."
 
 group = "com.joseflavio"
 archivesBaseName = "iperoxo"
-version = "1.0-A3"
+version = "1.0-A4"
 
 //------------------------------------------------------
 
@@ -83,7 +83,7 @@ task distDep(type: Copy, dependsOn: [jar]) {
 task distExe << {
     def destino = new File( "build/exe" )
     destino.mkdirs()
-    def comando = new File( "build/exe/" + archivesBaseName + ".sh" )
+    def comando = new File( "build/exe/iperoxo.sh" )
     def nomeJar = archivesBaseName + "-" + version + ".jar"
     comando << "#!/bin/sh\n\n"
     comando << "java -server "

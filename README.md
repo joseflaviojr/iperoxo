@@ -6,12 +6,13 @@ Modelo de aplicação de [Copaíba](http://joseflavio.com/copaiba).
 
 ## Versão Atual / Current Version
 
-1.0-A3
+1.0-A4
 
 Padrão de versionamento: http://joseflavio.com/jfv/
 
 ## Requisitos / Requirements
 
+* Git >= 1.8
 * Java >= 1.8
 * Gradle >= 2.0
 * [Unha-de-gato](http://joseflavio.com/unhadegato)
@@ -37,14 +38,15 @@ Compilation+Execution during the development process.
 
 ## Docker Container
 
-Compilation:
+Download and Compilation:
 
-    cd iperoxo-java
+    git clone --branch "1.0-A4" https://github.com/joseflaviojr/iperoxo.git
+    cd iperoxo/iperoxo-java
     gradle dist
 
 Dockerizing:
 
-    docker build --force-rm -t joseflavio/iperoxo:1.0-A3 .
+    docker build --force-rm -t joseflavio/iperoxo:1.0-A4 .
 
 Creating the volume:
 
@@ -52,8 +54,21 @@ Creating the volume:
 
 Running:
 
-    docker run --name="iperoxo" -d -p 8884:8884 -v iperoxo:/volume --restart=unless-stopped joseflavio/iperoxo:1.0-A3
+    docker run --name="iperoxo" -d -p 8884:8884 -v iperoxo:/volume --restart=unless-stopped joseflavio/iperoxo:1.0-A4
 
 Connecting to the network:
 
     docker network connect --ip=x.x.x.x NETWORK_NAME iperoxo
+
+Configuration:
+
+    nano /var/lib/docker/volumes/iperoxo/_data/conf/Configuracao.properties
+
+Log:
+
+    tail /var/lib/docker/volumes/iperoxo/_data/logs/iperoxo.log -n 100
+
+Removal:
+
+    docker rm -f iperoxo
+    docker rmi joseflavio/iperoxo:1.0-A4
