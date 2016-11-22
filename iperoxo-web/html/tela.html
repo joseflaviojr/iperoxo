@@ -1,4 +1,4 @@
-<!-- 
+<!--
 Copyright (C) 2016 José Flávio de Souza Dias Júnior
 This file is part of Ipê-roxo - <http://www.joseflavio.com/iperoxo/>.
  -->
@@ -17,7 +17,7 @@ This file is part of Ipê-roxo - <http://www.joseflavio.com/iperoxo/>.
   <body>
 
     <!-- Tela a ser importada pelo Ipê-roxo, no processo de abertura. -->
-    <div class="tela tamanho_flexivel hidden" id="" funcInicio="inicioTela">
+    <div class="tela tamanho_flexivel" id="" funcInicio="inicioTela">
 
       <!-- Título da tela -->
       <h3 class="tela_titulo texto_dinamico" chave="tela_exemplo_titulo">TELA</h3>
@@ -28,7 +28,7 @@ This file is part of Ipê-roxo - <http://www.joseflavio.com/iperoxo/>.
         <!-- Mensagens -->
         <div class="mensagens">
         </div>
-        
+
         <!-- Especificação da Copaíba, classe e método a ser executado remotamente. -->
         <input type="hidden" name="copaiba" value="copaiba@com.joseflavio.iperoxo.Exemplo@executar">
 
@@ -54,7 +54,7 @@ This file is part of Ipê-roxo - <http://www.joseflavio.com/iperoxo/>.
             <span class="btn btn-default btn-file">
               <span class="fileinput-new texto_dinamico" chave="selecionar">SELECIONAR</span>
               <span class="fileinput-exists texto_dinamico" chave="alterar">ALTERAR</span>
-              <input type="file" name="arquivo">
+              <input type="file" name="arquivo" multiple>
             </span>
             <span class="fileinput-filename"></span>
             <a href="#" class="close fileinput-exists" data-dismiss="fileinput" style="float: none">&times;</a>

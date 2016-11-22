@@ -46,6 +46,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.UnsupportedEncodingException;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -78,6 +80,8 @@ public final class IpeRoxo {
 	private static final Properties configuracao = new Properties();
 	
 	private static final Map<String,ResourceBundle> mensagens = new HashMap<>();
+	
+	private static BasicDataSource dataSource;
 	
 	private static EntityManagerFactory emf;
 	
@@ -150,25 +154,31 @@ public final class IpeRoxo {
 		System.setProperty( Context.INITIAL_CONTEXT_FACTORY, "org.apache.naming.java.javaURLContextFactory" );
 		System.setProperty( Context.URL_PKG_PREFIXES, "org.apache.naming" );
 		
-		BasicDataSource fonte = new BasicDataSource();
-		fonte.setDriverClassName( getPropriedade( "DataSource.Driver" ) );
-		fonte.setUrl( getPropriedade( "DataSource.URL" ) );
-		fonte.setUsername( getPropriedade( "DataSource.Username" ) );
-		fonte.setPassword( getPropriedade( "DataSource.Password" ) );
-		fonte.setInitialSize( Integer.parseInt( getPropriedade( "DataSource.InitialSize" ) ) );
-		fonte.setMaxTotal( Integer.parseInt( getPropriedade( "DataSource.MaxTotal" ) ) );
-		fonte.setMinIdle( Integer.parseInt( getPropriedade( "DataSource.MinIdle" ) ) );
-		fonte.setMaxIdle( Integer.parseInt( getPropriedade( "DataSource.MaxIdle" ) ) );
-		fonte.setTestOnCreate( Boolean.parseBoolean( getPropriedade( "DataSource.TestOnCreate" ) ) );
-		fonte.setTestWhileIdle( Boolean.parseBoolean( getPropriedade( "DataSource.TestWhileIdle" ) ) );
-		fonte.setTestOnBorrow( Boolean.parseBoolean( getPropriedade( "DataSource.TestOnBorrow" ) ) );
-		fonte.setTestOnReturn( Boolean.parseBoolean( getPropriedade( "DataSource.TestOnReturn" ) ) );
+		dataSource = new BasicDataSource();
+		dataSource.setDriverClassName( getPropriedade( "DataSource.Driver" ) );
+		dataSource.setUrl( getPropriedade( "DataSource.URL" ) );
+		dataSource.setUsername( getPropriedade( "DataSource.Username" ) );
+		dataSource.setPassword( getPropriedade( "DataSource.Password" ) );
+		dataSource.setInitialSize( Integer.parseInt( getPropriedade( "DataSource.InitialSize" ) ) );
+		dataSource.setMaxTotal( Integer.parseInt( getPropriedade( "DataSource.MaxTotal" ) ) );
+		dataSource.setMinIdle( Integer.parseInt( getPropriedade( "DataSource.MinIdle" ) ) );
+		dataSource.setMaxIdle( Integer.parseInt( getPropriedade( "DataSource.MaxIdle" ) ) );
+		dataSource.setTestOnCreate( Boolean.parseBoolean( getPropriedade( "DataSource.TestOnCreate" ) ) );
+		dataSource.setTestWhileIdle( Boolean.parseBoolean( getPropriedade( "DataSource.TestWhileIdle" ) ) );
+		dataSource.setTestOnBorrow( Boolean.parseBoolean( getPropriedade( "DataSource.TestOnBorrow" ) ) );
+		dataSource.setTestOnReturn( Boolean.parseBoolean( getPropriedade( "DataSource.TestOnReturn" ) ) );
 
 		Context contexto = new InitialContext();
 		try{
-			contexto.bind( "FONTE", fonte );
+			contexto.bind( "FONTE", dataSource );
 		}finally{
 			contexto.close();
+		}
+		
+		if( Boolean.parseBoolean( getPropriedade( "DataSource.JPA.Enable" ) ) ){
+			log.info( getMensagem( null, "$Log.Iniciando.JPA" ) );
+		}else{
+			return;
 		}
 		
 		emf = Persistence.createEntityManagerFactory( "JPA" );
@@ -207,6 +217,7 @@ public final class IpeRoxo {
 		copaiba = new Copaiba();
 		
 		copaiba.setPermitirRotina( false );
+		copaiba.setPublicarCertificados( false );
 		copaiba.setAuditor( new PacoteAuditor() );
 
 		int     porta  = Integer.parseInt( getPropriedade( "Copaiba.Porta" ) );
@@ -269,10 +280,32 @@ public final class IpeRoxo {
 	}
 	
 	/**
-	 * {@link EntityManagerFactory}, se "DataSource.Enable"
+	 * {@link DataSource}, se "DataSource.Enable"
+	 */
+	public static DataSource getDataSource() {
+		return dataSource;
+	}
+	
+	/**
+	 * {@link DataSource#getConnection()}, se "DataSource.Enable"
+	 */
+	public static Connection getConnection() throws SQLException {
+		return dataSource != null ? dataSource.getConnection() : null;
+	}
+	
+	/**
+	 * {@link EntityManagerFactory}, se "DataSource.Enable" e "DataSource.JPA.Enable"
 	 */
 	public static EntityManagerFactory getEntityManagerFactory() {
 		return emf;
+	}
+	
+	/**
+	 * {@link IpeRoxo} está inicializada e publicamente disponível?
+	 * @see Copaiba#isAberta()
+	 */
+	public static boolean isDisponivel() {
+		return copaiba != null && copaiba.isAberta();
 	}
 	
 	/**

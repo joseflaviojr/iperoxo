@@ -1,12 +1,12 @@
 # Ipê-roxo
 
-Modelo de aplicação de [Copaíba](http://joseflavio.com/copaiba).
+Modelo de aplicação HTML5 com [Copaíba](http://joseflavio.com/copaiba).
 
-[Copaíba](http://joseflavio.com/copaiba) application model.
+HTML5 application model with [Copaíba](http://joseflavio.com/copaiba).
 
 ## Versão Atual / Current Version
 
-1.0-A4
+1.0-A5
 
 Padrão de versionamento: http://joseflavio.com/jfv/
 
@@ -40,13 +40,13 @@ Compilation+Execution during the development process.
 
 Download and Compilation:
 
-    git clone --branch "1.0-A4" https://github.com/joseflaviojr/iperoxo.git
+    git clone --branch "1.0-A5" https://github.com/joseflaviojr/iperoxo.git
     cd iperoxo/iperoxo-java
     gradle dist
 
 Dockerizing:
 
-    docker build --force-rm -t joseflavio/iperoxo:1.0-A4 .
+    docker build --force-rm -t joseflavio/iperoxo:1.0-A5 .
 
 Creating the volume:
 
@@ -54,7 +54,7 @@ Creating the volume:
 
 Running:
 
-    docker run --name="iperoxo" -d -p 8884:8884 -v iperoxo:/volume --restart=unless-stopped joseflavio/iperoxo:1.0-A4
+    docker run --name="iperoxo" -d -p 8884:8884 -v iperoxo:/volume --restart=unless-stopped joseflavio/iperoxo:1.0-A5
 
 Connecting to the network:
 
@@ -71,4 +71,4 @@ Log:
 Removal:
 
     docker rm -f iperoxo
-    docker rmi joseflavio/iperoxo:1.0-A4
+    docker rmi joseflavio/iperoxo:1.0-A5

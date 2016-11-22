@@ -46,55 +46,16 @@
 
 //--------------------------------------------------------------------------
 
-// Gera aleatoriamente um identificador de tag HTML.
-function gerarID() {
-    return "id_" + Math.floor( Math.random() * 999999999 );
-}
+var sid = ""; // ID da Sessão
 
 //--------------------------------------------------------------------------
 
-// Resolve uma rotina de JavaScript com "eval".
-// Retorna "undefined" se falhar.
-function js( rotina ) {
-    try{
-        return eval(rotina);
-    }catch(e){
-        return undefined;
-    }
-}
-
-//--------------------------------------------------------------------------
-
-// Resolve e executa uma função JavaScript.
-// Retorna "undefined" se falhar.
-function jsExec( funcaoNome, arg1, arg2, arg3, arg4, arg5 ) {
-    try{
-        return eval(funcaoNome)(arg1, arg2, arg3, arg4, arg5);
-    }catch(e){
-        return undefined;
-    }
-}
-
-//--------------------------------------------------------------------------
-
-function setCookie( chave, valor, minutos ) {
-    var expiracao = new Date();
-    expiracao.setTime( expiracao.getTime() + (minutos*60*1000) );
-    document.cookie = chave + "=" + valor + ";expires=" + expiracao.toUTCString() + ";path=/";
-}
-
-//--------------------------------------------------------------------------
-
-function getCookie( chave ) {
-    var inicio = chave + "=";
-    var partes = document.cookie.split(';');
-    for( var i = 0; i < partes.length; i++ ){
-        var p = partes[i].replace(/^\s+/,"");
-        if( p.indexOf(inicio) == 0 ){
-            return p.substring(inicio.length, p.length);
-        }
-    }
-    return "";
+// Altera a "sid" (ID da Sessão), comumente chamada de "token".
+function setSID( nova_sid, minutos ) {
+    sid = nova_sid;
+    if( minutos == undefined ) minutos = 1 * 24 * 60;
+    setCookie( "sid", nova_sid, minutos );
+    atualizarTelas();
 }
 
 //--------------------------------------------------------------------------

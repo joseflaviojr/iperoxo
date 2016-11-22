@@ -40,76 +40,63 @@
 package com.joseflavio.iperoxo;
 
 import java.io.IOException;
-import java.util.ResourceBundle;
+import java.sql.Connection;
 
-import com.joseflavio.urucum.comunicacao.Arquivo;
-import com.joseflavio.urucum.comunicacao.Mensagem.Tipo;
-import com.joseflavio.urucum.comunicacao.Resposta;
-import com.joseflavio.urucum.validacao.NaoNulo;
-import com.joseflavio.urucum.validacao.NaoVazio;
-import com.joseflavio.urucum.validacao.ValidacaoUtil;
+import org.junit.AfterClass;
+import org.junit.Assert;
+import org.junit.BeforeClass;
+import org.junit.FixMethodOrder;
+import org.junit.Test;
+import org.junit.runners.MethodSorters;
+
+import com.joseflavio.urucum.texto.StringUtil;
 
 /**
- * Exemplo de {@link Servico}.
+ * Base de testes de {@link Servico}s {@link IpeRoxo}.
  * @author José Flávio de Souza Dias Júnior
  */
-public class Exemplo extends BasicoServico<String> {
-	
-	@NaoNulo(mensagem="$IpeRoxo.Exemplo.Texto.Vazio")
-	@NaoVazio(mensagem="$IpeRoxo.Exemplo.Texto.Vazio")
-	private String texto;
-	
-	@NaoNulo(mensagem="$IpeRoxo.Exemplo.Arquivo.Vazio")
-	@NaoVazio(mensagem="$IpeRoxo.Exemplo.Arquivo.Vazio")
-	private Arquivo[] arquivo;
+@FixMethodOrder(MethodSorters.JVM)
+public class IpeRoxoTeste {
 
-	@Override
-	public void executar( Resposta<String> resp, BancoDeDados bd, ResourceBundle rb ) throws IOException {
+	@BeforeClass
+	public static void inicializar() throws IOException, InterruptedException {
 		
-		try{
-			
-			if( ! ValidacaoUtil.validar( this, resp.getMensagens(), true, null, rb ) ){
-				throw new IOException();
-			}
-			
-			resp.mais( Tipo.EXITO, null, getMensagem( "$IpeRoxo.Exemplo.Exito" ) );
-			resp.mais( Tipo.INFORMACAO, null, texto );
-			
-			for( Arquivo a : arquivo ){
-				resp.mais( Tipo.INFORMACAO, null, a.getNome() + " [" + a.getEndereco() + "]" );
-			}
-			
-		}catch( IOException e ){
-			throw e;
-		}catch( Exception e ){
-			throw new IOException( e );
+		new Thread( () -> {
+			IpeRoxo.main( new String[0] );			
+		} ).start();
+		
+		while( ! IpeRoxo.isDisponivel() ){
+			Thread.sleep( 50 );
 		}
 		
 	}
 	
-	@Override
-	public String toString() {
-		try{
-			return getMensagem( "$IpeRoxo.Exemplo.Texto" );
-		}catch( Exception e ){
-			return "Texto";
+	@AfterClass
+	public static void finalizar() throws IOException {
+	}
+	
+	@Test
+	public void testarConfiguracao() throws IOException {
+		Assert.assertNotEquals( 0, StringUtil.tamanho( IpeRoxo.getPropriedade( "Copaiba.Porta" ) ) );
+		Assert.assertNotEquals( 0, StringUtil.tamanho( IpeRoxo.getPropriedade( "Copaiba.Segura" ) ) );
+		Assert.assertNotEquals( 0, StringUtil.tamanho( IpeRoxo.getPropriedade( "Copaiba.Auditor.Raiz" ) ) );
+	}
+	
+	@Test
+	public void testarMensagem() throws IOException {
+		Assert.assertEquals( "Aplicação Ipê-roxo!", IpeRoxo.getMensagem( "pt-BR", "$IpeRoxo.Exemplo.Teste", "Ipê-roxo" ) );
+		Assert.assertEquals( "Ipê-roxo application!", IpeRoxo.getMensagem( "en", "$IpeRoxo.Exemplo.Teste", "Ipê-roxo" ) );
+	}
+	
+	@Test
+	public void testarDataSource() throws IOException {
+		if( Boolean.parseBoolean( IpeRoxo.getPropriedade( "DataSource.Enable" ) ) ){
+			try( Connection con = IpeRoxo.getConnection() ){
+				Assert.assertTrue( ! con.isClosed() );
+			}catch( Exception e ){
+				Assert.fail();
+			}
 		}
-	}
-
-	public String getTexto() {
-		return texto;
-	}
-
-	public void setTexto( String texto ) {
-		this.texto = texto;
-	}
-	
-	public Arquivo[] getArquivo() {
-		return arquivo;
-	}
-	
-	public void setArquivo( Arquivo[] arquivo ) {
-		this.arquivo = arquivo;
 	}
 	
 }

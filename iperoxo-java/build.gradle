@@ -6,11 +6,11 @@ apply plugin: "eclipse"
 //------------------------------------------------------
 
 String nome = "Ipe-roxo"
-String descricao = "Ipê-roxo: Modelo de aplicação de Copaíba."
+String descricao = "Ipê-roxo: Modelo de aplicação HTML5 com Copaíba."
 
 group = "com.joseflavio"
 archivesBaseName = "iperoxo"
-version = "1.0-A4"
+version = "1.0-A5"
 
 //------------------------------------------------------
 
@@ -45,18 +45,18 @@ repositories {
 
 dependencies {
     compile fileTree(dir:"biblioteca", include:["*.jar"])
-    compile "com.joseflavio:copaiba:1.0-A3"
-    compile "org.apache.tomcat:tomcat-catalina:8.0.35"
+    compile "com.joseflavio:copaiba:1.0-A5"
+    compile "org.apache.tomcat:tomcat-catalina:8.5.8"
     compile "org.apache.tomee:javaee-api:7.0"
     compile "org.apache.geronimo.specs:geronimo-osgi-locator:1.1"
-    compile "org.eclipse.persistence:eclipselink:2.6.2"
-    compile "org.postgresql:postgresql:9.4.1207"
+    compile "org.eclipse.persistence:eclipselink:2.6.4"
+    compile "org.postgresql:postgresql:9.4.1212"
     compile "org.apache.commons:commons-dbcp2:2.1.1"
-    compile "org.apache.commons:commons-lang3:3.4"
+    compile "org.apache.commons:commons-lang3:3.5"
     compile "org.apache.commons:commons-io:1.3.2"
     compile "org.apache.commons:commons-email:1.4"
-    compile "org.apache.logging.log4j:log4j-api:2.5"
-    compile "org.apache.logging.log4j:log4j-core:2.5"
+    compile "org.apache.logging.log4j:log4j-api:2.7"
+    compile "org.apache.logging.log4j:log4j-core:2.7"
     testCompile "junit:junit:4.12"
 }
 

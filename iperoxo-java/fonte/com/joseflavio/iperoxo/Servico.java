@@ -73,8 +73,9 @@ public abstract class Servico <T extends Serializable> {
 		return sid;
 	}
 
-	public void setSid( String sid ) {
+	public Servico<T> setSid( String sid ) {
 		this.sid = sid;
+		return this;
 	}
 
 	/**
@@ -84,8 +85,9 @@ public abstract class Servico <T extends Serializable> {
 		return tid;
 	}
 
-	public void setTid( String tid ) {
+	public Servico<T> setTid( String tid ) {
 		this.tid = tid;
+		return this;
 	}
 	
 	/**
@@ -98,8 +100,9 @@ public abstract class Servico <T extends Serializable> {
 		return lid;
 	}
 
-	public void setLid( String lid ) {
+	public Servico<T> setLid( String lid ) {
 		this.lid = lid;
+		return this;
 	}
 	
 	/**

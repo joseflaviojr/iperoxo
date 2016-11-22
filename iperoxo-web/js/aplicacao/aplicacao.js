@@ -5,13 +5,9 @@
 
 //--------------------------------------------------------------------------
 
-var sid = ""; // ID da Sessão
-
-//--------------------------------------------------------------------------
-
 // Comportamento inicial da aplicação.
 $(document).ready(function(){
-    sid = gerarID();
+    setSID( gerarID() );
     setLinguagem( navigator.language );
     abrirTela( "html/tela.html" );
 });
