@@ -1,0 +1,114 @@
+//------------------------------------------------------
+
+apply plugin: "java"
+apply plugin: "eclipse"
+
+//------------------------------------------------------
+
+String nome = "Nome"
+String descricao = "Descrição da aplicação."
+
+group = "br.com.grupo"
+archivesBaseName = "nome"
+version = "1.0"
+
+//------------------------------------------------------
+
+[
+
+"biblioteca",
+"binario",
+"dist",
+"fonte",
+"recurso"
+
+].each { new File(it).mkdirs() }
+
+//------------------------------------------------------
+
+float javaVersao = 1.8
+String codificacao = "ISO-8859-1"
+
+sourceCompatibility = javaVersao
+compileJava.options.encoding = codificacao
+
+sourceSets {
+    main.java.srcDirs = ["fonte"]
+    main.resources.srcDirs = ["recurso"]
+}
+
+//------------------------------------------------------
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile fileTree(dir:"biblioteca", include:["*.jar"])
+    compile "com.joseflavio:iperoxo:1.0-A6"
+    compile "org.apache.tomcat:tomcat-catalina:8.5.8"
+    compile "org.apache.geronimo.specs:geronimo-osgi-locator:1.1"
+    compile "org.eclipse.persistence:eclipselink:2.6.4"
+    compile "org.postgresql:postgresql:9.4.1212"
+}
+
+//------------------------------------------------------
+
+jar {
+    manifest {
+        attributes "Implementation-Title": nome,
+                   "Implementation-Version": version,
+                   "Main-Class": "com.joseflavio.iperoxo.IpeRoxo",
+                   "Class-Path": configurations.compile.collect{ it.getName() }.join(" ")
+    }
+}
+
+//------------------------------------------------------
+
+task distDep(type: Copy, dependsOn: [jar]) {
+    into "$buildDir/dist"
+    from "$projectDir/dist"
+    from "$buildDir/libs/" + archivesBaseName + "-" + version + ".jar"
+    from configurations.compile
+}
+
+task distExe << {
+    def destino = new File( "build/exe" )
+    destino.mkdirs()
+    def comando = new File( "build/exe/iperoxo.sh" )
+    def nomeJar = archivesBaseName + "-" + version + ".jar"
+    comando << "#!/bin/sh\n\n"
+    comando << "java -server "
+    comando << "-jar $nomeJar \"\$@\"\n"
+}
+
+task dist(type: Copy, dependsOn: [distDep, distExe]) {
+    into "$buildDir/dist"
+    from "$buildDir/exe"
+    fileMode 0755
+}
+
+build.dependsOn dist
+
+//------------------------------------------------------
+
+eclipse {
+    project {
+        name = archivesBaseName
+        comment = descricao
+    }
+    jdt {
+        sourceCompatibility = javaVersao
+        targetCompatibility = javaVersao
+    }
+    classpath {
+        defaultOutputDir = file("binario")
+        file {
+            beforeMerged {
+                classpath -> classpath.entries.removeAll { entry -> entry.kind == "output" }
+            }
+        }
+    }
+}
+
+//------------------------------------------------------

@@ -1,16 +1,18 @@
 //------------------------------------------------------
 
 apply plugin: "java"
+apply plugin: "maven"
 apply plugin: "eclipse"
+apply plugin: "signing"
 
 //------------------------------------------------------
 
 String nome = "Ipe-roxo"
-String descricao = "Ipê-roxo: Modelo de aplicação HTML5 com Copaíba."
+String descricao = "Ipê-roxo: Modelo de aplicação Copaíba."
 
 group = "com.joseflavio"
 archivesBaseName = "iperoxo"
-version = "1.0-A5"
+version = "1.0-A6"
 
 //------------------------------------------------------
 
@@ -18,8 +20,8 @@ version = "1.0-A5"
 
 "biblioteca",
 "binario",
-"dist",
 "fonte",
+"projeto",
 "recurso"
 
 ].each { new File(it).mkdirs() }
@@ -46,11 +48,7 @@ repositories {
 dependencies {
     compile fileTree(dir:"biblioteca", include:["*.jar"])
     compile "com.joseflavio:copaiba:1.0-A5"
-    compile "org.apache.tomcat:tomcat-catalina:8.5.8"
     compile "org.apache.tomee:javaee-api:7.0"
-    compile "org.apache.geronimo.specs:geronimo-osgi-locator:1.1"
-    compile "org.eclipse.persistence:eclipselink:2.6.4"
-    compile "org.postgresql:postgresql:9.4.1212"
     compile "org.apache.commons:commons-dbcp2:2.1.1"
     compile "org.apache.commons:commons-lang3:3.5"
     compile "org.apache.commons:commons-io:1.3.2"
@@ -73,30 +71,41 @@ jar {
 
 //------------------------------------------------------
 
-task distDep(type: Copy, dependsOn: [jar]) {
-    into "$buildDir/dist"
-    from "$projectDir/dist"
-    from "$buildDir/libs/" + archivesBaseName + "-" + version + ".jar"
+task jarFonte(type: Jar) {
+    
+    classifier = "sources"
+    from sourceSets.main.allSource
+
+    manifest {
+        attributes "Implementation-Title": nome + " - Codigo Fonte",
+                   "Implementation-Version": version,
+                   "Main-Class": ""
+    }
+
+}
+
+//------------------------------------------------------
+
+task jarDoc(type: Jar) {
+
+    classifier = "javadoc"
+    from javadoc
+
+    javadoc.options.encoding = codificacao
+    javadoc.failOnError = false
+    javadoc.title = nome + " " + version
+    javadoc.options.links = []
+    
+}
+
+//------------------------------------------------------
+
+task jarDep(type: Copy) {
+    into "$buildDir/dependencias"
     from configurations.compile
 }
 
-task distExe << {
-    def destino = new File( "build/exe" )
-    destino.mkdirs()
-    def comando = new File( "build/exe/iperoxo.sh" )
-    def nomeJar = archivesBaseName + "-" + version + ".jar"
-    comando << "#!/bin/sh\n\n"
-    comando << "java -server "
-    comando << "-jar $nomeJar \"\$@\"\n"
-}
-
-task dist(type: Copy, dependsOn: [distDep, distExe]) {
-    into "$buildDir/dist"
-    from "$buildDir/exe"
-    fileMode 0755
-}
-
-build.dependsOn dist
+build.dependsOn jarDep
 
 //------------------------------------------------------
 
@@ -117,6 +126,65 @@ eclipse {
             }
         }
     }
+}
+
+//------------------------------------------------------
+
+artifacts {
+    archives jarFonte, jarDoc
+}
+
+signing {
+    required { gradle.taskGraph.hasTask("uploadArchives") }
+    sign configurations.archives
+}
+
+uploadArchives {
+  repositories {
+    mavenDeployer {
+
+      beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+
+      repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
+        authentication( userName: "xxxxxx", password: "xxxxxx" )
+      }
+
+      snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
+        authentication( userName: "xxxxxx", password: "xxxxxx" )
+      }
+
+      pom.project {
+
+        name nome
+        packaging "jar"
+        description descricao
+        url "http://www.joseflavio.com/iperoxo"
+
+        scm {
+          connection "scm:git:ssh:git@github.com/joseflaviojr/iperoxo.git"
+          developerConnection "scm:git:ssh:git@github.com/joseflaviojr/iperoxo.git"
+          url "https://github.com/joseflaviojr/iperoxo.git"
+        }
+
+        licenses {
+          license {
+            name "GNU Lesser General Public License, Version 3"
+            url "http://www.gnu.org/licenses/lgpl.txt"
+          }
+        }
+
+        developers {
+          developer {
+            id "joseflaviojr"
+            name "José Flávio de Souza Dias Júnior"
+            email "contato@joseflavio.com"
+          }
+        }
+
+      }
+
+    }
+  }
 }
 
 //------------------------------------------------------

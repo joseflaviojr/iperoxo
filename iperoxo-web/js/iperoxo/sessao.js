@@ -53,7 +53,7 @@ var sid = ""; // ID da Sessão
 // Altera a "sid" (ID da Sessão), comumente chamada de "token".
 function setSID( nova_sid, minutos ) {
     sid = nova_sid;
-    if( minutos == undefined ) minutos = 1 * 24 * 60;
+    if( minutos == undefined ) minutos = 365 * 24 * 60;
     setCookie( "sid", nova_sid, minutos );
     atualizarTelas();
 }

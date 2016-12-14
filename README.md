@@ -6,7 +6,7 @@ HTML5 application model with [Copaíba](http://joseflavio.com/copaiba).
 
 ## Versão Atual / Current Version
 
-1.0-A5
+1.0-A6
 
 Padrão de versionamento: http://joseflavio.com/jfv/
 
@@ -24,7 +24,7 @@ Execute o comando a seguir e importe o projeto no Eclipse IDE.
 
 Run the following command and import the project in Eclipse IDE.
 
-    cd iperoxo-java
+    cd iperoxo-docker
     gradle eclipse
 
 ## Execução local / Local execution
@@ -33,30 +33,29 @@ Compilação+Execução durante o processo de desenvolvimento.
 
 Compilation+Execution during the development process.
 
-    cd iperoxo-java
+    cd iperoxo-docker
     ./local.sh
 
 ## Docker Container
 
-Download and Compilation:
+Compilation:
 
-    git clone --branch "1.0-A5" https://github.com/joseflaviojr/iperoxo.git
-    cd iperoxo/iperoxo-java
+    cd iperoxo-docker
     gradle dist
 
-Dockerizing:
+Image:
 
-    docker build --force-rm -t joseflavio/iperoxo:1.0-A5 .
+    docker build --force-rm -t joseflavio/iperoxo:1.0-A6 .
 
-Creating the volume:
+Volume:
 
     docker volume create --name iperoxo
 
 Running:
 
-    docker run --name="iperoxo" -d -p 8884:8884 -v iperoxo:/volume --restart=unless-stopped joseflavio/iperoxo:1.0-A5
+    docker run --name="iperoxo" -d -p 8884:8884 -v iperoxo:/volume --restart=unless-stopped joseflavio/iperoxo:1.0-A6
 
-Connecting to the network:
+Network:
 
     docker network connect --ip=x.x.x.x NETWORK_NAME iperoxo
 
@@ -71,4 +70,4 @@ Log:
 Removal:
 
     docker rm -f iperoxo
-    docker rmi joseflavio/iperoxo:1.0-A5
+    docker rmi joseflavio/iperoxo:1.0-A6

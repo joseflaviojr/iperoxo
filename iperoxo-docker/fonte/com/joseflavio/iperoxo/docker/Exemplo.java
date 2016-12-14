@@ -37,11 +37,14 @@
  *  junto com Ipê-roxo. Se não, veja <http://www.gnu.org/licenses/>.
  */
 
-package com.joseflavio.iperoxo;
+package com.joseflavio.iperoxo.docker;
 
 import java.io.IOException;
 import java.util.ResourceBundle;
 
+import com.joseflavio.iperoxo.BancoDeDados;
+import com.joseflavio.iperoxo.BasicoServico;
+import com.joseflavio.iperoxo.Servico;
 import com.joseflavio.urucum.comunicacao.Arquivo;
 import com.joseflavio.urucum.comunicacao.Mensagem.Tipo;
 import com.joseflavio.urucum.comunicacao.Resposta;
