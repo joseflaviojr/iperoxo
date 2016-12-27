@@ -2,8 +2,9 @@
 
 apply plugin: "java"
 apply plugin: "maven"
-apply plugin: "eclipse"
 apply plugin: "signing"
+apply plugin: "eclipse"
+apply plugin: "idea"
 
 //------------------------------------------------------
 
@@ -18,11 +19,10 @@ version = "1.0-A6"
 
 [
 
-"biblioteca",
-"binario",
-"fonte",
-"projeto",
-"recurso"
+"biblioteca", // Dependências diretas: *.jar
+"fonte",      // Código fonte: *.java
+"recurso",    // Anexos que serão embutidos no ".jar"
+"projeto"     // Arquivos de projeto: doc, svg, psd, etc.
 
 ].each { new File(it).mkdirs() }
 
@@ -32,7 +32,15 @@ float javaVersao = 1.8
 String codificacao = "ISO-8859-1"
 
 sourceCompatibility = javaVersao
-compileJava.options.encoding = codificacao
+
+tasks.withType(JavaCompile) {
+    options.encoding = codificacao
+}
+
+tasks.withType(GroovyCompile) {
+    options.encoding = codificacao
+    groovyOptions.encoding = codificacao
+}
 
 sourceSets {
     main.java.srcDirs = ["fonte"]
@@ -109,27 +117,6 @@ build.dependsOn jarDep
 
 //------------------------------------------------------
 
-eclipse {
-    project {
-        name = archivesBaseName
-        comment = descricao
-    }
-    jdt {
-        sourceCompatibility = javaVersao
-        targetCompatibility = javaVersao
-    }
-    classpath {
-        defaultOutputDir = file("binario")
-        file {
-            beforeMerged {
-                classpath -> classpath.entries.removeAll { entry -> entry.kind == "output" }
-            }
-        }
-    }
-}
-
-//------------------------------------------------------
-
 artifacts {
     archives jarFonte, jarDoc
 }
@@ -185,6 +172,43 @@ uploadArchives {
 
     }
   }
+}
+
+//------------------------------------------------------
+
+eclipse {
+    project {
+        name = archivesBaseName
+        comment = descricao
+    }
+    jdt {
+        sourceCompatibility = javaVersao
+        targetCompatibility = javaVersao
+    }
+}
+
+eclipseJdt << {
+    file(".settings/org.eclipse.core.resources.prefs").text =
+        "eclipse.preferences.version=1\nencoding/<project>=" + codificacao
+}
+
+//------------------------------------------------------
+
+idea {
+    project {
+        vcs = "Git"
+        ipr {
+            withXml {
+                def projeto = it.asNode()
+                def encoding = projeto.component.find { it.@name == "Encoding" }
+                encoding.appendNode("file", [url: "PROJECT", charset: codificacao])
+            }
+        }
+    }
+    module {
+        languageLevel = new org.gradle.plugins.ide.idea.model.IdeaLanguageLevel(javaVersao)
+        jdkName = "" + javaVersao
+    }
 }
 
 //------------------------------------------------------

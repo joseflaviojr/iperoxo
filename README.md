@@ -8,7 +8,7 @@ HTML5 application model with [Copaíba](http://joseflavio.com/copaiba).
 
 1.0-A6
 
-Padrão de versionamento: http://joseflavio.com/jfv/
+Padrão de versionamento: [JFV](http://joseflavio.com/jfv)
 
 ## Requisitos / Requirements
 
@@ -20,18 +20,19 @@ Padrão de versionamento: http://joseflavio.com/jfv/
 
 ## Desenvolvimento / Development
 
-Execute o comando a seguir e importe o projeto no Eclipse IDE.
+Configuração do projeto para Eclipse ou IntelliJ IDEA.
 
-Run the following command and import the project in Eclipse IDE.
+Project configuration for Eclipse or IntelliJ IDEA.
 
     cd iperoxo-docker
     gradle eclipse
+    gradle cleanIdea idea
 
 ## Execução local / Local execution
 
-Compilação+Execução durante o processo de desenvolvimento.
+Execução durante o processo de desenvolvimento.
 
-Compilation+Execution during the development process.
+Execution during the development process.
 
     cd iperoxo-docker
     ./local.sh
@@ -41,7 +42,7 @@ Compilation+Execution during the development process.
 Compilation:
 
     cd iperoxo-docker
-    gradle dist
+    gradle clean build
 
 Image:
 

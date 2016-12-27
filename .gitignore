@@ -29,8 +29,13 @@ test-output/
 .project
 .classpath
 .settings/
-binario/
 bin/
+
+# IntelliJ IDEA
+*.iml
+*.ipr
+*.iws
+out/
 
 # Logs
 *.log
