@@ -100,6 +100,13 @@ public final class IpeRoxo {
 			
 			executarConfiguracao( args );
 			executarFonteDeDados();
+			
+			String finalizarAposDataSource = getPropriedade( "IpeRoxo.FinalizarAposDataSource" );
+			if( finalizarAposDataSource != null && finalizarAposDataSource.equals( "true" ) ){
+				log.info( getMensagem( null, "$Log.FinalizandoAposDataSource" ) );
+				System.exit( 0 );
+			}
+			
 			executarInicializacao();
 			executarCopaiba();
 			

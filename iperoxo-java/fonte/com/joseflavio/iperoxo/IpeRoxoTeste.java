@@ -42,7 +42,6 @@ package com.joseflavio.iperoxo;
 import java.io.IOException;
 import java.sql.Connection;
 
-import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
@@ -58,21 +57,21 @@ import com.joseflavio.urucum.texto.StringUtil;
 @FixMethodOrder(MethodSorters.JVM)
 public class IpeRoxoTeste {
 
-	@BeforeClass
-	public static void inicializar() throws IOException, InterruptedException {
+	/**
+	 * Inicializa o {@link IpeRoxo} através de {@link IpeRoxo#main(String[])} e
+	 * espera por {@link IpeRoxo#isDisponivel()}.<br>
+	 * Deve-se chamar este método preferencialmente em {@link BeforeClass}.
+	 */
+	protected static void inicializarIpeRoxo() throws IOException, InterruptedException {
 		
 		new Thread( () -> {
 			IpeRoxo.main( new String[0] );			
 		} ).start();
 		
 		while( ! IpeRoxo.isDisponivel() ){
-			Thread.sleep( 50 );
+			Thread.sleep( 10 );
 		}
 		
-	}
-	
-	@AfterClass
-	public static void finalizar() throws IOException {
 	}
 	
 	@Test
