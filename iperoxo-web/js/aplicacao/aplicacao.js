@@ -9,6 +9,7 @@
 $(document).ready(function(){
     setSID( gerarID() );
     setLinguagem( navigator.language );
+    setCookie( "cookieTeste", "Ipê-roxo ~ Teste de Cookie!" );
     abrirTela( "html/tela.html" );
 });
 

@@ -80,7 +80,7 @@ function jsExec( funcaoNome, arg1, arg2, arg3, arg4, arg5 ) {
 function setCookie( chave, valor, minutos ) {
     var expiracao = new Date();
     expiracao.setTime( expiracao.getTime() + (minutos*60*1000) );
-    document.cookie = chave + "=" + valor + ";expires=" + expiracao.toUTCString() + ";path=/";
+    document.cookie = chave + "=" + encodeURI(valor) + ";expires=" + expiracao.toUTCString() + ";path=/";
 }
 
 //--------------------------------------------------------------------------
@@ -91,7 +91,7 @@ function getCookie( chave ) {
     for( var i = 0; i < partes.length; i++ ){
         var p = partes[i].replace(/^\s+/,"");
         if( p.indexOf(inicio) == 0 ){
-            return p.substring(inicio.length, p.length);
+            return decodeURI(p.substring(inicio.length, p.length));
         }
     }
     return "";

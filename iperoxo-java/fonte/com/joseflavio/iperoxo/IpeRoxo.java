@@ -101,8 +101,7 @@ public final class IpeRoxo {
 			executarConfiguracao( args );
 			executarFonteDeDados();
 			
-			String finalizarAposDataSource = getPropriedade( "IpeRoxo.FinalizarAposDataSource" );
-			if( finalizarAposDataSource != null && finalizarAposDataSource.equals( "true" ) ){
+			if( Boolean.parseBoolean( getPropriedade( "IpeRoxo.FinalizarAposDataSource" ) ) ){
 				log.info( getMensagem( null, "$Log.FinalizandoAposDataSource" ) );
 				System.exit( 0 );
 			}
@@ -112,6 +111,7 @@ public final class IpeRoxo {
 			
 		}catch( Exception e ){
 			log.error( e.getMessage(), e );
+			System.exit( 1 );
 		}
 		
 	}
@@ -193,7 +193,7 @@ public final class IpeRoxo {
 		try{
 			emf.createEntityManager().close();
 		}catch( Exception e ){
-			throw new IOException( e );
+			log.error( e.getMessage(), e );
 		}
 		
 	}
@@ -208,9 +208,25 @@ public final class IpeRoxo {
 		String nome = getPropriedade( "IpeRoxo.Inicializacao" );
 		if( nome == null || nome.isEmpty() ) return;
 		
+		log.info( getMensagem( null, "$Log.Executando.Inicializacao" ) );
+		
 		Class<?> classe = Class.forName( nome );
 		
-		((Inicializacao)classe.newInstance()).inicializar();
+		try{
+			
+			((Inicializacao)classe.newInstance()).inicializar();
+		
+		}catch( InstantiationException e ){
+			throw e;
+		}catch( IllegalAccessException e ){
+			throw e;
+		}catch( Exception e ){
+			if( Boolean.parseBoolean( getPropriedade( "IpeRoxo.Inicializacao.Essencial" ) ) ){
+				throw e instanceof IOException ? (IOException) e : new IOException( e );
+			}else{
+				log.error( e.getMessage(), e );
+			}
+		}
 		
 	}
 	
@@ -284,6 +300,15 @@ public final class IpeRoxo {
 	 */
 	public static String getPropriedade( String chave ) {
 		return configuracao.getProperty( chave );
+	}
+
+	/**
+	 * Determina o valor de uma propriedade da aplicação.<br>
+	 * A alteração não será persistida, tendo efeito apenas durante o tempo de execução corrente.
+	 * @see #getPropriedade(String)
+	 */
+	public static void setPropriedade( String chave, String valor ) {
+		configuracao.setProperty( chave, valor );
 	}
 	
 	/**

@@ -45,6 +45,7 @@ import java.util.ResourceBundle;
 import com.joseflavio.iperoxo.BancoDeDados;
 import com.joseflavio.iperoxo.BasicoServico;
 import com.joseflavio.iperoxo.Servico;
+import com.joseflavio.urucum.aparencia.Nome;
 import com.joseflavio.urucum.comunicacao.Arquivo;
 import com.joseflavio.urucum.comunicacao.Mensagem.Tipo;
 import com.joseflavio.urucum.comunicacao.Resposta;
@@ -57,30 +58,35 @@ import com.joseflavio.urucum.validacao.ValidacaoUtil;
  * @author José Flávio de Souza Dias Júnior
  */
 public class Exemplo extends BasicoServico<String> {
-	
-	@NaoNulo(mensagem="$IpeRoxo.Exemplo.Texto.Vazio")
-	@NaoVazio(mensagem="$IpeRoxo.Exemplo.Texto.Vazio")
+
+	@Nome(masculino="$IpeRoxo.Exemplo.Texto")
+	@NaoNulo
+	@NaoVazio
 	private String texto;
 	
 	@NaoNulo(mensagem="$IpeRoxo.Exemplo.Arquivo.Vazio")
 	@NaoVazio(mensagem="$IpeRoxo.Exemplo.Arquivo.Vazio")
 	private Arquivo[] arquivo;
 
+	private String cookieTeste;
+
 	@Override
 	public void executar( Resposta<String> resp, BancoDeDados bd, ResourceBundle rb ) throws IOException {
 		
 		try{
-			
-			if( ! ValidacaoUtil.validar( this, resp.getMensagens(), true, null, rb ) ){
+
+			if( ! ValidacaoUtil.validar( this, resp.getMensagens(), rb ) ){
 				throw new IOException();
 			}
-			
+
 			resp.mais( Tipo.EXITO, null, getMensagem( "$IpeRoxo.Exemplo.Exito" ) );
 			resp.mais( Tipo.INFORMACAO, null, texto );
 			
 			for( Arquivo a : arquivo ){
 				resp.mais( Tipo.INFORMACAO, null, a.getNome() + " [" + a.getEndereco() + "]" );
 			}
+
+			resp.mais( Tipo.ATENCAO, null, "Cookie: " + cookieTeste );
 			
 		}catch( IOException e ){
 			throw e;
@@ -99,6 +105,11 @@ public class Exemplo extends BasicoServico<String> {
 		}
 	}
 
+	@Override
+	protected boolean isNecessarioBancoDeDados() {
+		return false;
+	}
+
 	public String getTexto() {
 		return texto;
 	}
@@ -114,5 +125,13 @@ public class Exemplo extends BasicoServico<String> {
 	public void setArquivo( Arquivo[] arquivo ) {
 		this.arquivo = arquivo;
 	}
-	
+
+	public String getCookieTeste() {
+		return cookieTeste;
+	}
+
+	public void setCookieTeste( String cookieTeste ) {
+		this.cookieTeste = cookieTeste;
+	}
+
 }
