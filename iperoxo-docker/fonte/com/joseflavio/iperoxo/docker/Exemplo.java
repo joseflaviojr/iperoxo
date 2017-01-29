@@ -39,9 +39,6 @@
 
 package com.joseflavio.iperoxo.docker;
 
-import java.io.IOException;
-import java.util.ResourceBundle;
-
 import com.joseflavio.iperoxo.BancoDeDados;
 import com.joseflavio.iperoxo.BasicoServico;
 import com.joseflavio.iperoxo.Servico;
@@ -52,6 +49,9 @@ import com.joseflavio.urucum.comunicacao.Resposta;
 import com.joseflavio.urucum.validacao.NaoNulo;
 import com.joseflavio.urucum.validacao.NaoVazio;
 import com.joseflavio.urucum.validacao.ValidacaoUtil;
+
+import java.io.IOException;
+import java.util.ResourceBundle;
 
 /**
  * Exemplo de {@link Servico}.
@@ -69,6 +69,8 @@ public class Exemplo extends BasicoServico<String> {
 	private Arquivo[] arquivo;
 
 	private String cookieTeste;
+	
+	private String chave;
 
 	@Override
 	public void executar( Resposta<String> resp, BancoDeDados bd, ResourceBundle rb ) throws IOException {
@@ -99,10 +101,12 @@ public class Exemplo extends BasicoServico<String> {
 	@Override
 	public String toString() {
 		try{
-			return getMensagem( "$IpeRoxo.Exemplo.Texto" );
+			if( chave.equals( "texto" ) ){
+				return getMensagem( "$IpeRoxo.Exemplo.Texto" );
+			}
 		}catch( Exception e ){
-			return "Texto";
 		}
+		return chave;
 	}
 
 	@Override
@@ -133,5 +137,13 @@ public class Exemplo extends BasicoServico<String> {
 	public void setCookieTeste( String cookieTeste ) {
 		this.cookieTeste = cookieTeste;
 	}
-
+	
+	public String getChave() {
+		return chave;
+	}
+	
+	public void setChave( String chave ) {
+		this.chave = chave;
+	}
+	
 }

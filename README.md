@@ -53,11 +53,7 @@ Volume:
 
 Running:
 
-    docker run --name="iperoxo" -d -p 8884:8884 -v iperoxo:/volume --restart=unless-stopped joseflavio/iperoxo:1.0-A7
-
-Network:
-
-    docker network connect --ip=x.x.x.x NETWORK_NAME iperoxo
+    docker run --name="iperoxo" -d -p 8884:8884 -v iperoxo:/volume --ip=x.x.x.x --net xxxxxx --restart=unless-stopped joseflavio/iperoxo:1.0-A7
 
 Configuration:
 
