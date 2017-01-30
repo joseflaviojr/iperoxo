@@ -39,22 +39,12 @@
 
 package com.joseflavio.iperoxo;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.io.UnsupportedEncodingException;
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
-import java.util.MissingResourceException;
-import java.util.Properties;
-import java.util.PropertyResourceBundle;
-import java.util.ResourceBundle;
+import com.joseflavio.copaiba.Copaiba;
+import com.joseflavio.copaiba.CopaibaException;
+import com.joseflavio.urucum.texto.StringUtil;
+import org.apache.commons.dbcp2.BasicDataSource;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -62,21 +52,19 @@ import javax.naming.NamingException;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.sql.DataSource;
-
-import org.apache.commons.dbcp2.BasicDataSource;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
-import com.joseflavio.copaiba.Copaiba;
-import com.joseflavio.copaiba.CopaibaException;
-import com.joseflavio.urucum.texto.StringUtil;
+import java.io.*;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.*;
 
 /**
  * Ipê-roxo: Modelo de aplicação de {@link Copaiba}.
  * @author José Flávio de Souza Dias Júnior
  */
 public final class IpeRoxo {
-
+	
+	private static final Properties configuracaoGeral = new Properties();
+	
 	private static final Properties configuracao = new Properties();
 	
 	private static final Map<String,ResourceBundle> mensagens = new HashMap<>();
@@ -98,6 +86,7 @@ public final class IpeRoxo {
 			
 			log.info( getMensagem( null, "$Log.Inicio" ) );
 			
+			executarConfiguracaoGeral();
 			executarConfiguracao( args );
 			executarFonteDeDados();
 			
@@ -112,6 +101,20 @@ public final class IpeRoxo {
 		}catch( Exception e ){
 			log.error( e.getMessage(), e );
 			System.exit( 1 );
+		}
+		
+	}
+	
+	/**
+	 * ~/Iperoxo.properties
+	 */
+	private static void executarConfiguracaoGeral() throws IOException {
+		
+		File arquivo = new File( System.getProperty( "user.home" ), "Iperoxo.properties" );
+		if( ! arquivo.exists() ) return;
+		
+		try( Reader texto = new InputStreamReader( new FileInputStream( arquivo ), "UTF-8" ) ){
+			configuracaoGeral.load( texto );
 		}
 		
 	}
@@ -235,16 +238,27 @@ public final class IpeRoxo {
 	 */
 	private static void executarCopaiba() throws IOException, CopaibaException {
 		
-		log.info( getMensagem( null, "$Log.Iniciando.Copaiba" ) );
-		
 		copaiba = new Copaiba();
 		
 		copaiba.setPermitirRotina( false );
 		copaiba.setPublicarCertificados( false );
 		copaiba.setAuditor( new PacoteAuditor() );
 
-		int     porta  = Integer.parseInt( getPropriedade( "Copaiba.Porta" ) );
+		int porta = 8884;
+		String portaStr = getPropriedade( "Copaiba.Porta" );
+		
+		try{
+			porta = Integer.parseInt( portaStr );
+		}catch( NumberFormatException e ){
+			try{
+				porta = Integer.parseInt( configuracaoGeral.getProperty( portaStr ) );
+			}catch( NumberFormatException f ){
+			}
+		}
+		
 		boolean segura = Boolean.parseBoolean( getPropriedade( "Copaiba.Segura" ) );
+		
+		log.info( getMensagem( null, "$Log.Iniciando.Copaiba", porta ) );
 		
 		copaiba.abrir( porta, segura );
 		
