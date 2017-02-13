@@ -41,6 +41,7 @@ package com.joseflavio.iperoxo.docker;
 
 import com.joseflavio.iperoxo.BancoDeDados;
 import com.joseflavio.iperoxo.BasicoServico;
+import com.joseflavio.iperoxo.IpeRoxo;
 import com.joseflavio.iperoxo.Servico;
 import com.joseflavio.urucum.aparencia.Nome;
 import com.joseflavio.urucum.comunicacao.Arquivo;
@@ -90,10 +91,10 @@ public class Exemplo extends BasicoServico<String> {
 
 			resp.mais( Tipo.ATENCAO, null, "Cookie: " + cookieTeste );
 			
-		}catch( IOException e ){
-			throw e;
 		}catch( Exception e ){
-			throw new IOException( e );
+			resp.setCodigo( IpeRoxo.getCodigo( "Erro.Desconhecido" ) );
+			if( e instanceof IOException ) throw (IOException) e;
+			else throw new IOException( e );
 		}
 		
 	}

@@ -41,6 +41,7 @@ package com.joseflavio.iperoxo;
 
 import com.joseflavio.copaiba.Copaiba;
 import com.joseflavio.copaiba.CopaibaException;
+import com.joseflavio.urucum.comunicacao.Resposta;
 import com.joseflavio.urucum.texto.StringUtil;
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.apache.logging.log4j.LogManager;
@@ -68,6 +69,8 @@ public final class IpeRoxo {
 	private static final Properties configuracao = new Properties();
 	
 	private static final Map<String,ResourceBundle> mensagens = new HashMap<>();
+	
+	private static final Map<String,Integer> codigos = new HashMap<>();
 	
 	private static BasicDataSource dataSource;
 	
@@ -124,6 +127,8 @@ public final class IpeRoxo {
 	 */
 	private static void executarConfiguracao( String[] args ) throws IOException {
 		
+		// Configuracao.properties
+		
 		InputStream conf = null;
 		
 		if( args.length >= 1 ){
@@ -146,6 +151,20 @@ public final class IpeRoxo {
 		
 		try( Reader texto = new InputStreamReader( conf, "UTF-8" ) ){
 			configuracao.load( texto );
+		}
+		
+		// Codigos.properties
+		
+		conf = IpeRoxo.class.getResourceAsStream( "/Codigos.properties" );
+		if( conf != null ){
+			Properties props = new Properties();
+			try( Reader texto = new InputStreamReader( conf, "UTF-8" ) ){
+				props.load( texto );
+			}
+			for( Object chave : props.keySet() ){
+				String nome = chave.toString();
+				codigos.put( nome, Integer.parseInt( props.getProperty( nome ) ) );
+			}
 		}
 		
 	}
@@ -265,7 +284,9 @@ public final class IpeRoxo {
 	}
 	
 	/**
-	 * {@link ResourceBundle} correspondente a uma {@link Locale}.
+	 * {@link ResourceBundle} correspondente a uma {@link Locale}.<br>
+	 * Nomenclatura dos arquivos de mensagens:<br>
+	 * <code>"Mensagens_" + {@link Locale#getLanguage()} [ + "-" + {@link Locale#getCountry()} ] + ".properties"</code>
 	 * @param linguagem Veja {@link Locale#toString()}. Opcional.
 	 * @see StringUtil#formatarMensagem(ResourceBundle, String, Object...)
 	 * @see #getMensagem(String, String, Object...)
@@ -306,6 +327,17 @@ public final class IpeRoxo {
 	 */
 	public static String getMensagem( String linguagem, String mensagem, Object... parametros ) throws IOException, MissingResourceException {
 		return StringUtil.formatarMensagem( getResourceBundle( linguagem ), mensagem, parametros );
+	}
+	
+	/**
+	 * Busca por um código inteiro definido em "Codigos.properties".<br>
+	 * Código normalmente representa um estado do sistema, seja de progressão ou de erro.
+	 * @return 0, se código indefinido.
+	 * @see Resposta#getCodigo()
+	 */
+	public static int getCodigo( String chave ) {
+		Integer codigo = codigos.get( chave );
+		return codigo != null ? codigo : 0;
 	}
 	
 	/**
