@@ -41,15 +41,14 @@ package com.joseflavio.iperoxo.docker;
 
 import com.joseflavio.iperoxo.BancoDeDados;
 import com.joseflavio.iperoxo.BasicoServico;
-import com.joseflavio.iperoxo.IpeRoxo;
 import com.joseflavio.iperoxo.Servico;
 import com.joseflavio.urucum.aparencia.Nome;
 import com.joseflavio.urucum.comunicacao.Arquivo;
 import com.joseflavio.urucum.comunicacao.Mensagem.Tipo;
 import com.joseflavio.urucum.comunicacao.Resposta;
+import com.joseflavio.urucum.texto.StringUtil;
 import com.joseflavio.urucum.validacao.NaoNulo;
 import com.joseflavio.urucum.validacao.NaoVazio;
-import com.joseflavio.urucum.validacao.ValidacaoUtil;
 
 import java.io.IOException;
 import java.util.ResourceBundle;
@@ -78,8 +77,8 @@ public class Exemplo extends BasicoServico<String> {
 		
 		try{
 
-			if( ! ValidacaoUtil.validar( this, resp.getMensagens(), rb ) ){
-				throw new IOException();
+			if( StringUtil.tamanho( cookieTeste ) == 0 ){
+				retornarErro( resp, "Erro.Desconhecido", "$Erro_NaoNulo", "Cookie", 0, 0 );
 			}
 
 			resp.mais( Tipo.EXITO, null, getMensagem( "$IpeRoxo.Exemplo.Exito" ) );
@@ -92,7 +91,6 @@ public class Exemplo extends BasicoServico<String> {
 			resp.mais( Tipo.ATENCAO, null, "Cookie: " + cookieTeste );
 			
 		}catch( Exception e ){
-			resp.setCodigo( IpeRoxo.getCodigo( "Erro.Desconhecido" ) );
 			if( e instanceof IOException ) throw (IOException) e;
 			else throw new IOException( e );
 		}

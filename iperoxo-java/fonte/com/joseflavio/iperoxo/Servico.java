@@ -39,12 +39,12 @@
 
 package com.joseflavio.iperoxo;
 
+import com.joseflavio.copaiba.CopaibaConexao;
+import com.joseflavio.urucum.comunicacao.Resposta;
+
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.Locale;
-
-import com.joseflavio.copaiba.CopaibaConexao;
-import com.joseflavio.urucum.comunicacao.Resposta;
 
 /**
  * Base para serviços a serem expostos através de {@link CopaibaConexao#solicitar(String, String, String)}.

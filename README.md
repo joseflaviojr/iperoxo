@@ -6,7 +6,7 @@ HTML5 application model with [Copaíba](http://joseflavio.com/copaiba).
 
 ## Versão Atual / Current Version
 
-1.0-A9
+1.0-A10
 
 Padrão de versionamento: [JFV](http://joseflavio.com/jfv)
 
@@ -45,7 +45,7 @@ Compilation:
 
 Image:
 
-    docker build --force-rm -t joseflavio/iperoxo:1.0-A9 .
+    docker build --force-rm -t joseflavio/iperoxo:1.0-A10 .
 
 Volume:
 
@@ -53,7 +53,7 @@ Volume:
 
 Running:
 
-    docker run --name="iperoxo" -d -p 8884:8884 -v iperoxo:/volume --ip=x.x.x.x --net xxxxxx --restart=unless-stopped joseflavio/iperoxo:1.0-A9
+    docker run --name="iperoxo" -d -p 8884:8884 -v iperoxo:/volume --ip=x.x.x.x --net xxxxxx --restart=unless-stopped joseflavio/iperoxo:1.0-A10
 
 Configuration:
 
@@ -66,4 +66,4 @@ Log:
 Removal:
 
     docker rm -f iperoxo
-    docker rmi joseflavio/iperoxo:1.0-A9
+    docker rmi joseflavio/iperoxo:1.0-A10

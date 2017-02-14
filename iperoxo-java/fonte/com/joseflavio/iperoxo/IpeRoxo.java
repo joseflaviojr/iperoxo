@@ -127,9 +127,14 @@ public final class IpeRoxo {
 	 */
 	private static void executarConfiguracao( String[] args ) throws IOException {
 		
-		// Configuracao.properties
+		// Configuracao.Padrao.properties
 		
-		InputStream conf = null;
+		InputStream conf = IpeRoxo.class.getResourceAsStream( "/Configuracao.Padrao.properties" );
+		try( Reader texto = new InputStreamReader( conf, "UTF-8" ) ){
+			configuracao.load( texto );
+		}
+		
+		// Configuracao.properties
 		
 		if( args.length >= 1 ){
 			
@@ -204,6 +209,17 @@ public final class IpeRoxo {
 			contexto.close();
 		}
 		
+		while( true ){
+			try( Connection con = getConnection() ){
+				break;
+			}catch( Exception e ){
+				try{
+					Thread.sleep( 2000 );
+				}catch( InterruptedException f ){
+				}
+			}
+		}
+		
 		if( Boolean.parseBoolean( getPropriedade( "DataSource.JPA.Enable" ) ) ){
 			log.info( getMensagem( null, "$Log.Iniciando.JPA" ) );
 		}else{
@@ -211,7 +227,7 @@ public final class IpeRoxo {
 		}
 		
 		emf = Persistence.createEntityManagerFactory( "JPA" );
-
+		
 		try{
 			emf.createEntityManager().close();
 		}catch( Exception e ){
@@ -337,15 +353,35 @@ public final class IpeRoxo {
 	 */
 	public static int getCodigo( String chave ) {
 		Integer codigo = codigos.get( chave );
-		return codigo != null ? codigo : 0;
+		if( codigo == null ){
+			try{
+				getLog().error( getMensagem( null, "$Codigo.Desconhecido", chave ) );
+			}catch( Exception e ){
+			}
+			return 0;
+		}else{
+			return codigo;
+		}
 	}
 	
 	/**
 	 * Obtém uma propriedade da aplicação.
+	 * @param chave Chave da propriedade.
 	 * @see Properties#getProperty(String)
 	 */
 	public static String getPropriedade( String chave ) {
 		return configuracao.getProperty( chave );
+	}
+	
+	/**
+	 * Obtém uma propriedade da aplicação.
+	 * @param chave Chave da propriedade.
+	 * @param nulo Valor a retornar, se propriedade nula ou indefinida.
+	 * @see Properties#getProperty(String)
+	 */
+	public static String getPropriedade( String chave, String nulo ) {
+		String valor = configuracao.getProperty( chave );
+		return valor != null ? valor : nulo;
 	}
 
 	/**
