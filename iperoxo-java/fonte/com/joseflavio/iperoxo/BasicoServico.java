@@ -125,32 +125,19 @@ public abstract class BasicoServico <T extends Serializable> extends Servico<T> 
 	
 	/**
 	 * Encerra a {@link #executar(Resposta, BancoDeDados, ResourceBundle) execução} do {@link Servico} através de {@link IOException},
-	 * definindo opcionalmente na {@link Resposta} um {@link Resposta#setCodigo(int) código} e/ou
+	 * definindo na {@link Resposta} um {@link Resposta#setCodigo(int) código} e
 	 * uma {@link Resposta#mais(Mensagem.Tipo, String, Serializable) mensagem} de {@link Mensagem.Tipo#ERRO erro}.
 	 * @param resposta {@link Resposta} em construção.
-	 * @param codigo Chave do código a retornar, conforme {@link IpeRoxo#getCodigo(String)}. Opcional.
-	 * @param mensagem Mensagem de {@link Mensagem.Tipo#ERRO erro} a retornar, conforme {@link IpeRoxo#getMensagem(String, String, Object...)}. Opcional.
+	 * @param chave Chave do {@link IpeRoxo#getCodigo(String) código} e da {@link IpeRoxo#getMensagem(String, String, Object...) mensagem} de {@link Mensagem.Tipo#ERRO erro}.
 	 * @param parametros Parâmetros para {@link IpeRoxo#getMensagem(String, String, Object...)}.
 	 * @throws IOException disparada incondicionalmente, a fim de encerrar a {@link #executar() execução} do {@link Servico}.
 	 */
-	protected void retornarErro( Resposta resposta, String codigo, String mensagem, Object... parametros ) throws IOException {
-		if( codigo != null ){
-			resposta.setCodigo( IpeRoxo.getCodigo( codigo ) );
-		}
-		if( mensagem != null ){
-			resposta.mais( Mensagem.Tipo.ERRO, null, getMensagem( mensagem, parametros ) );
-		}
+	protected void retornarErro( Resposta resposta, String chave, Object... parametros ) throws IOException {
+		if( resposta == null || StringUtil.tamanho( chave ) == 0 ) throw new IllegalArgumentException();
+		if( chave.charAt( 0 ) == '$' ) chave = chave.substring( 1 );
+		resposta.setCodigo( IpeRoxo.getCodigo( chave ) );
+		resposta.mais( Mensagem.Tipo.ERRO, null, getMensagem( "$" + chave, parametros ) );
 		throw new IOException();
-	}
-	
-	/**
-	 * Executa {@link #retornarErro(Resposta, String, String, Object...)}, utilizando
-	 * a chave de {@link IpeRoxo#getCodigo(String)} também como chave da
-	 * {@link IpeRoxo#getMensagem(String, String, Object...) mensagem} de {@link Mensagem.Tipo#ERRO erro}.
-	 * @see #retornarErro(Resposta, String, String, Object...)
-	 */
-	protected void retornarErro( Resposta resposta, String codigo, Object... parametros ) throws IOException {
-		retornarErro( resposta, codigo, "$" + codigo, parametros );
 	}
 	
 }
