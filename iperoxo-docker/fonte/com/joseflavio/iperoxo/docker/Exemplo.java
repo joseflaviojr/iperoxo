@@ -107,7 +107,7 @@ public class Exemplo extends BasicoServico<String> {
 		}
 		return chave;
 	}
-
+	
 	@Override
 	protected boolean isNecessarioBancoDeDados() {
 		return false;

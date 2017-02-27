@@ -40,8 +40,12 @@
 package com.joseflavio.iperoxo;
 
 import com.joseflavio.copaiba.Copaiba;
+import com.joseflavio.copaiba.CopaibaConexao;
 import com.joseflavio.copaiba.CopaibaException;
+import com.joseflavio.unhadegato.UnhaDeGato;
+import com.joseflavio.urucum.arquivo.ResourceBundleCharsetControl;
 import com.joseflavio.urucum.comunicacao.Resposta;
+import com.joseflavio.urucum.json.JSON;
 import com.joseflavio.urucum.texto.StringUtil;
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.apache.logging.log4j.LogManager;
@@ -54,6 +58,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.sql.DataSource;
 import java.io.*;
+import java.lang.reflect.Method;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.*;
@@ -276,7 +281,14 @@ public final class IpeRoxo {
 		copaiba = new Copaiba();
 		
 		copaiba.setPermitirRotina( false );
+		copaiba.setPermitirMensagem( false );
+		copaiba.setPermitirLeitura( false );
+		copaiba.setPermitirAtribuicao( false );
+		copaiba.setPermitirRemocao( false );
+		copaiba.setPermitirTransferencia( false );
+		
 		copaiba.setPublicarCertificados( false );
+		
 		copaiba.setAuditor( new PacoteAuditor() );
 
 		int porta = 8884;
@@ -301,43 +313,47 @@ public final class IpeRoxo {
 	
 	/**
 	 * {@link ResourceBundle} correspondente a uma {@link Locale}.<br>
-	 * Nomenclatura dos arquivos de mensagens:<br>
-	 * <code>"Mensagens_" + {@link Locale#getLanguage()} [ + "-" + {@link Locale#getCountry()} ] + ".properties"</code>
-	 * @param linguagem Veja {@link Locale#toString()}. Opcional.
-	 * @see StringUtil#formatarMensagem(ResourceBundle, String, Object...)
+	 * {@link ResourceBundle#getBaseBundleName()} == {@link #getPropriedade(String) propriedade} "ResourceBundle.BaseName"<br>
+	 * {@link PropertyResourceBundle}'s (arquivos ".properties") devem estar codificados conforme {@link #getPropriedade(String) propriedade} "ResourceBundle.Charset". Veja {@link ResourceBundleCharsetControl}.
+	 * @param linguagem Formato IETF BCP 47. Veja {@link Locale#toLanguageTag()}. {@code null} == {@link #getPropriedade(String) propriedade} "ResourceBundle.Locale.Default"
 	 * @see #getMensagem(String, String, Object...)
 	 */
 	public static ResourceBundle getResourceBundle( String linguagem ) throws IOException {
 		
-		if( linguagem == null ) linguagem = Locale.getDefault().toString();
+		final boolean padrao = linguagem == null;
+		
+		if( padrao ) linguagem = getPropriedade( "ResourceBundle.Locale.Default", "pt" );
 		
 		ResourceBundle rb = mensagens.get( linguagem );
 		if( rb != null ) return rb;
 		
-		if( linguagem.indexOf( '_' ) > 0 ){
-			return getResourceBundle( linguagem.replace( '_', '-' ) );
-		}
+		String baseName = getPropriedade( "ResourceBundle.BaseName", "Mensagens" );
 		
-		InputStream is = IpeRoxo.class.getResourceAsStream( "/Mensagens_" + linguagem + ".properties" );
-		if( is != null ){
-			try{
-				rb = new PropertyResourceBundle( new InputStreamReader( is, "UTF-8" ) );
-				mensagens.put( linguagem, rb );
-				return rb;
-			}catch( UnsupportedEncodingException e ){
+		try{
+			
+			rb = ResourceBundle.getBundle(
+                baseName,
+                Locale.forLanguageTag( linguagem ),
+                new ResourceBundleCharsetControl( getPropriedade( "ResourceBundle.Charset", "UTF-8" ) )
+            );
+			
+			mensagens.put( linguagem, rb );
+			return rb;
+			
+		}catch( MissingResourceException e ){
+			
+			if( padrao ){
 				throw new IOException( e );
+			}else{
+				return getResourceBundle( null );
 			}
+			
 		}
-		
-		int traco = linguagem.indexOf( '-' );
-		rb = traco > 0 ? getResourceBundle( linguagem.substring( 0, traco ) ) : getResourceBundle( "pt-BR" );
-		mensagens.put( linguagem, rb );
-		return rb;
 		
 	}
 	
 	/**
-	 * @param linguagem Veja {@link Locale#toString()}. Opcional.
+	 * @param linguagem Veja {@link Locale#toLanguageTag()}. Opcional.
 	 * @see StringUtil#formatarMensagem(ResourceBundle, String, Object...)
 	 * @see #getResourceBundle(String)
 	 */
@@ -412,6 +428,61 @@ public final class IpeRoxo {
 	 */
 	public static EntityManagerFactory getEntityManagerFactory() {
 		return emf;
+	}
+	
+	/**
+	 * {@link UnhaDeGato}
+	 * @param nome Identificação da {@link UnhaDeGato} desejada.
+	 * @see #getUnhaDeGato()
+	 */
+	public static UnhaDeGato getUnhaDeGato( String nome ) {
+		
+		String  udgEndereco = getPropriedade( "UnhaDeGato." + nome + ".Endereco" );
+		int     udgPorta    = Integer.parseInt( getPropriedade( "UnhaDeGato." + nome + ".Porta" ) );
+		boolean udgSegura   = Boolean.parseBoolean( getPropriedade( "UnhaDeGato." + nome + ".Segura" ) );
+		boolean udgIgnorar  = Boolean.parseBoolean( getPropriedade( "UnhaDeGato." + nome + ".IgnorarCertificado" ) );
+		
+		return new UnhaDeGato( udgEndereco, udgPorta, udgSegura, udgIgnorar );
+		
+	}
+	
+	/**
+	 * {@link UnhaDeGato} "Principal".
+	 * @see #getUnhaDeGato(String)
+	 */
+	public static UnhaDeGato getUnhaDeGato() {
+		return getUnhaDeGato( "Principal" );
+	}
+	
+	/**
+	 * @see UnhaDeGato#solicitar(String, String, String, String)
+	 * @see CopaibaConexao#solicitar(String, String, String)
+	 */
+	public static JSON solicitar( UnhaDeGato unhaDeGato, String copaiba, String classe, JSON estado, String metodo ) throws IOException {
+		return new JSON( unhaDeGato.solicitar(
+			copaiba,
+			classe,
+			estado.toString(),
+			metodo
+		) );
+	}
+	
+	/**
+	 * @see #getUnhaDeGato()
+	 * @see #solicitar(UnhaDeGato, String, String, JSON, String)
+	 */
+	public static JSON solicitar( String copaiba, String classe, JSON estado, String metodo ) throws IOException {
+		return solicitar( getUnhaDeGato(), copaiba, classe, estado, metodo );
+	}
+	
+	/**
+	 * {@link #getUnhaDeGato()}, {@link Servico#executar()}.
+	 * @see #getUnhaDeGato()
+	 * @see Servico#executar()
+	 * @see #solicitar(UnhaDeGato, String, String, JSON, String)
+	 */
+	public static JSON solicitar( String copaiba, String classe, JSON estado ) throws IOException {
+		return solicitar( getUnhaDeGato(), copaiba, classe, estado, "executar" );
 	}
 	
 	/**

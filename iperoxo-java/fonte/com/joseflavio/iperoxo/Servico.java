@@ -91,8 +91,8 @@ public abstract class Servico <T extends Serializable> {
 	}
 	
 	/**
-	 * Linguagem do usuário.
-	 * @see Locale
+	 * Linguagem do usuário, no formato IETF BCP 47.
+	 * @see Locale#toLanguageTag()
 	 * @see IpeRoxo#getResourceBundle(String)
 	 * @see IpeRoxo#getMensagem(String, String, Object...)
 	 */

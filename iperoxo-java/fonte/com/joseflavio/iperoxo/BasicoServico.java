@@ -97,7 +97,7 @@ public abstract class BasicoServico <T extends Serializable> extends Servico<T> 
 	 * Se {@link #isNecessarioAutoCommit()}, será feito um {@link BancoDeDados#commit()} (se êxito) ou um {@link BancoDeDados#rollback()}.
 	 * @param resp {@link Resposta} que será enviada ao {@link CopaibaConexao cliente}.
 	 * @param bd {@link BancoDeDados} do {@link IpeRoxo}, se existente e {@link #isNecessarioBancoDeDados() necessário}.
-	 * @param rb {@link ResourceBundle} correspondente ao {@link #getLid()}.
+	 * @param rb {@link ResourceBundle} correspondente à {@link #getLid()}.
 	 */
 	public abstract void executar( Resposta<T> resp, BancoDeDados bd, ResourceBundle rb ) throws IOException;
 	
