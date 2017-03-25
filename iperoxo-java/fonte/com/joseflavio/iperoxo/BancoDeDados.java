@@ -332,7 +332,7 @@ public class BancoDeDados implements EntityManager, EntityTransaction, Closeable
 		
 		if( et.isActive() ){
 			et.commit();
-			et = null;			
+			et = null;
 		}
 
 		em.close();
@@ -392,7 +392,7 @@ public class BancoDeDados implements EntityManager, EntityTransaction, Closeable
 	
 	@Override
 	public void commit() {
-		et.commit();
+		if( et.isActive() ) et.commit();
 		if( transacoes > 0 ){
 			transacoes--;
 			et.begin();
@@ -401,7 +401,7 @@ public class BancoDeDados implements EntityManager, EntityTransaction, Closeable
 	
 	@Override
 	public void rollback() {
-		et.rollback();
+		if( et.isActive() ) et.rollback();
 		if( transacoes > 0 ){
 			transacoes--;
 			et.begin();

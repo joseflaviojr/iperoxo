@@ -48,6 +48,7 @@ import com.joseflavio.urucum.comunicacao.Resposta;
 import com.joseflavio.urucum.json.JSON;
 import com.joseflavio.urucum.texto.StringUtil;
 import org.apache.commons.dbcp2.BasicDataSource;
+import org.apache.commons.io.IOUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -58,7 +59,6 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.sql.DataSource;
 import java.io.*;
-import java.lang.reflect.Method;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.*;
@@ -146,11 +146,16 @@ public final class IpeRoxo {
 			File arquivo = new File( args[0] );
 			log.info( getMensagem( null, "$Log.Carregando.Configuracao" ) + ": " + arquivo.getAbsolutePath() );
 			
-			if( arquivo.exists() ){
-				conf = new FileInputStream( arquivo );
-			}else{
-				throw new IOException( getMensagem( null, "$Arquivo.Inexistente" ) + ": " + arquivo.getAbsolutePath() );
+			if( ! arquivo.exists() ){
+				try(
+					InputStream  is = IpeRoxo.class.getResourceAsStream( "/Configuracao.properties" );
+					OutputStream os = new FileOutputStream( arquivo );
+				){
+					IOUtils.copy( is, os );
+				}
 			}
+			
+			conf = new FileInputStream( arquivo );
 			
 		}else{
 			
