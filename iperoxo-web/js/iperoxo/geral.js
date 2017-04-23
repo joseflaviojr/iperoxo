@@ -78,9 +78,13 @@ function jsExec( funcaoNome, arg1, arg2, arg3, arg4, arg5 ) {
 //--------------------------------------------------------------------------
 
 function setCookie( chave, valor, minutos ) {
-    var expiracao = new Date();
-    expiracao.setTime( expiracao.getTime() + (minutos*60*1000) );
-    document.cookie = chave + "=" + encodeURI(valor) + ";expires=" + expiracao.toUTCString() + ";path=/";
+    if( minutos == undefined ){
+      document.cookie = chave + "=" + encodeURI(valor) + ";path=/";
+    }else{
+      var expiracao = new Date();
+      expiracao.setTime( expiracao.getTime() + (minutos*60*1000) );
+      document.cookie = chave + "=" + encodeURI(valor) + ";expires=" + expiracao.toUTCString() + ";path=/";
+    }
 }
 
 //--------------------------------------------------------------------------

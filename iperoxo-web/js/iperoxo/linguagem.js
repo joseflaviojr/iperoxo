@@ -55,6 +55,7 @@ var dicionario = Dicionario_pt_BR;
 // No final, será chamada a função linguagemAlterada(), que deveria chamar carregarTextoDinamico()
 function setLinguagem( nome ) {
     lid = nome;
+    setCookie( "lid", lid, 365 * 24 * 60 );
     dicionario = js( "Dicionario_" + nome.split("-").join("_") );
     if( dicionario == undefined ) dicionario = Dicionario_pt_BR;
     linguagemAlterada();
