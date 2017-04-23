@@ -45,6 +45,7 @@ import com.joseflavio.copaiba.CopaibaException;
 import com.joseflavio.unhadegato.UnhaDeGato;
 import com.joseflavio.urucum.arquivo.ResourceBundleCharsetControl;
 import com.joseflavio.urucum.comunicacao.Resposta;
+import com.joseflavio.urucum.comunicacao.SocketServidor;
 import com.joseflavio.urucum.json.JSON;
 import com.joseflavio.urucum.texto.StringUtil;
 import org.apache.commons.dbcp2.BasicDataSource;
@@ -312,7 +313,7 @@ public final class IpeRoxo {
 		
 		log.info( getMensagem( null, "$Log.Iniciando.Copaiba", porta ) );
 		
-		copaiba.abrir( porta, segura );
+		copaiba.abrir( new SocketServidor( porta, segura, true ) );
 		
 	}
 	
@@ -374,15 +375,7 @@ public final class IpeRoxo {
 	 */
 	public static int getCodigo( String chave ) {
 		Integer codigo = codigos.get( chave );
-		if( codigo == null ){
-			try{
-				getLog().error( getMensagem( null, "$Codigo.Desconhecido", chave ) );
-			}catch( Exception e ){
-			}
-			return 0;
-		}else{
-			return codigo;
-		}
+		return codigo != null ? codigo : 0;
 	}
 	
 	/**
