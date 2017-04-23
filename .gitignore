@@ -37,6 +37,10 @@ bin/
 *.iws
 out/
 
+# SASS
+.sass-cache/
+*.css.map
+
 # Logs
 *.log
 hs_err_pid*
