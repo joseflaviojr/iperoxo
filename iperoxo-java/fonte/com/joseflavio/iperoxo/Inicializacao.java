@@ -39,9 +39,9 @@
 
 package com.joseflavio.iperoxo;
 
-import java.io.IOException;
-
 import com.joseflavio.copaiba.Copaiba;
+
+import java.io.IOException;
 
 /**
  * Procedimento pré-{@link Copaiba#abrir() abertura}.

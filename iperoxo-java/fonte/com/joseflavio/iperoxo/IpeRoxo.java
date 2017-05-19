@@ -93,14 +93,14 @@ public final class IpeRoxo {
 		
 		try{
 			
-			log.info( getMensagem( null, "$Log.Inicio" ) );
+			log.info( getMensagem( null, "Log.Inicio" ) );
 			
 			executarConfiguracaoGeral();
 			executarConfiguracao( args );
 			executarFonteDeDados();
 			
 			if( Boolean.parseBoolean( getPropriedade( "IpeRoxo.FinalizarAposDataSource" ) ) ){
-				log.info( getMensagem( null, "$Log.FinalizandoAposDataSource" ) );
+				log.info( getMensagem( null, "Log.FinalizandoAposDataSource" ) );
 				System.exit( 0 );
 			}
 			
@@ -145,7 +145,7 @@ public final class IpeRoxo {
 		if( args.length >= 1 ){
 			
 			File arquivo = new File( args[0] );
-			log.info( getMensagem( null, "$Log.Carregando.Configuracao" ) + ": " + arquivo.getAbsolutePath() );
+			log.info( getMensagem( null, "Log.Carregando.Configuracao" ) + ": " + arquivo.getAbsolutePath() );
 			
 			if( ! arquivo.exists() ){
 				try(
@@ -160,7 +160,7 @@ public final class IpeRoxo {
 			
 		}else{
 			
-			log.info( getMensagem( null, "$Log.Carregando.Configuracao.Padrao" ) );
+			log.info( getMensagem( null, "Log.Carregando.Configuracao.Padrao" ) );
 			conf = IpeRoxo.class.getResourceAsStream( "/Configuracao.properties" );
 			
 		}
@@ -191,7 +191,7 @@ public final class IpeRoxo {
 	private static void executarFonteDeDados() throws IOException, NamingException {
 		
 		if( Boolean.parseBoolean( getPropriedade( "DataSource.Enable" ) ) ){
-			log.info( getMensagem( null, "$Log.Iniciando.DataSource" ) );
+			log.info( getMensagem( null, "Log.Iniciando.DataSource" ) );
 		}else{
 			return;
 		}
@@ -232,7 +232,7 @@ public final class IpeRoxo {
 		}
 		
 		if( Boolean.parseBoolean( getPropriedade( "DataSource.JPA.Enable" ) ) ){
-			log.info( getMensagem( null, "$Log.Iniciando.JPA" ) );
+			log.info( getMensagem( null, "Log.Iniciando.JPA" ) );
 		}else{
 			return;
 		}
@@ -257,7 +257,7 @@ public final class IpeRoxo {
 		String nome = getPropriedade( "IpeRoxo.Inicializacao" );
 		if( nome == null || nome.isEmpty() ) return;
 		
-		log.info( getMensagem( null, "$Log.Executando.Inicializacao" ) );
+		log.info( getMensagem( null, "Log.Executando.Inicializacao" ) );
 		
 		Class<?> classe = Class.forName( nome );
 		
@@ -311,7 +311,7 @@ public final class IpeRoxo {
 		
 		boolean segura = Boolean.parseBoolean( getPropriedade( "Copaiba.Segura" ) );
 		
-		log.info( getMensagem( null, "$Log.Iniciando.Copaiba", porta ) );
+		log.info( getMensagem( null, "Log.Iniciando.Copaiba", porta ) );
 		
 		copaiba.abrir( new SocketServidor( porta, segura, true ) );
 		
@@ -360,11 +360,11 @@ public final class IpeRoxo {
 	
 	/**
 	 * @param linguagem Veja {@link Locale#toLanguageTag()}. Opcional.
-	 * @see StringUtil#formatarMensagem(ResourceBundle, String, Object...)
+	 * @see StringUtil#formatar(ResourceBundle, String, Object...)
 	 * @see #getResourceBundle(String)
 	 */
 	public static String getMensagem( String linguagem, String mensagem, Object... parametros ) throws IOException, MissingResourceException {
-		return StringUtil.formatarMensagem( getResourceBundle( linguagem ), mensagem, parametros );
+		return StringUtil.formatar( getResourceBundle( linguagem ), mensagem, parametros );
 	}
 	
 	/**

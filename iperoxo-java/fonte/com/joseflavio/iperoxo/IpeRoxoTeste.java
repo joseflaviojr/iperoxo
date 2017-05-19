@@ -39,16 +39,15 @@
 
 package com.joseflavio.iperoxo;
 
-import java.io.IOException;
-import java.sql.Connection;
-
+import com.joseflavio.urucum.texto.StringUtil;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
 
-import com.joseflavio.urucum.texto.StringUtil;
+import java.io.IOException;
+import java.sql.Connection;
 
 /**
  * Base de testes de {@link Servico}s {@link IpeRoxo}.
@@ -83,8 +82,8 @@ public class IpeRoxoTeste {
 	
 	@Test
 	public void testarMensagem() throws IOException {
-		Assert.assertEquals( "Aplicação Ipê-roxo!", IpeRoxo.getMensagem( "pt-BR", "$IpeRoxo.Exemplo.Teste", "Ipê-roxo" ) );
-		Assert.assertEquals( "Ipê-roxo application!", IpeRoxo.getMensagem( "en", "$IpeRoxo.Exemplo.Teste", "Ipê-roxo" ) );
+		Assert.assertEquals( "Aplicação Ipê-roxo!", IpeRoxo.getMensagem( "pt-BR", "IpeRoxo.Exemplo.Teste", "Ipê-roxo" ) );
+		Assert.assertEquals( "Ipê-roxo application!", IpeRoxo.getMensagem( "en", "IpeRoxo.Exemplo.Teste", "Ipê-roxo" ) );
 	}
 	
 	@Test
