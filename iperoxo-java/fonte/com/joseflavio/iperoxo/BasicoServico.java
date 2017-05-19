@@ -48,10 +48,7 @@ import com.joseflavio.urucum.validacao.ValidacaoUtil;
 
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.List;
-import java.util.Map;
 import java.util.ResourceBundle;
-import java.util.Set;
 
 /**
  * {@link Servico} básico que monta uma {@link Resposta} enquanto utiliza, opcionalmente, um {@link BancoDeDados}.
@@ -59,84 +56,132 @@ import java.util.Set;
  */
 public abstract class BasicoServico <T extends Serializable> extends Servico<T> {
 	
+	protected BasicoServicoConf $Configuracao;
+	
+	/**
+	 * {@link Resposta} que será enviada ao {@link CopaibaConexao cliente}.
+	 * @see #executar()
+	 */
+	protected Resposta<T> $Resposta;
+	
+	/**
+	 * {@link BancoDeDados} do {@link IpeRoxo}, se existente e {@link BasicoServicoConf#bancoDeDados() necessário}.
+	 */
+	protected BancoDeDados $BancoDeDados;
+	
+	/**
+	 * {@link ResourceBundle} correspondente à {@link #getLid()}.
+	 * @see IpeRoxo#getResourceBundle(String)
+	 */
+	protected ResourceBundle $ResourceBundle;
+	
 	@Override
 	public final Resposta<T> executar() {
-		Resposta<T> resp = new Resposta<T>();
+		
+		$Configuracao = this.getClass().getAnnotation( BasicoServicoConf.class );
+		$Resposta     = new Resposta<>();
+		
 		try{
-			BancoDeDados bd = null;
-			if( isNecessarioBancoDeDados() && IpeRoxo.getEntityManagerFactory() != null ){
-				bd = new BancoDeDados();
+			
+			$ResourceBundle = IpeRoxo.getResourceBundle( lid );
+			
+			if( is$BancoDeDados() && IpeRoxo.getEntityManagerFactory() != null ){
+				$BancoDeDados = new BancoDeDados( get$Transacoes() );
 			}
+			
 			try{
-				ResourceBundle rb = IpeRoxo.getResourceBundle( lid );
-				if( isNecessarioValidar() && ! ValidacaoUtil.validar( this, resp.getMensagens(), rb ) ){
+				
+				if( is$Validacao() && ! ValidacaoUtil.validar( this, $Resposta.getMensagens(), $ResourceBundle, get$Omissao() ) ){
 					throw new IOException();
 				}
-				executar( resp, bd, rb );
-				if( bd != null && isNecessarioAutoCommit() ) bd.commit();
+				
+				try{ preProcessamento(); }catch( Exception e ){}
+				
+				processar();
+				
+				try{ posProcessamento(); }catch( Exception e ){}
+				
+				if( $BancoDeDados != null && is$Commit() ) $BancoDeDados.commit();
+				
 			}catch( Exception e ){
-				if( bd != null && isNecessarioAutoCommit() ) bd.rollback();
+				if( $BancoDeDados != null && is$Commit() ) $BancoDeDados.rollback();
 				throw e;
 			}finally{
-				if( bd != null ) bd.close();
+				if( $BancoDeDados != null ) $BancoDeDados.close();
 			}
-			resp.setExito( true );
+			
+			$Resposta.setExito( true );
+			
 		}catch( Exception e ){
-			resp.setExito( false );
-			if( resp.getMensagens().size() == 0 && StringUtil.tamanho( e.getMessage() ) > 0 ){
-				resp.mais( Tipo.ERRO, null, e.getMessage() );
+			
+			$Resposta.setExito( false );
+			
+			if( $Resposta.getMensagens().size() == 0 && StringUtil.tamanho( e.getMessage() ) > 0 ){
+				$Resposta.mais( Tipo.ERRO, null, e.getMessage() );
 			}
+			
 		}
-		return resp;
+		
+		return $Resposta;
+		
 	}
 	
 	/**
 	 * Montagem da {@link Resposta} deste {@link Servico}.<br>
 	 * {@link Resposta#setExito(boolean)} será determinada automaticamente, sendo <code>false</code>
 	 * quando este método disparar uma {@link Exception}.<br>
-	 * Se {@link #isNecessarioAutoCommit()}, será feito um {@link BancoDeDados#commit()} (se êxito) ou um {@link BancoDeDados#rollback()}.
-	 * @param resp {@link Resposta} que será enviada ao {@link CopaibaConexao cliente}.
-	 * @param bd {@link BancoDeDados} do {@link IpeRoxo}, se existente e {@link #isNecessarioBancoDeDados() necessário}.
-	 * @param rb {@link ResourceBundle} correspondente à {@link #getLid()}.
+	 * Se {@link BasicoServicoConf#commit()}, será feito um {@link BancoDeDados#commit()} (se êxito) ou um {@link BancoDeDados#rollback()}.
 	 */
-	public abstract void executar( Resposta<T> resp, BancoDeDados bd, ResourceBundle rb ) throws IOException;
+	protected abstract void processar() throws IOException;
 	
 	/**
-	 * É necessário {@link ValidacaoUtil#validar(Object, List, boolean, Map, ResourceBundle, Set) validar} este {@link Servico}?
-	 * @see ValidacaoUtil#validar(Object, List, boolean, Map, ResourceBundle, Set)
+	 * Atividade pré-{@link #processar() processamento}.<br>
+	 * {@link Exception}s são desconsideradas.
 	 */
-	protected boolean isNecessarioValidar() {
-		return true;
+	protected void preProcessamento() {
 	}
 	
 	/**
-	 * Este {@link Servico} necessita de {@link BancoDeDados}?
+	 * Atividade pós-{@link #processar() processamento}.<br>
+	 * {@link Exception}s são desconsideradas.
 	 */
-	protected boolean isNecessarioBancoDeDados() {
-		return true;
+	protected void posProcessamento() {
+	}
+	
+	
+	private boolean is$BancoDeDados() {
+		return $Configuracao != null ? $Configuracao.bancoDeDados() : true;
+	}
+	
+	private int get$Transacoes() {
+		return $Configuracao != null ? $Configuracao.transacoes() : 1;
+	}
+	
+	private boolean is$Commit() {
+		return $Configuracao != null ? $Configuracao.commit() : true;
+	}
+	
+	private boolean is$Validacao() {
+		return $Configuracao != null ? $Configuracao.validacao() : true;
+	}
+	
+	private String[] get$Omissao() {
+		return $Configuracao != null ? $Configuracao.omissao() : new String[]{ "Automatico" };
 	}
 	
 	/**
-	 * Este {@link Servico} necessita de {@link BancoDeDados#commit()} ou {@link BancoDeDados#rollback()} automático?
-	 */
-	protected boolean isNecessarioAutoCommit() {
-		return true;
-	}
-	
-	/**
-	 * Encerra a {@link #executar(Resposta, BancoDeDados, ResourceBundle) execução} do {@link Servico} através de {@link IOException},
+	 * Encerra a {@link #executar() execução} do {@link BasicoServico} através de {@link IOException},
 	 * definindo na {@link Resposta} um {@link Resposta#setCodigo(int) código} e
 	 * uma {@link Resposta#mais(Mensagem.Tipo, String, Serializable) mensagem} de {@link Mensagem.Tipo#ERRO erro}.
-	 * @param resposta {@link Resposta} em construção.
 	 * @param chave Chave do {@link IpeRoxo#getCodigo(String) código} e da {@link IpeRoxo#getMensagem(String, String, Object...) mensagem} de {@link Mensagem.Tipo#ERRO erro}.
 	 * @param parametros Parâmetros para {@link IpeRoxo#getMensagem(String, String, Object...)}.
-	 * @throws IOException disparada incondicionalmente, a fim de encerrar a {@link #executar() execução} do {@link Servico}.
+	 * @throws IOException disparada incondicionalmente, a fim de encerrar a {@link #executar() execução} do {@link BasicoServico}.
 	 */
-	protected void retornarErro( Resposta resposta, String chave, Object... parametros ) throws IOException {
-		if( resposta == null || StringUtil.tamanho( chave ) == 0 ) throw new IllegalArgumentException();
+	protected void retornarErro( String chave, Object... parametros ) throws IOException {
+		if( StringUtil.tamanho( chave ) == 0 ) throw new IllegalArgumentException();
 		if( chave.charAt( 0 ) == '$' ) chave = chave.substring( 1 );
-		resposta.setCodigo( IpeRoxo.getCodigo( chave ) );
-		resposta.mais( Mensagem.Tipo.ERRO, null, getMensagem( "$" + chave, parametros ) );
+		$Resposta.setCodigo( IpeRoxo.getCodigo( chave ) );
+		$Resposta.mais( Mensagem.Tipo.ERRO, null, getMensagem( chave, parametros ) );
 		throw new IOException();
 	}
 	
