@@ -1,7 +1,7 @@
 //--------------------------------------------------------------------------
 
 // Copyright (C) 2016 José Flávio de Souza Dias Júnior
-// Ipê-roxo 1.0-A13 - <http://www.joseflavio.com/iperoxo/>.
+// Ipê-roxo 1.0-A14 - <http://www.joseflavio.com/iperoxo/>.
 
 //--------------------------------------------------------------------------
 

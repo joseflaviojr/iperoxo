@@ -13,7 +13,7 @@ String descricao = "Ipê-roxo: Modelo de aplicação Copaíba."
 
 group = "com.joseflavio"
 archivesBaseName = "iperoxo"
-version = "1.0-A13"
+version = "1.0-A14"
 
 //------------------------------------------------------
 
@@ -55,7 +55,7 @@ repositories {
 
 dependencies {
     compile fileTree(dir:"biblioteca", include:["*.jar"])
-    compile "com.joseflavio:unhadegato:1.0-A12"
+    compile "com.joseflavio:unhadegato:1.0-A13"
     compile "org.apache.tomee:javaee-api:7.0-1"
     compile "org.apache.commons:commons-dbcp2:2.1.1"
     compile "org.apache.commons:commons-lang3:3.5"

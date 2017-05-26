@@ -1,10 +1,10 @@
-# Exemplo de README.md
+# Ipê-roxo
 
-Descrição da aplicação.
+Exemplo de aplicação Docker.
 
 ## Versão Atual
 
-1.0-A1
+1.0-A14
 
 Padrão de versionamento: [JFV](http://joseflavio.com/jfv)
 
