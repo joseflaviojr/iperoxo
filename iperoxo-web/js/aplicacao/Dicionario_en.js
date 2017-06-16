@@ -11,6 +11,7 @@ var Dicionario_en_US = {
     enviar                           : "Send",
     selecionar                       : "Select",
     alterar                          : "Change",
+    animacao_espera_msg              : "Activities in progress",
 
     tela_exemplo_titulo              : "Example of frame"
 

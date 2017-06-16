@@ -86,6 +86,7 @@ function mensagemErro( texto, regiao ) {
 //--------------------------------------------------------------------------
 
 // Remove as mensagens ativas e mostra o conjunto novo de mensagens provenientes de Copaíba.
+// Ver mensagensAmplaCopaiba()
 function mensagensCopaiba( resposta, status, jqXHR, regiao ) {
     limparMensagens( regiao );
     $.each( resposta.mensagens, function() {
@@ -95,6 +96,14 @@ function mensagensCopaiba( resposta, status, jqXHR, regiao ) {
         else if( this.tipo == "ERRO"       ) mensagemErro( this.argumento, regiao );
         else if( this.tipo == "ACAO"       ) jsExec( this.referencia, this.argumento );
     });
+}
+
+//--------------------------------------------------------------------------
+
+// Mostra amplamente o conjunto novo de mensagens provenientes de Copaíba.
+// Ver mensagensCopaiba()
+function mensagensAmplaCopaiba( resposta, status, jqXHR, regiao ) {
+    abrirMensagemAmpla( extrairMensagens(resposta) );
 }
 
 //--------------------------------------------------------------------------
@@ -113,5 +122,46 @@ function limparMensagens( regiao ) {
     var destino = regiao == null ? $("#mensagens") : regiao.find(".mensagens:first");
     destino.empty();
 }
+
+//--------------------------------------------------------------------------
+
+// Extrai as mensagens de uma com.joseflavio.urucum.comunicacao.Resposta
+function extrairMensagens( resposta, separador ) {
+    var texto = "";
+    if( separador == undefined ) separador = "<br>";
+    $.each( resposta.mensagens, function() {
+        texto += this.argumento + separador;
+    });
+    return texto;
+}
+
+//--------------------------------------------------------------------------
+
+function abrirMensagemAmpla( texto ) {
+    mensagem_ampla_texto.innerHTML = texto;
+    mensagem_ampla.style.display = "block";
+}
+
+function fecharMensagemAmpla() {
+    mensagem_ampla.style.display = "none";
+}
+
+$(document).ready(function(){
+
+    var mensagem_ampla        = document.getElementById("mensagem_ampla");
+    var mensagem_ampla_fechar = document.getElementsByClassName("mensagem_ampla_fechar")[0];
+    var mensagem_ampla_texto  = document.getElementById("mensagem_ampla_texto");
+
+    mensagem_ampla_fechar.onclick = function() {
+        fecharMensagemAmpla();
+    }
+
+    window.addEventListener("click", function(e){
+        if( e.target == mensagem_ampla ){
+            fecharMensagemAmpla();
+        }
+    });
+
+});
 
 //--------------------------------------------------------------------------

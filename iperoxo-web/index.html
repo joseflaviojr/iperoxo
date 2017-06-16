@@ -9,20 +9,28 @@ This file is part of Ipê-roxo - <http://www.joseflavio.com/iperoxo/>.
     
     <!-- Configurações gerais -->
     <meta charset="utf-8">
+    <meta name="description" content="Modelo de aplicação de Copaíba.">
+    <meta name="keywords" content="ipe-roxo, ipe, copaiba">
+    <meta name="author" content="José Flávio de Souza Dias Júnior">
+    <meta name="robots" content="index, follow">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="format-detection" content="telephone=no">
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, minimum-scale=1, maximum-scale=1">
 
     <!-- Configurações de segurança -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' data: gap: joseflavio.com *.panoramio.com">
 
-    <!-- Facebook -->
-    <meta property="og:type" content="website">
-    <meta property="og:locale" content="pt_BR">
-    <meta property="og:url" content="http://joseflavio.com/iperoxo/">
-    <meta property="og:image" content="http://static.panoramio.com/photos/large/25186294.jpg">
-    <meta property="og:title" content="Ipê-roxo">
-    <meta property="og:description" content="Modelo de aplicação de Copaíba.">
+    <!-- Open Graph protocol -->
+    <meta property="og:site_name" content="Ipê-roxo" />
+    <meta property="og:title" content="Ipê-roxo" />
+    <meta property="og:description" content="Modelo de aplicação de Copaíba." />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="pt_BR" />
+    <meta property="og:locale:alternate" content="en_US" />
+    <meta property="og:locale:alternate" content="es_ES" />
+    <meta property="og:url" content="http://joseflavio.com/iperoxo/" />
+    <meta property="og:image" content="http://static.panoramio.com/photos/large/25186294.jpg" />
+    <meta property="og:image:secure_url" content="https://static.panoramio.com/photos/large/25186294.jpg" />
 
     <title>Ipê-roxo</title>
     
@@ -37,7 +45,9 @@ This file is part of Ipê-roxo - <http://www.joseflavio.com/iperoxo/>.
 
   <body>
 
+    <!-- ========================================== -->
     <!-- Barra de navegação -->
+
     <nav class="navbar navbar-default">
       <div class="container-fluid">
         <div class="navbar-header">
@@ -61,9 +71,29 @@ This file is part of Ipê-roxo - <http://www.joseflavio.com/iperoxo/>.
       </div>
     </nav>
 
+    <!-- ========================================== -->
     <!-- Mensagens globais -->
+
     <div id="mensagens">
     </div>
+
+    <!-- ========================================== -->
+    <!-- Animação de espera -->
+
+    <div id="animacao_espera" class="animacao_espera" onclick="abrirMensagemAmpla(dicionario.animacao_espera_msg + ': ' + animacao_espera_total);"></div>
+
+    <!-- ========================================== -->
+    <!-- Mensagem ampla -->
+
+    <div id="mensagem_ampla" class="mensagem_ampla">
+      <div class="mensagem_ampla_conteudo">
+        <span class="mensagem_ampla_fechar">&times;</span>
+        <p id="mensagem_ampla_texto">Mensagem ampla...</p>
+      </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- Scripts -->
 
     <!-- Bibliotecas -->
     <script src="js/terceiro/jquery.min.js"></script>
@@ -77,6 +107,7 @@ This file is part of Ipê-roxo - <http://www.joseflavio.com/iperoxo/>.
     <!-- Recursos culturais -->
     <script src="js/aplicacao/Dicionario_pt.js"></script>
     <script src="js/aplicacao/Dicionario_en.js"></script>
+    <script src="js/aplicacao/Dicionario_es.js"></script>
 
     <!-- Ipê-roxo -->
     <script src="js/iperoxo/geral.js"></script>
@@ -88,6 +119,8 @@ This file is part of Ipê-roxo - <http://www.joseflavio.com/iperoxo/>.
 
     <!-- Aplicação -->
     <script src="js/aplicacao/aplicacao.js"></script>
+
+    <!-- ========================================== -->
 
   </body>
 

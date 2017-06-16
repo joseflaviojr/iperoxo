@@ -46,6 +46,11 @@
 
 //--------------------------------------------------------------------------
 
+var url_args = {}; // Argumentos da URL
+var animacao_espera_total = 0; //Total de atividades em execução
+
+//--------------------------------------------------------------------------
+
 // Gera aleatoriamente um identificador de tag HTML.
 function gerarID() {
     return "id_" + Math.floor( Math.random() * 999999999 );
@@ -100,5 +105,40 @@ function getCookie( chave ) {
     }
     return "";
 }
+
+//--------------------------------------------------------------------------
+
+// Incrementa o número de atividades pelas quais se espera,
+// mostrando a animação de execução.
+function incrementarEspera() {
+    animacao_espera_total++;
+    document.getElementById("animacao_espera").style.display = "block";
+}
+
+// Decrementa o número de atividades pelas quais se espera.
+// Se resultar em zero, a animação de execução será removida.
+function decrementarEspera() {
+    animacao_espera_total--;
+    if( animacao_espera_total <= 0 ){
+        animacao_espera_total = 0;
+        document.getElementById("animacao_espera").style.display = "none";
+    }
+}
+
+//--------------------------------------------------------------------------
+
+// Definição de "url_args".
+$(document).ready(function(){
+
+    var query = decodeURIComponent(window.location.search.substring(1));
+    var args = query.split('&');
+    var valor, i;
+
+    for( i = 0; i < args.length; i++ ) {
+        valor = args[i].split('=');
+        url_args[valor[0]] = valor[1] === undefined ? null : valor[1];
+    }
+
+});
 
 //--------------------------------------------------------------------------

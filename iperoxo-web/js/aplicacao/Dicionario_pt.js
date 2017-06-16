@@ -11,6 +11,7 @@ var Dicionario_pt_BR = {
     enviar                           : "Enviar",
     selecionar                       : "Selecionar",
     alterar                          : "Alterar",
+    animacao_espera_msg              : "Atividades em execução",
 
     tela_exemplo_titulo              : "Exemplo de tela"
 

@@ -46,19 +46,25 @@
 
 //--------------------------------------------------------------------------
 
-var lid        = "pt-BR";
-var dicionario = Dicionario_pt_BR;
+var lid        = "en-US";
+var dicionario = Dicionario_en_US;
 
 //--------------------------------------------------------------------------
 
-// Altera a linguagem atual - variável "lid". Padrão: "pt-BR"
+// Altera a linguagem atual - variável "lid". Padrão: "en-US"
 // No final, será chamada a função linguagemAlterada(), que deveria chamar carregarTextoDinamico()
 function setLinguagem( nome ) {
-    lid = nome;
+    
+    lid = nome.split("_").join("-");
     setCookie( "lid", lid, 365 * 24 * 60 );
-    dicionario = js( "Dicionario_" + nome.split("-").join("_") );
-    if( dicionario == undefined ) dicionario = Dicionario_pt_BR;
+
+    var nomeDic = nome.split("-").join("_");
+    dicionario = js( "Dicionario_" + nomeDic );
+    if( dicionario == undefined ) dicionario = js( "Dicionario_" + nomeDic.split("_")[0] );
+    if( dicionario == undefined ) dicionario = Dicionario_en_US;
+
     linguagemAlterada();
+
 }
 
 //--------------------------------------------------------------------------

@@ -19,6 +19,8 @@ $(document).ready(function(){
     setCookie( "cookieTeste", "Ipê-roxo ~ Teste de Cookie!" );
     abrirTela( "html/tela.html" );
 
+    abrirMensagemAmpla( "Bem vindo ao Ipê-roxo!<br>Welcome to Ipê-roxo!" );
+
 });
 
 //--------------------------------------------------------------------------

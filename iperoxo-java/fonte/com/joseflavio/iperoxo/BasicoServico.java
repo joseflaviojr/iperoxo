@@ -83,8 +83,6 @@ public abstract class BasicoServico <T extends Serializable> extends Servico<T> 
 		
 		try{
 			
-			$ResourceBundle = IpeRoxo.getResourceBundle( lid );
-			
 			if( is$BancoDeDados() && IpeRoxo.getEntityManagerFactory() != null ){
 				$BancoDeDados = new BancoDeDados( get$Transacoes() );
 			}
@@ -183,6 +181,15 @@ public abstract class BasicoServico <T extends Serializable> extends Servico<T> 
 		$Resposta.setCodigo( IpeRoxo.getCodigo( chave ) );
 		$Resposta.mais( Mensagem.Tipo.ERRO, null, getMensagem( chave, parametros ) );
 		throw new IOException();
+	}
+	
+	@Override
+	public Servico<T> setLid( String lid ) {
+		try{
+			$ResourceBundle = IpeRoxo.getResourceBundle( lid );
+		}catch( IOException e ){
+		}
+		return super.setLid( lid );
 	}
 	
 }
