@@ -12,8 +12,9 @@ $(document).ready(function(){
 	if( sid == "" ) sid = gerarID();
 	setSID( sid );
 
-	lid = getCookie( "lid" );
-    if( lid == "" ) lid = navigator.language;
+    lid = url_args.lid;
+    if( lid == "" || lid == undefined ) lid = getCookie( "lid" );
+    if( lid == "" || lid == undefined ) lid = navigator.language;
     setLinguagem( lid );
     
     setCookie( "cookieTeste", "Ipê-roxo ~ Teste de Cookie!" );
