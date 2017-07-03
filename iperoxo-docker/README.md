@@ -1,6 +1,6 @@
-# Ipê-roxo
+# Ipê-roxo Docker
 
-Exemplo de aplicação Docker.
+Aplicação Docker.
 
 ## Versão Atual
 
@@ -21,6 +21,37 @@ Configuração do projeto para Eclipse ou IntelliJ IDEA.
     gradle eclipse
     gradle cleanIdea idea
 
+## Execução local
+
+Execução durante o processo de desenvolvimento.
+
+    ./local.compilar.sh
+    ./local.executar.sh
+
 ## Docker
 
-Seguir as orientações de [Ipê-roxo](http://joseflavio.com/iperoxo).
+### Volume
+
+    docker volume create --name iperoxo
+
+### Imagem
+
+    gradle clean build
+    docker build --force-rm -t joseflavio/iperoxo:1.0-A14 .
+
+### Container
+
+    docker run --name="iperoxo" -d -p 8884:8884 -v iperoxo:/volume --ip=x.x.x.x --net xxxxxx --restart=unless-stopped joseflavio/iperoxo:1.0-A14
+
+### Configuração
+
+    nano /var/lib/docker/volumes/iperoxo/_data/conf/Configuracao.properties
+
+### Log
+
+    tail /var/lib/docker/volumes/iperoxo/_data/logs/iperoxo.log -n 100
+
+### Remoção
+
+    docker rm -f iperoxo
+    docker rmi joseflavio/iperoxo:1.0-A14

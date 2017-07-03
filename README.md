@@ -4,67 +4,14 @@ Modelo de aplicação HTML5 com [Copaíba](http://joseflavio.com/copaiba).
 
 HTML5 application model with [Copaíba](http://joseflavio.com/copaiba).
 
-## Versão Atual / Current Version
+## Versão Atual
 
 1.0-A14
 
 Padrão de versionamento: [JFV](http://joseflavio.com/jfv)
 
-## Requisitos / Requirements
+## Sistema
 
-* Git >= 1.8
-* Java >= 1.8
-* Gradle >= 2.0
-* [Uxi-amarelo](http://joseflavio.com/uxiamarelo)
-
-## Desenvolvimento / Development
-
-Configuração do projeto para Eclipse ou IntelliJ IDEA.
-
-Project configuration for Eclipse or IntelliJ IDEA.
-
-    cd iperoxo-docker
-    gradle eclipse
-    gradle cleanIdea idea
-
-## Execução local / Local execution
-
-Execução durante o processo de desenvolvimento.
-
-Execution during the development process.
-
-    cd iperoxo-docker
-    ./local.compilar.sh
-    ./local.executar.sh
-
-## Docker Container
-
-Compilation:
-
-    cd iperoxo-docker
-    gradle clean build
-
-Image:
-
-    docker build --force-rm -t joseflavio/iperoxo:1.0-A14 .
-
-Volume:
-
-    docker volume create --name iperoxo
-
-Running:
-
-    docker run --name="iperoxo" -d -p 8884:8884 -v iperoxo:/volume --ip=x.x.x.x --net xxxxxx --restart=unless-stopped joseflavio/iperoxo:1.0-A14
-
-Configuration:
-
-    nano /var/lib/docker/volumes/iperoxo/_data/conf/Configuracao.properties
-
-Log:
-
-    tail /var/lib/docker/volumes/iperoxo/_data/logs/iperoxo.log -n 100
-
-Removal:
-
-    docker rm -f iperoxo
-    docker rmi joseflavio/iperoxo:1.0-A14
+* [Biblioteca Java](https://github.com/joseflaviojr/iperoxo/tree/master/iperoxo-java)
+* [Aplicação Docker](https://github.com/joseflaviojr/iperoxo/tree/master/iperoxo-docker)
+* [Aplicação Web](https://github.com/joseflaviojr/iperoxo/tree/master/iperoxo-web)

@@ -75,10 +75,6 @@ public class Exemplo extends BasicoServico<String> {
 		
 		try{
 
-			if( StringUtil.tamanho( cookieTeste ) == 0 ){
-				retornarErro( "Erro_NaoNulo", "Cookie", 0, 0 );
-			}
-
 			$Resposta.mais( Tipo.EXITO, null, getMensagem( "IpeRoxo.Exemplo.Exito" ) );
 			$Resposta.mais( Tipo.INFORMACAO, null, texto );
 			
@@ -86,7 +82,11 @@ public class Exemplo extends BasicoServico<String> {
 				$Resposta.mais( Tipo.INFORMACAO, null, a.getNome() + " [" + a.getEndereco() + "]" );
 			}
 			
-			$Resposta.mais( Tipo.ATENCAO, null, "Cookie: " + cookieTeste );
+			if( StringUtil.tamanho( cookieTeste ) > 0 ){
+				$Resposta.mais( Tipo.ATENCAO, null, "Cookie: " + cookieTeste );
+			}
+			
+			$Resposta.mais( Tipo.INFORMACAO, null, "JSON: " + $CopaibaEstado );
 			
 			$Resposta.setResultado( getMensagem( "IpeRoxo.Exemplo.Teste", "Exemplo" ) );
 			

@@ -58,6 +58,8 @@ public abstract class Servico <T extends Serializable> {
 	
 	protected String lid;
 	
+	protected String $CopaibaEstado;
+	
 	protected Servico() {
 	}
 	
@@ -103,6 +105,20 @@ public abstract class Servico <T extends Serializable> {
 	public Servico<T> setLid( String lid ) {
 		this.lid = lid;
 		return this;
+	}
+	
+	/**
+	 * Estado serializado deste {@link Servico}, no formato JSON.
+	 */
+	public String get$CopaibaEstado() {
+		return $CopaibaEstado;
+	}
+	
+	/**
+	 * @see #get$CopaibaEstado()
+	 */
+	public void set$CopaibaEstado( String $CopaibaEstado ) {
+		this.$CopaibaEstado = $CopaibaEstado;
 	}
 	
 	/**

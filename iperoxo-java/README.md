@@ -1,6 +1,6 @@
-# Ipê-roxo
+# Ipê-roxo Java
 
-Exemplo de biblioteca Java.
+Biblioteca Java.
 
 ## Versão Atual
 
@@ -16,14 +16,14 @@ Padrão de versionamento: [JFV](http://joseflavio.com/jfv)
 
 ## Gradle
 
-    compile 'com.joseflavio:exemplo:1.0-A1'
+    compile 'com.joseflavio:iperoxo:1.0-A14'
 
 ## Maven
 
     <dependency>
         <groupId>com.joseflavio</groupId>
-        <artifactId>exemplo</artifactId>
-        <version>1.0-A1</version>
+        <artifactId>iperoxo</artifactId>
+        <version>1.0-A14</version>
     </dependency>
 
 ## Desenvolvimento
