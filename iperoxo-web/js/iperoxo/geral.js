@@ -46,8 +46,21 @@
 
 //--------------------------------------------------------------------------
 
+var iperoxo_script_geral = true;
+
 var url_args = {}; // Argumentos da URL
 var animacao_espera_total = 0; //Total de atividades em execução
+
+//--------------------------------------------------------------------------
+
+// Atividade a ser executada quando o dispositivo estiver pronto.
+function inicio( atividade ) {
+    if( typeof(cordova) != "undefined" ){
+        document.addEventListener("deviceready", atividade, false);
+    }else{
+        $(atividade);
+    }
+}
 
 //--------------------------------------------------------------------------
 
@@ -71,10 +84,15 @@ function js( rotina ) {
 //--------------------------------------------------------------------------
 
 // Resolve e executa uma função JavaScript.
+// funcao = Função ou nome de função.
 // Retorna "undefined" se falhar.
-function jsExec( funcaoNome, arg1, arg2, arg3, arg4, arg5 ) {
+function jsExec( funcao, arg1, arg2, arg3, arg4, arg5 ) {
     try{
-        return eval(funcaoNome)(arg1, arg2, arg3, arg4, arg5);
+        if( typeof(funcao) === "function" ){
+            return funcao( arg1, arg2, arg3, arg4, arg5 );
+        }else{
+            return eval(funcao)( arg1, arg2, arg3, arg4, arg5 );
+        }
     }catch(e){
         return undefined;
     }
@@ -94,9 +112,10 @@ function setCookie( chave, valor, minutos ) {
 
 //--------------------------------------------------------------------------
 
-function getCookie( chave ) {
+function getCookie( chave, fonte ) {
+    if( fonte == undefined ) fonte = document.cookie;
     var inicio = chave + "=";
-    var partes = document.cookie.split(';');
+    var partes = fonte.split(';');
     for( var i = 0; i < partes.length; i++ ){
         var p = partes[i].replace(/^\s+/,"");
         if( p.indexOf(inicio) == 0 ){
@@ -128,7 +147,7 @@ function decrementarEspera() {
 //--------------------------------------------------------------------------
 
 // Definição de "url_args".
-$(document).ready(function(){
+inicio(function(){
 
     var query = decodeURIComponent(window.location.search.substring(1));
     var args = query.split('&');

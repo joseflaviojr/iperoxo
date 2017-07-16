@@ -46,6 +46,10 @@
 
 //--------------------------------------------------------------------------
 
+var iperoxo_script_mensagem = true;
+
+//--------------------------------------------------------------------------
+
 // Acrescenta uma mensagem numa região.
 // A classificação segue o padrão da Bootstrap.
 // A mensagem será inserida no primeiro descendente que contém a classe "mensagens".
@@ -116,6 +120,13 @@ function mensagemErroUxiamarelo( jqXHR, status, errorThrown, regiao ) {
 
 //--------------------------------------------------------------------------
 
+// Mostra amplamente o conteúdo bruto de um objeto.
+function mensagemAmplaBruta( obj ) {
+    abrirMensagemAmpla( JSON.stringify(obj) );
+}
+
+//--------------------------------------------------------------------------
+
 // Remove todas as mensagens contidas numa região.
 // Ver mensagemClassificada()
 function limparMensagens( regiao ) {
@@ -146,7 +157,7 @@ function fecharMensagemAmpla() {
     mensagem_ampla.style.display = "none";
 }
 
-$(document).ready(function(){
+inicio(function(){
 
     var mensagem_ampla        = document.getElementById("mensagem_ampla");
     var mensagem_ampla_fechar = document.getElementsByClassName("mensagem_ampla_fechar")[0];

@@ -46,6 +46,10 @@
 
 //--------------------------------------------------------------------------
 
+var iperoxo_script_uxiamarelo = true;
+
+//--------------------------------------------------------------------------
+
 // Executa AJAX do tipo POST para um serviço Uxi-amarelo.
 function uxiamarelo( url, json, funcExito, funcErro, argExtra ) {
     
@@ -64,11 +68,11 @@ function uxiamarelo( url, json, funcExito, funcErro, argExtra ) {
 
     });
 
-    if( typeof funcExito == 'function' ) req.done(function( data, textStatus, jqXHR ) {
+    if( typeof(funcExito) === "function" ) req.done(function( data, textStatus, jqXHR ) {
         this.funcExito( data, textStatus, jqXHR, this.argExtra );
     });
 
-    if( typeof funcErro  == 'function' ) req.fail(function( jqXHR, textStatus, errorThrown ) {
+    if( typeof(funcErro) === "function" ) req.fail(function( jqXHR, textStatus, errorThrown ) {
         this.funcErro( jqXHR, textStatus, errorThrown, this.argExtra );
     });
 
@@ -94,19 +98,19 @@ function uxiamareloPreparar( formulario, enviarAgora, funcExito, funcErro, funcP
         dataType: "json",
 
         success: function( data, textStatus, jqXHR ){
-            if( typeof this.funcExito == 'function' ){
+            if( typeof(this.funcExito) === "function" ){
                 this.funcExito( data, textStatus, jqXHR, this.formulario );
             }
         },
 
         error: function( jqXHR, textStatus, errorThrown ){
-            if( typeof this.funcErro == 'function' ){
+            if( typeof(this.funcErro) === "function" ){
                 this.funcErro( jqXHR, textStatus, errorThrown, this.formulario );
             }
         },
 
         beforeSend: function( jqXHR, settings ){
-            if( typeof this.funcPreEnvio == 'function' ){
+            if( typeof(this.funcPreEnvio) === "function" ){
                 this.funcPreEnvio( jqXHR, settings, this.formulario );
             }
         }

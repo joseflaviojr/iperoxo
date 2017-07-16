@@ -329,6 +329,7 @@ public final class IpeRoxo {
 		final boolean padrao = linguagem == null;
 		
 		if( padrao ) linguagem = getPropriedade( "ResourceBundle.Locale.Default", "pt" );
+		else linguagem = linguagem.replace( '_', '-' );
 		
 		ResourceBundle rb = mensagens.get( linguagem );
 		if( rb != null ) return rb;

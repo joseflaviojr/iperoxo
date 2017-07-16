@@ -46,6 +46,8 @@
 
 //--------------------------------------------------------------------------
 
+var iperoxo_script_linguagem = true;
+
 var lid        = "en-US";
 var dicionario = Dicionario_en_US;
 

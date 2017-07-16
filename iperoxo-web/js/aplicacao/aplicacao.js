@@ -1,12 +1,12 @@
 //--------------------------------------------------------------------------
 
 // Copyright (C) 2016 José Flávio de Souza Dias Júnior
-// Ipê-roxo 1.0-A14 - <http://www.joseflavio.com/iperoxo/>.
+// Ipê-roxo 1.0-A15 - <http://www.joseflavio.com/iperoxo/>.
 
 //--------------------------------------------------------------------------
 
 // Comportamento inicial da aplicação.
-$(document).ready(function(){
+inicio(function(){
 	
 	sid = getCookie( "sid" );
 	if( sid == "" ) sid = gerarID();
@@ -27,7 +27,8 @@ $(document).ready(function(){
 //--------------------------------------------------------------------------
 
 function linguagemAlterada() {
-    atualizarTelas();
+    if( iperoxo_script_tela ) atualizarTelas();
+    else if( iperoxo_script_linguagem ) carregarTextoDinamico();
 }
 
 //--------------------------------------------------------------------------

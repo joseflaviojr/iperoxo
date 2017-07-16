@@ -46,10 +46,14 @@
 
 //--------------------------------------------------------------------------
 
+var iperoxo_script_tela = true;
+
+//--------------------------------------------------------------------------
+
 // Atualiza o ambiente de telas.
 function atualizarTelas() {
 
-    carregarTextoDinamico();
+    if( iperoxo_script_linguagem ) carregarTextoDinamico();
 
     var navegacao = $("#navegacao");
     if( navegacao.length > 0 ) navegacao.empty();

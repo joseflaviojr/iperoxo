@@ -6,7 +6,7 @@ HTML5 application model with [Copaíba](http://joseflavio.com/copaiba).
 
 ## Versão Atual
 
-1.0-A14
+1.0-A15
 
 Padrão de versionamento: [JFV](http://joseflavio.com/jfv)
 

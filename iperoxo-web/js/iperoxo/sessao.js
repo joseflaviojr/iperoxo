@@ -46,6 +46,8 @@
 
 //--------------------------------------------------------------------------
 
+var iperoxo_script_sessao = true;
+
 var sid = ""; // ID da Sessão
 
 //--------------------------------------------------------------------------
@@ -54,8 +56,8 @@ var sid = ""; // ID da Sessão
 function setSID( nova_sid, minutos ) {
     sid = nova_sid;
     if( minutos == undefined ) minutos = 365 * 24 * 60;
-    setCookie( "sid", nova_sid, minutos );
-    atualizarTelas();
+    if( iperoxo_script_geral ) setCookie( "sid", nova_sid, minutos );
+    if( iperoxo_script_tela ) atualizarTelas();
 }
 
 //--------------------------------------------------------------------------
