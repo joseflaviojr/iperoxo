@@ -321,12 +321,12 @@ public final class IpeRoxo {
 	 * {@link ResourceBundle} correspondente a uma {@link Locale}.<br>
 	 * {@link ResourceBundle#getBaseBundleName()} == {@link #getPropriedade(String) propriedade} "ResourceBundle.BaseName"<br>
 	 * {@link PropertyResourceBundle}'s (arquivos ".properties") devem estar codificados conforme {@link #getPropriedade(String) propriedade} "ResourceBundle.Charset". Veja {@link ResourceBundleCharsetControl}.
-	 * @param linguagem Formato IETF BCP 47. Veja {@link Locale#toLanguageTag()}. {@code null} == {@link #getPropriedade(String) propriedade} "ResourceBundle.Locale.Default"
+	 * @param linguagem Formato IETF BCP 47. Veja {@link Locale#toLanguageTag()}. {@code null} ou {@code vazio} == {@link IpeRoxo#getPropriedade(String) propriedade} "ResourceBundle.Locale.Default".
 	 * @see #getMensagem(String, String, Object...)
 	 */
 	public static ResourceBundle getResourceBundle( String linguagem ) throws IOException {
 		
-		final boolean padrao = linguagem == null;
+		final boolean padrao = StringUtil.tamanho( linguagem ) == 0;
 		
 		if( padrao ) linguagem = getPropriedade( "ResourceBundle.Locale.Default", "pt" );
 		else linguagem = linguagem.replace( '_', '-' );

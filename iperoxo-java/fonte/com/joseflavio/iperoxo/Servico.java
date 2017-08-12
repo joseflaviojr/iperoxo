@@ -101,7 +101,10 @@ public abstract class Servico <T extends Serializable> {
 	public String getLid() {
 		return lid;
 	}
-
+	
+	/**
+	 * @see #getLid()
+	 */
 	public Servico<T> setLid( String lid ) {
 		this.lid = lid;
 		return this;
