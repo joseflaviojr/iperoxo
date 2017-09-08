@@ -9,7 +9,7 @@ apply plugin: "idea"
 //------------------------------------------------------
 
 String nome = "Ipe-roxo"
-String descricao = "Ipê-roxo: Modelo de aplicação Copaíba."
+String descricao = "Ipê-roxo: Modelo de software multicamada."
 
 group = "com.joseflavio"
 archivesBaseName = "iperoxo"

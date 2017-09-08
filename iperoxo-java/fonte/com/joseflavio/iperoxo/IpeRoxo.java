@@ -65,7 +65,7 @@ import java.sql.SQLException;
 import java.util.*;
 
 /**
- * Ipê-roxo: Modelo de aplicação de {@link Copaiba}.
+ * Ipê-roxo: Modelo de software multicamada.
  * @author José Flávio de Souza Dias Júnior
  */
 public final class IpeRoxo {

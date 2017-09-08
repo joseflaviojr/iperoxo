@@ -1,8 +1,10 @@
 # Ipê-roxo
 
-Modelo de aplicação HTML5 com [Copaíba](http://joseflavio.com/copaiba).
+Modelo de software multicamada.
 
-HTML5 application model with [Copaíba](http://joseflavio.com/copaiba).
+Multilayered software model.
+
+Communication base: [Copaíba](http://joseflavio.com/copaiba)
 
 ## Versão Atual
 
