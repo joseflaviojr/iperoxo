@@ -88,7 +88,9 @@ function js( rotina ) {
 // Retorna "undefined" se falhar.
 function jsExec( funcao, arg1, arg2, arg3, arg4, arg5 ) {
     try{
-        if( typeof(funcao) === "function" ){
+        if( funcao == undefined || funcao == "" ){
+            return undefined;
+        }else if( typeof(funcao) === "function" ){
             return funcao( arg1, arg2, arg3, arg4, arg5 );
         }else{
             return eval(funcao)( arg1, arg2, arg3, arg4, arg5 );

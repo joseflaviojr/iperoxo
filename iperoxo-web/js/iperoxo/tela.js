@@ -128,8 +128,9 @@ function abrirTela( pagina, autoAtivar, paginaArg, funcExito, funcExitoArg ) {
 
             atualizarTelas();
             if( autoAtivar ) ativarTela( tid );
-            div.removeClass("hidden");
 
+            jsExec( tela.attr("funcPreparacao"), tela );
+            div.removeClass("hidden");
             jsExec( tela.attr("funcInicio"), tela );
 
             tela.find(".uxiamarelo_form").each(function(i){
