@@ -49,7 +49,7 @@
 var iperoxo_script_linguagem = true;
 
 var lid        = "en-US";
-var dicionario = Dicionario_en_US;
+var dicionario = dicionario_en_US;
 
 //--------------------------------------------------------------------------
 
@@ -61,9 +61,9 @@ function setLinguagem( nome ) {
     setCookie( "lid", lid, 365 * 24 * 60 );
 
     var nomeDic = nome.split("-").join("_");
-    dicionario = js( "Dicionario_" + nomeDic );
-    if( dicionario == undefined ) dicionario = js( "Dicionario_" + nomeDic.split("_")[0] );
-    if( dicionario == undefined ) dicionario = Dicionario_en_US;
+    dicionario = js( "dicionario_" + nomeDic );
+    if( dicionario == undefined ) dicionario = js( "dicionario_" + nomeDic.split("_")[0] );
+    if( dicionario == undefined ) dicionario = dicionario_en_US;
 
     linguagemAlterada();
 

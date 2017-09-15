@@ -2,7 +2,7 @@
 // Copyright (C) 2016 José Flávio de Souza Dias Júnior
 // This file is part of Ipê-roxo - <http://www.joseflavio.com/iperoxo/>.
 
-var Dicionario_pt_BR = {
+var dicionario_pt_BR = {
     
     aplicacao_titulo                 : "Ipê-roxo",
     fechar                           : "Fechar",
@@ -17,5 +17,5 @@ var Dicionario_pt_BR = {
 
 };
 
-var Dicionario_pt    = Dicionario_pt_BR;
-var Dicionario_pt_PT = Dicionario_pt_BR;
+var dicionario_pt    = dicionario_pt_BR;
+var dicionario_pt_PT = dicionario_pt_BR;
