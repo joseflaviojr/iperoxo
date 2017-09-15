@@ -4,7 +4,7 @@ Aplicação Docker.
 
 ## Versão Atual
 
-1.0-A15
+1.0-A16
 
 Padrão de versionamento: [JFV](http://joseflavio.com/jfv)
 
@@ -37,11 +37,11 @@ Execução durante o processo de desenvolvimento.
 ### Imagem
 
     gradle clean build
-    docker build --force-rm -t joseflavio/iperoxo:1.0-A15 .
+    docker build --force-rm -t joseflavio/iperoxo:1.0-A16 .
 
 ### Container
 
-    docker run --name="iperoxo" -d -p 8884:8884 -v iperoxo:/volume --ip=x.x.x.x --net xxxxxx --restart=unless-stopped joseflavio/iperoxo:1.0-A15
+    docker run --name="iperoxo" -d -p 8884:8884 -v iperoxo:/volume --ip=x.x.x.x --net xxxxxx --restart=unless-stopped joseflavio/iperoxo:1.0-A16
 
 ### Configuração
 
@@ -54,4 +54,4 @@ Execução durante o processo de desenvolvimento.
 ### Remoção
 
     docker rm -f iperoxo
-    docker rmi joseflavio/iperoxo:1.0-A15
+    docker rmi joseflavio/iperoxo:1.0-A16

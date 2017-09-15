@@ -13,7 +13,7 @@ String descricao = "Ipê-roxo: Modelo de software multicamada."
 
 group = "com.joseflavio"
 archivesBaseName = "iperoxo"
-version = "1.0-A15"
+version = "1.0-A16"
 
 //------------------------------------------------------
 
@@ -60,7 +60,7 @@ dependencies {
     compile "org.apache.commons:commons-dbcp2:2.1.1"
     compile "org.apache.commons:commons-lang3:3.6"
     compile "org.apache.commons:commons-io:1.3.2"
-    compile "org.apache.commons:commons-email:1.4"
+    compile "org.apache.commons:commons-email:1.5"
     testCompile "junit:junit:4.12"
 }
 

@@ -8,7 +8,7 @@ Communication base: [Copaíba](http://joseflavio.com/copaiba)
 
 ## Versão Atual
 
-1.0-A15
+1.0-A16
 
 Padrão de versionamento: [JFV](http://joseflavio.com/jfv)
 

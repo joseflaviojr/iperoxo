@@ -4,7 +4,7 @@ Biblioteca Java.
 
 ## Versão Atual
 
-1.0-A15
+1.0-A16
 
 Padrão de versionamento: [JFV](http://joseflavio.com/jfv)
 
@@ -16,14 +16,14 @@ Padrão de versionamento: [JFV](http://joseflavio.com/jfv)
 
 ## Gradle
 
-    compile 'com.joseflavio:iperoxo:1.0-A15'
+    compile 'com.joseflavio:iperoxo:1.0-A16'
 
 ## Maven
 
     <dependency>
         <groupId>com.joseflavio</groupId>
         <artifactId>iperoxo</artifactId>
-        <version>1.0-A15</version>
+        <version>1.0-A16</version>
     </dependency>
 
 ## Desenvolvimento
