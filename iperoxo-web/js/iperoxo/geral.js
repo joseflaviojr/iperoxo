@@ -49,7 +49,19 @@
 var iperoxo_script_geral = true;
 
 var url_args = {}; // Argumentos da URL
-var animacao_espera_total = 0; //Total de atividades em execução
+var animacao_espera_total = 0; // Total de atividades em execução
+
+var HTML_ENTIDADE = {
+    ' ': '&#32;',
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#39;',
+    '/': '&#47;',
+    '\\': '&#92;',
+    '\n': '<br />'
+};
 
 //--------------------------------------------------------------------------
 
@@ -125,6 +137,16 @@ function getCookie( chave, fonte ) {
         }
     }
     return "";
+}
+
+//--------------------------------------------------------------------------
+
+// Substitui caracteres especiais por entidades HTML.
+// Exemplo: & = &amp;
+function textoHTML( texto ) {
+    return String( texto ).replace(/[ &<>"'\/\\\n]/g, function(x) {
+        return HTML_ENTIDADE[x];
+    });
 }
 
 //--------------------------------------------------------------------------

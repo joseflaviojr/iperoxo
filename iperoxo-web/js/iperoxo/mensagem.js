@@ -59,7 +59,7 @@ function mensagemClassificada( classe, texto, regiao ) {
     destino.append(
         "<div class=\"alert " + classe + "\">" +
         "<a href=\"#\" class=\"close\" data-dismiss=\"alert\" aria-label=\"fechar\">&times;</a>" +
-        texto +
+        textoHTML(texto) +
         "</div>"
     );
     destino[0].scrollIntoView(true);
@@ -139,7 +139,7 @@ function limparMensagens( regiao ) {
 // Extrai as mensagens de uma com.joseflavio.urucum.comunicacao.Resposta
 function extrairMensagens( resposta, separador ) {
     var texto = "";
-    if( separador == undefined ) separador = "<br>";
+    if( separador == undefined ) separador = '\n';
     $.each( resposta.mensagens, function() {
         texto += this.argumento + separador;
     });
@@ -149,7 +149,7 @@ function extrairMensagens( resposta, separador ) {
 //--------------------------------------------------------------------------
 
 function abrirMensagemAmpla( texto ) {
-    mensagem_ampla_texto.innerHTML = texto;
+    mensagem_ampla_texto.innerHTML = textoHTML(texto);
     mensagem_ampla.style.display = "block";
 }
 

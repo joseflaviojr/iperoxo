@@ -22,7 +22,7 @@ inicio(function(){
     // Código de Exemplo
     setCookie( "cookieTeste", "Ipê-roxo ~ Teste de Cookie!" );
     abrirTela( "html/tela.html" );
-    var msgfunc = new MessageFormat("en").compile( "Bem vindo ao Ipê-roxo {VERSAO}!<br>Welcome to Ipê-roxo {VERSAO}!" );
+    var msgfunc = new MessageFormat("en").compile( "Bem vindo ao Ipê-roxo {VERSAO}!\nWelcome to Ipê-roxo {VERSAO}!" );
     abrirMensagemAmpla( msgfunc( { VERSAO: configuracao.iperoxo_versao } ) );
 
 });
