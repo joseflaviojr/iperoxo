@@ -1,5 +1,5 @@
 
-# .gitignore 2017-05-25
+# .gitignore 2017-09-15
 
 # Sistema Operacional
 .DS_Store*
@@ -19,6 +19,7 @@ Thumbs.db
 *.app
 
 # Geral
+.vscode/
 rascunho/
 
 # Java

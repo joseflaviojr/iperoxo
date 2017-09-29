@@ -70,6 +70,8 @@ public class Exemplo extends BasicoServico<String> {
 	
 	private String chave;
 	
+	private Classe classe;
+	
 	@Override
 	protected void processar() throws IOException {
 		
@@ -84,6 +86,12 @@ public class Exemplo extends BasicoServico<String> {
 			
 			if( StringUtil.tamanho( cookieTeste ) > 0 ){
 				$Resposta.mais( Tipo.ATENCAO, null, "Cookie: " + cookieTeste );
+			}
+			
+			if( classe != null ){
+				$Resposta.mais( Tipo.INFORMACAO, null, "classe.valor: " + classe.getValor() + "\nclasse.classe.valor: " + classe.getClasse().getValor() );
+			}else{
+				$Resposta.mais( Tipo.ERRO, null, "classe == null" );
 			}
 			
 			$Resposta.mais( Tipo.INFORMACAO, null, "JSON: " + $CopaibaEstado );
@@ -138,6 +146,41 @@ public class Exemplo extends BasicoServico<String> {
 	
 	public void setChave( String chave ) {
 		this.chave = chave;
+	}
+	
+	public Classe getClasse() {
+		return classe;
+	}
+	
+	public void setClasse( Classe classe ) {
+		this.classe = classe;
+	}
+	
+	/**
+	 * Classe de exemplo para testar encapsulamento.
+	 */
+	public static class Classe {
+		
+		private Classe classe;
+		
+		private String valor;
+		
+		public Classe getClasse() {
+			return classe;
+		}
+		
+		public void setClasse( Classe classe ) {
+			this.classe = classe;
+		}
+		
+		public String getValor() {
+			return valor;
+		}
+		
+		public void setValor( String valor ) {
+			this.valor = valor;
+		}
+		
 	}
 	
 }
