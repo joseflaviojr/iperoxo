@@ -85,15 +85,14 @@ function carregarTextoDinamico() {
         var origem = _this.attr("origem");
         if( origem == null || origem.length == 0 ) origem = "javascript";
 
-        var texto = _this.text();
+        var texto = _this.html();
         var destino_textual = texto != null && texto.length > 0;
 
         if( origem == "javascript" ){
-            if( destino_textual ){
-                _this.text( js( "dicionario." + _this.attr("chave") ) );
-            }else{
-                _this.val( js( "dicionario." + _this.attr("chave") ) );
-            }
+            var txt = dicionario[_this.attr("chave")];
+            if( txt == undefined ) txt = " ";
+            if( destino_textual ) _this.html(textoHTML(txt));
+            else _this.val(txt);
         }else{
             var json = {
                 sid: sid,
@@ -101,11 +100,8 @@ function carregarTextoDinamico() {
                 chave: _this.attr("chave")
             };
             uxiamarelo( origem, json, function(txt){
-                if( destino_textual ){
-                    _this.text(txt);
-                }else{
-                    _this.val(txt);
-                }
+                if( destino_textual ) _this.html(textoHTML(txt));
+                else _this.val(txt);
             } );
         }
 

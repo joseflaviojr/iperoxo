@@ -110,8 +110,14 @@ function abrirTela( pagina, autoAtivar, paginaArg, funcExito, funcExitoArg ) {
     if( autoAtivar == undefined ) autoAtivar = true;
 
     var divID  = gerarID();
-    $("body").append( "<div id=\"" + divID + "\" class=\"hidden\"></div>" );
+    var divHTML = "<div id=\"" + divID + "\" class=\"hidden\"></div>";
+    var telaAtiva = $(".tela").not(".hidden");
+
+    if( telaAtiva.length == 1 ) telaAtiva.after(divHTML);
+    else $("body").append(divHTML);
+
     var div = $( "#" + divID );
+    var queryJSON = copiarQueryParaJSON(pagina);
 
     div.load(
         pagina + " .tela",
@@ -129,9 +135,9 @@ function abrirTela( pagina, autoAtivar, paginaArg, funcExito, funcExitoArg ) {
             atualizarTelas();
             if( autoAtivar ) ativarTela( tid );
 
-            jsExec( tela.attr("funcPreparacao"), tela );
+            jsExec( tela.attr("funcPreparacao"), tela, queryJSON );
             div.removeClass("hidden");
-            jsExec( tela.attr("funcInicio"), tela );
+            jsExec( tela.attr("funcInicio"), tela, queryJSON );
 
             tela.find(".uxiamarelo_form").each(function(i){
                 var _this = $(this);
@@ -170,6 +176,14 @@ function ativarTela( tid ) {
 // Fecha e remove uma tela.
 function fecharTela( tid ) {
     $( "#" + tid ).remove();
+    atualizarTelas();
+}
+
+//--------------------------------------------------------------------------
+
+// Fecha e remove todas as telas atuais.
+function fecharTelas() {
+    $( ".tela" ).remove();
     atualizarTelas();
 }
 

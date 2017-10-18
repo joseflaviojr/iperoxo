@@ -170,18 +170,30 @@ function decrementarEspera() {
 
 //--------------------------------------------------------------------------
 
-// Definição de "url_args".
-inicio(function(){
+// Copia os parâmetros/valores de uma URL (query) para um JSON.
+function copiarQueryParaJSON( url, json={} ) {
+   
+    var inicio = url.indexOf('?');
+    if( inicio == -1 ) return json;
 
-    var query = decodeURIComponent(window.location.search.substring(1));
+    var query = decodeURIComponent(url.substring(inicio+1));
     var args = query.split('&');
     var valor, i;
 
     for( i = 0; i < args.length; i++ ) {
         valor = args[i].split('=');
-        url_args[valor[0]] = valor[1] === undefined ? null : valor[1];
+        json[valor[0]] = valor[1] === undefined ? null : valor[1];
     }
 
+    return json;
+
+}
+
+//--------------------------------------------------------------------------
+
+// Definição de "url_args".
+inicio(function(){
+    copiarQueryParaJSON( window.location.search, url_args );
 });
 
 //--------------------------------------------------------------------------
