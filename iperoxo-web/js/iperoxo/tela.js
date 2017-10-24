@@ -113,8 +113,8 @@ function abrirTela( pagina, autoAtivar, paginaArg, funcExito, funcExitoArg ) {
     var divHTML = "<div id=\"" + divID + "\" class=\"hidden\"></div>";
     var telaAtiva = $(".tela").not(".hidden");
 
-    if( telaAtiva.length == 1 ) telaAtiva.after(divHTML);
-    else $("body").append(divHTML);
+    if( telaAtiva.length == 1 ) telaAtiva.parent().after(divHTML);
+    else $("#telas").append(divHTML);
 
     var div = $( "#" + divID );
     var queryJSON = copiarQueryParaJSON(pagina);

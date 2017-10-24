@@ -45,7 +45,14 @@
   animation-duration: 0.5s; }
 
 /* ---------------------------------------------- */
+#telas {
+  position: relative;
+  width: 100%; }
+
 .tamanho_flexivel {
+  position: absolute;
+  top: 0;
+  width: 100%;
   margin-right: auto;
   margin-left: auto; }
   @media (min-width: 0px) and (max-width: 767px) {
@@ -63,8 +70,8 @@
 
 .tamanho_cheio {
   position: fixed;
-  left: 0;
   top: 0;
+  left: 0;
   width: 100vw;
   height: 100vh;
   overflow: visible; }

@@ -55,8 +55,16 @@ $tela_g: "(min-width: 1025px)";
 
 /* ---------------------------------------------- */
 
+#telas {
+    position: relative;
+    width: 100%;
+}
+
 .tamanho_flexivel {
 
+    position: absolute;
+    top: 0;
+    width: 100%;
     margin-right: auto;
     margin-left: auto;
 
@@ -78,12 +86,16 @@ $tela_g: "(min-width: 1025px)";
 }
 
 .tamanho_cheio {
+    
     position: fixed;
-    left: 0;
     top: 0;
+    left: 0;
+
     width: 100vw;
     height: 100vh;
+
     overflow: visible;
+
 }
 
 /* ---------------------------------------------- */
