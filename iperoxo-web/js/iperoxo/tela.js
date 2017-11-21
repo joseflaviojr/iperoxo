@@ -95,6 +95,38 @@ function atualizarTelas() {
 
     });
 
+    // DateTimePicker's
+    $(".datetimepicker").each(function(i){
+
+        var obj = $(this);
+        var dtp = obj.data("DateTimePicker");
+
+        if( dtp == undefined ){
+
+            var opcoes = jsExec( obj.attr("opcoes") );
+            if( opcoes == undefined ){
+                opcoes = {
+                    locale: lid,
+                    showTodayButton: true,
+                    showClear: true,
+                    allowInputToggle: true
+                };
+            }
+
+            var inputTimestamp = obj.parent().find("input[type='hidden']");
+            var inputTimestampFunc = function() {
+                inputTimestamp.val( obj.data("DateTimePicker").date().valueOf() );
+            };
+            obj.find("input[type='text']").change(inputTimestampFunc);
+
+            obj.datetimepicker(opcoes).on("dp.change", inputTimestampFunc);
+
+        }else{
+            dtp.locale(lid);
+        }
+
+    });
+
 }
 
 //--------------------------------------------------------------------------

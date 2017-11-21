@@ -10,9 +10,9 @@ Padrão de versionamento: [JFV](http://joseflavio.com/jfv)
 
 ## Requisitos
 
-* Git >= 1.8
+* Git >= 2.8
 * Java >= 1.8
-* Gradle >= 2.0
+* Gradle >= 3.1
 
 ## Desenvolvimento
 

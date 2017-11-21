@@ -7,6 +7,7 @@ var dicionario_en_US = {
     aplicacao_titulo                 : "Ipê-roxo",
     fechar                           : "Close",
     texto                            : "Text",
+    data                             : "Date",
     arquivo                          : "File",
     enviar                           : "Send",
     selecionar                       : "Select",

@@ -30,8 +30,7 @@ inicio(function(){
 //--------------------------------------------------------------------------
 
 function linguagemAlterada() {
-    if( iperoxo_script_tela ) atualizarTelas();
-    else if( iperoxo_script_linguagem ) carregarTextoDinamico();
+    atualizarComponentesCulturais();
 }
 
 //--------------------------------------------------------------------------

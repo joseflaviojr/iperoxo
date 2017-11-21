@@ -12,6 +12,7 @@ This file is part of Ipê-roxo - <http://www.joseflavio.com/iperoxo/>.
     <link href="../css/bootstrap-theme.min.css" rel="stylesheet">
     <link href="../css/jasny-bootstrap.min.css" rel="stylesheet">
     <link href="../css/iperoxo.css" rel="stylesheet">
+    <link href="../css/estilo.css" rel="stylesheet">
   </head>
 
   <body>
@@ -20,7 +21,7 @@ This file is part of Ipê-roxo - <http://www.joseflavio.com/iperoxo/>.
     <div class="tela tamanho_flexivel" id="" funcPreparacao="" funcInicio="inicioTela">
 
       <!-- Título da tela -->
-      <h3 class="tela_titulo texto_dinamico" chave="tela_exemplo_titulo">TELA</h3>
+      <h3 class="tela_titulo texto_dinamico" chave="tela_exemplo_titulo">&nbsp;</h3>
 
       <!-- Formulário para encaminhamento através de Uxi-amarelo. -->
       <form class="uxiamarelo_form" action="/uxiamarelo/servlet/solicitar" method="post" role="form" funcInicio="" funcPreEnvio="" funcExito="mensagensCopaiba" funcErro="mensagemErroUxiamarelo">
@@ -43,17 +44,29 @@ This file is part of Ipê-roxo - <http://www.joseflavio.com/iperoxo/>.
 
         <!-- Texto -->
         <div class="form-group">
-          <label for="texto"><span class="texto_dinamico" chave="texto" origem="/uxiamarelo/rest/copaiba/solicitar/com.joseflavio.iperoxo.docker.Exemplo/toString">TEXTO</span>:</label>
+          <label for="texto"><span class="texto_dinamico" chave="texto" origem="/uxiamarelo/rest/copaiba/solicitar/com.joseflavio.iperoxo.docker.Exemplo/toString">&nbsp;</span>:</label>
           <input type="text" class="form-control" name="texto">
+        </div>
+
+        <!-- Data -->
+        <div class="form-group">
+          <input type="hidden" name="data" value="">
+          <label for="dataTexto"><span class="texto_dinamico" chave="data">&nbsp;</span>:</label>
+          <div class="input-group date datetimepicker" opcoes="">
+            <input type="text" class="form-control" name="dataTexto">
+            <span class="input-group-addon">
+              <span class="glyphicon glyphicon-calendar"></span>
+            </span>
+          </div>
         </div>
 
         <!-- Arquivo -->
         <div class="form-group">
-          <label for="arquivo"><span class="texto_dinamico" chave="arquivo">ARQUIVO</span>:</label>
+          <label for="arquivo"><span class="texto_dinamico" chave="arquivo">&nbsp;</span>:</label>
           <div class="fileinput fileinput-new" style="display:block;" data-provides="fileinput">
             <span class="btn btn-default btn-file">
-              <span class="fileinput-new texto_dinamico" chave="selecionar">SELECIONAR</span>
-              <span class="fileinput-exists texto_dinamico" chave="alterar">ALTERAR</span>
+              <span class="fileinput-new texto_dinamico" chave="selecionar">&nbsp;</span>
+              <span class="fileinput-exists texto_dinamico" chave="alterar">&nbsp;</span>
               <input type="file" name="arquivo" multiple>
             </span>
             <span class="fileinput-filename"></span>

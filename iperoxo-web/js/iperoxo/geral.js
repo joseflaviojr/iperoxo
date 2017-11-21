@@ -170,6 +170,15 @@ function decrementarEspera() {
 
 //--------------------------------------------------------------------------
 
+// Atualiza todos os componentes sensíveis à "lid".
+function atualizarComponentesCulturais() {
+    moment.locale(lid);
+    if( iperoxo_script_tela ) atualizarTelas();
+    else if( iperoxo_script_linguagem ) carregarTextoDinamico();
+}
+
+//--------------------------------------------------------------------------
+
 // Copia os parâmetros/valores de uma URL (query) para um JSON.
 function copiarQueryParaJSON( url, json={} ) {
    

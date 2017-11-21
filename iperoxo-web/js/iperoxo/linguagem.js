@@ -54,7 +54,7 @@ var dicionario = dicionario_en_US;
 //--------------------------------------------------------------------------
 
 // Altera a linguagem atual - variável "lid". Padrão: "en-US"
-// No final, será chamada a função linguagemAlterada(), que deveria chamar carregarTextoDinamico()
+// No final, será chamada a função linguagemAlterada(), que deveria chamar atualizarComponentesCulturais()
 function setLinguagem( nome ) {
     
     lid = nome.split("_").join("-");

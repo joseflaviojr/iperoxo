@@ -49,6 +49,7 @@ import com.joseflavio.urucum.validacao.NaoNulo;
 import com.joseflavio.urucum.validacao.NaoVazio;
 
 import java.io.IOException;
+import java.util.Date;
 
 /**
  * Exemplo de {@link BasicoServico}.
@@ -61,6 +62,10 @@ public class Exemplo extends BasicoServico<String> {
 	@NaoNulo
 	@NaoVazio
 	private String texto;
+	
+	@Nome(feminino="IpeRoxo.Exemplo.Data")
+	@NaoNulo
+	private Date data;
 	
 	@NaoNulo(mensagem="IpeRoxo.Exemplo.Arquivo.Vazio")
 	@NaoVazio(mensagem="IpeRoxo.Exemplo.Arquivo.Vazio")
@@ -78,7 +83,7 @@ public class Exemplo extends BasicoServico<String> {
 		try{
 
 			$Resposta.mais( Tipo.EXITO, null, getMensagem( "IpeRoxo.Exemplo.Exito" ) );
-			$Resposta.mais( Tipo.INFORMACAO, null, texto );
+			$Resposta.mais( Tipo.INFORMACAO, null, texto + "\n" + data.toString() );
 			
 			for( Arquivo a : arquivo ){
 				$Resposta.mais( Tipo.INFORMACAO, null, a.getNome() + " [" + a.getEndereco() + "]" );
@@ -122,6 +127,14 @@ public class Exemplo extends BasicoServico<String> {
 
 	public void setTexto( String texto ) {
 		this.texto = texto;
+	}
+	
+	public Date getData() {
+		return data;
+	}
+	
+	public void setData( Date data ) {
+		this.data = data;
 	}
 	
 	public Arquivo[] getArquivo() {
