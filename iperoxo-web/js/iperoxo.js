@@ -58,12 +58,14 @@ var iperoxo_script_persistencia = true;
 
 var url_args = {}; // Argumentos da URL
 
-var sid = ""; // ID da Sessão
+var sid = "";      // ID da Sessão
 var lid = "en-US"; // Linguagem
 
 var dicionario = dicionario_en_US;
 var cordova_repositorio_padrao = null;
 var animacao_espera_total = 0; // Total de atividades em execução
+var telas = {};
+var navegacao_passo = 0;
 
 var HTML_ENTIDADE = {
     ' ': '&#32;',
@@ -165,6 +167,17 @@ function textoHTML( texto ) {
 
 //--------------------------------------------------------------------------
 
+// Retorna o sufixo do nome indicado, de acordo com um caractere separador.
+// Se sufixo inexistente, será retornado "undefined".
+// nome     : String que contém um sufixo.
+// separador: Caractere separador.
+function sufixo( nome, separador='_' ) {
+    var i = nome.lastIndexOf(separador);
+    return i >= 0 ? nome.substring(i+1) : undefined;
+}
+
+//--------------------------------------------------------------------------
+
 // Incrementa o número de atividades pelas quais se espera,
 // mostrando a animação de execução.
 function incrementarEspera() {
@@ -245,7 +258,7 @@ function setLinguagem( nome ) {
 // Carrega o conteúdo dos componentes textuais, sensíveis à "lid", que estão desatualizados.
 function carregarTextoDinamico() {
 
-    $(document).find(".texto_dinamico").each(function(){
+    $(".texto_dinamico").each(function(){
 
         var _this = $(this);
 
@@ -474,39 +487,81 @@ function atualizarTelas() {
     if( iperoxo_script_linguagem ) carregarTextoDinamico();
 
     var navegacao = $("#navegacao");
-    if( navegacao.length > 0 ) navegacao.empty();
+    if( navegacao.length == 0 ) navegacao = undefined;
 
+    // Removendo abas desnecessárias
+    if( navegacao != undefined ){
+        navegacao.children("li").each(function(i){
+            var tab_li = $(this);
+            var tid = tab_li.attr("tid");
+            if( $("#"+tid).length == 0 ){
+                tab_li.remove();
+            }
+        });
+    }
+
+    // Removendo objetos desnecessários
+    for( var t in telas ){
+        if( $("#"+t).length == 0 ){
+            delete telas[t];
+        }
+    }
+
+    // Atualizando
     $(".tela").each(function(i){
 
-        var tela = $(this);
+        var tela  = $(this);
+        var ativa = ! tela.hasClass("hidden");
 
+        // ID
         var tid = tela.attr("id");
         if( tid == null || tid.length == 0 ){
             tid = gerarID();
             tela.attr( "id", tid );
         }
 
+        // Objeto
+        var obj = telas[tid];
+        if( obj == undefined ){
+            obj = {
+                "tid"   : tid,
+                "passo" : navegacao_passo
+            };
+            telas[tid] = obj;
+        }
+
+        // Título
         var titulo = tela.children(".tela_titulo").text();
         if( titulo == null || titulo.length == 0 ){
             titulo = "Tela " + ( i + 1 );
         }
-
-        if( titulo.length > 20 ) titulo = titulo.substring(0, 17) + "...";
-
-        if( navegacao.length > 0 ){
-            navegacao.append(
-                "<li id=\"tab_li_" + tid + "\" tid=\"" + tid + "\" class=\"" +
-                ( tela.hasClass("hidden") ? "" : "active" ) +
-                "\">" +
-                "<a href=\"#\" id=\"tab_a_" + tid +
-                "\" onclick=\"ativarTela('" + tid + "');\">" +
-                titulo +
-                "</a>" +
-                //TODO "<a href=\"#\" class=\"close\" aria-label=\"fechar\">&times;</a>" +
-                "</li>"
-            );
+        if( titulo.length > 20 ){
+            titulo = titulo.substring(0, 17) + "...";
         }
 
+        // Navegação
+        if( navegacao != undefined ){
+            var tab_li = $( "#tab_li_" + tid );
+            if( tab_li.length > 0 ){
+                tab_li.removeClass();
+                tab_li.addClass( ativa ? "active" : "" );
+                tab_li.find("a").html(titulo);
+            }else{
+                navegacao.append(
+                    "<li id=\"tab_li_" + tid + "\" tid=\"" + tid + "\" class=\"" +
+                    ( ativa ? "active" : "" ) +
+                    "\">" +
+                    "<a href=\"#\" id=\"tab_a_" + tid +
+                    "\" onclick=\"ativarTela('" + tid + "');\">" +
+                    titulo +
+                    "</a>" +
+                    //TODO "<a href=\"#\" class=\"close\" aria-label=\"fechar\">&times;</a>" +
+                    "</li>"
+                );
+            }
+        }
+
+        // Campos padrões
         tela.find(".sid:first").val(sid);
         tela.find(".tid:first").val(tid);
         tela.find(".lid:first").val(lid);
@@ -555,9 +610,7 @@ function atualizarTelas() {
 // paginaArg    : Argumento a ser enviado para a página.
 // funcExito    : function(tid, funcExitoArg), executada após a carga normal da tela.
 // funcExitoArg : Argumento a ser passado para a funcExito.
-function abrirTela( pagina, autoAtivar, paginaArg, funcExito, funcExitoArg ) {
-
-    if( autoAtivar == undefined ) autoAtivar = true;
+function abrirTela( pagina, autoAtivar=true, paginaArg, funcExito, funcExitoArg ) {
 
     var divID  = gerarID();
     var divHTML = "<div id=\"" + divID + "\" class=\"hidden\"></div>";
@@ -590,14 +643,14 @@ function abrirTela( pagina, autoAtivar, paginaArg, funcExito, funcExitoArg ) {
             jsExec( tela.attr("funcInicio"), tela, queryJSON );
 
             tela.find(".uxiamarelo_form").each(function(i){
-                var _this = $(this);
-                jsExec( _this.attr("funcInicio"), _this );
+                var form = $(this);
+                jsExec( form.attr("funcInicio"), form );
                 uxiamareloPreparar(
-                    _this,
+                    form,
                     false,
-                    js(_this.attr("funcExito")),
-                    js(_this.attr("funcErro")),
-                    js(_this.attr("funcPreEnvio"))
+                    js(form.attr("funcExito")),
+                    js(form.attr("funcErro")),
+                    js(form.attr("funcPreEnvio"))
                 );
             });
 
@@ -613,27 +666,67 @@ function abrirTela( pagina, autoAtivar, paginaArg, funcExito, funcExitoArg ) {
 // Determina qual das telas deve estar visível e disponível para uso.
 function ativarTela( tid ) {
 
+    var tela = $( "#" + tid );
+
     $( "#navegacao > li" ).removeClass("active");
     $( "#tab_li_" + tid ).addClass("active");
-
     $( ".tela" ).addClass("hidden");
-    $( "#" + tid ).removeClass("hidden");
 
+    telas[tid].passo = ++navegacao_passo;
+    jsExec( tela.attr("funcPreAtivacao"), tela );
+    tela.removeClass("hidden");
+
+}
+
+//--------------------------------------------------------------------------
+
+// Verifica se a tela indicada está ativa.
+function isTelaAtiva( tid ) {
+    return ! $( "#" + tid ).hasClass("hidden");
 }
 
 //--------------------------------------------------------------------------
 
 // Fecha e remove uma tela.
 function fecharTela( tid ) {
-    $( "#" + tid ).remove();
+
+    var tela = $( "#" + tid );
+    if( ! tela.hasClass("tela") ) return;
+
+    var ativa = ! tela.hasClass("hidden");
+
+    tela.parent().remove();
+    delete telas[tid];
+
+    if( ativa ){
+
+        var maior = -1;
+        var maior_tid = undefined;
+
+        for( var t in telas ){
+            var p = telas[t].passo;
+            if( p > maior ){
+                maior = p;
+                maior_tid = t;
+            }
+        }
+
+        if( maior_tid != undefined ){
+            ativarTela( maior_tid );
+        }
+
+    }
+
     atualizarTelas();
+
 }
 
 //--------------------------------------------------------------------------
 
 // Fecha e remove todas as telas atuais.
 function fecharTelas() {
-    $( ".tela" ).remove();
+    $( ".tela" ).parent().remove();
+    telas = {};
     atualizarTelas();
 }
 
