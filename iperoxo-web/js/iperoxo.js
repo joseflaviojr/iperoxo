@@ -521,13 +521,12 @@ function atualizarTelas() {
         }
 
         // Objeto
-        var obj = telas[tid];
-        if( obj == undefined ){
-            obj = {
+        if( telas[tid] == undefined ){
+            telas[tid] = {
                 "tid"   : tid,
+                "args"  : {},
                 "passo" : navegacao_passo
             };
-            telas[tid] = obj;
         }
 
         // Título
@@ -635,6 +634,12 @@ function abrirTela( pagina, autoAtivar=true, paginaArg, funcExito, funcExitoArg 
                 tela.attr( "id", tid );
             }
 
+            telas[tid] = {
+                "tid"   : tid,
+                "args"  : queryJSON,
+                "passo" : navegacao_passo
+            };
+
             atualizarTelas();
             if( autoAtivar ) ativarTela( tid );
 
@@ -728,6 +733,13 @@ function fecharTelas() {
     $( ".tela" ).parent().remove();
     telas = {};
     atualizarTelas();
+}
+
+//--------------------------------------------------------------------------
+
+// Fecha a tela ativa.
+function fecharTelaAtiva() {
+    fecharTela( $(".tela").not(".hidden").attr("id") );
 }
 
 //--------------------------------------------------------------------------
