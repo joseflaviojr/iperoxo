@@ -700,6 +700,7 @@ function fecharTela( tid ) {
 
     var ativa = ! tela.hasClass("hidden");
 
+    jsExec( tela.attr("funcFim"), tela );
     tela.parent().remove();
     delete telas[tid];
 
@@ -730,9 +731,9 @@ function fecharTela( tid ) {
 
 // Fecha e remove todas as telas atuais.
 function fecharTelas() {
-    $( ".tela" ).parent().remove();
-    telas = {};
-    atualizarTelas();
+    for( var t in telas ){
+        fecharTela(t);
+    }
 }
 
 //--------------------------------------------------------------------------

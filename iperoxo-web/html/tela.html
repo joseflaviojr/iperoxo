@@ -19,7 +19,7 @@ This file is part of Ipê-roxo - <http://www.joseflavio.com/iperoxo/>.
   <body>
 
     <!-- Tela a ser importada pelo Ipê-roxo, no processo de abertura. -->
-    <div class="tela tamanho_flexivel" id="" funcPreparacao="" funcInicio="inicioTela" funcPreAtivacao="">
+    <div class="tela tamanho_flexivel" id="" funcPreparacao="" funcInicio="inicioTela" funcFim="" funcPreAtivacao="">
 
       <!-- Título da tela -->
       <h3 class="tela_titulo texto_dinamico" chave="tela_exemplo_titulo">&nbsp;</h3>
@@ -46,7 +46,7 @@ This file is part of Ipê-roxo - <http://www.joseflavio.com/iperoxo/>.
         <!-- Texto -->
         <div class="form-group">
           <label for="texto"><span class="texto_dinamico" chave="texto" origem="/uxiamarelo/rest/copaiba/solicitar/com.joseflavio.iperoxo.docker.Exemplo/toString">&nbsp;</span>:</label>
-          <input type="text" class="form-control" name="texto">
+          <input type="text" name="texto" class="form-control">
         </div>
 
         <!-- Data -->
@@ -54,7 +54,7 @@ This file is part of Ipê-roxo - <http://www.joseflavio.com/iperoxo/>.
           <input type="hidden" name="data" value="">
           <label for="dataTexto"><span class="texto_dinamico" chave="data">&nbsp;</span>:</label>
           <div class="input-group date datetimepicker" opcoes="">
-            <input type="text" class="form-control" name="dataTexto">
+            <input type="text" name="dataTexto" class="form-control">
             <span class="input-group-addon">
               <span class="glyphicon glyphicon-calendar"></span>
             </span>
