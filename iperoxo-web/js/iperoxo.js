@@ -66,6 +66,7 @@ var cordova_repositorio_padrao = null;
 var animacao_espera_total = 0; // Total de atividades em execução
 var telas = {};
 var navegacao_passo = 0;
+var id_geracao_sequencia = 0;
 
 var HTML_ENTIDADE = {
     ' ': '&#32;',
@@ -92,9 +93,25 @@ function inicio( atividade ) {
 
 //--------------------------------------------------------------------------
 
-// Gera aleatoriamente um identificador de tag HTML.
-function gerarID() {
-    return "id_" + Math.floor( Math.random() * 999999999 );
+// Gera um identificador de objeto.
+// aleatorio : sufixo numérico aleatório?
+// supressao : ID's que não devem ser retornados.
+function gerarID( aleatorio, supressao ) {
+    
+    function _gerar() {
+        return "id_" + ( aleatorio ? Math.floor( Math.random() * 999999999 ) : ++id_geracao_sequencia );
+    }
+
+    if( supressao != undefined && supressao.length > 0 ){
+        var id;
+        do{
+            id = _gerar();
+        }while( supressao.indexOf(id) != -1 );
+        return id;
+    }
+
+    return _gerar();
+
 }
 
 //--------------------------------------------------------------------------
@@ -171,7 +188,8 @@ function textoHTML( texto ) {
 // Se sufixo inexistente, será retornado "undefined".
 // nome     : String que contém um sufixo.
 // separador: Caractere separador.
-function sufixo( nome, separador='_' ) {
+function sufixo( nome, separador ) {
+    if( separador === undefined ) separador = '_';
     var i = nome.lastIndexOf(separador);
     return i >= 0 ? nome.substring(i+1) : undefined;
 }
@@ -207,16 +225,17 @@ function atualizarComponentesCulturais() {
 //--------------------------------------------------------------------------
 
 // Copia os parâmetros/valores de uma URL (query) para um JSON.
-function copiarQueryParaJSON( url, json={} ) {
+function copiarQueryParaJSON( url, json ) {
    
+    if( json === undefined ) json = {};
+
     var inicio = url.indexOf('?');
     if( inicio == -1 ) return json;
 
     var query = decodeURIComponent(url.substring(inicio+1));
     var args = query.split('&');
-    var valor, i;
 
-    for( i = 0; i < args.length; i++ ) {
+    for( var i = 0, valor; i < args.length; i++ ) {
         valor = args[i].split('=');
         json[valor[0]] = valor[1] === undefined ? null : valor[1];
     }
@@ -609,7 +628,9 @@ function atualizarTelas() {
 // paginaArg    : Argumento a ser enviado para a página.
 // funcExito    : function(tid, funcExitoArg), executada após a carga normal da tela.
 // funcExitoArg : Argumento a ser passado para a funcExito.
-function abrirTela( pagina, autoAtivar=true, paginaArg, funcExito, funcExitoArg ) {
+function abrirTela( pagina, autoAtivar, paginaArg, funcExito, funcExitoArg ) {
+    
+    if( autoAtivar === undefined ) autoAtivar = true;
 
     var divID  = gerarID();
     var divHTML = "<div id=\"" + divID + "\" class=\"hidden\"></div>";
