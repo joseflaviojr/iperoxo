@@ -56,18 +56,75 @@ var iperoxo_script_persistencia = true;
 
 //--------------------------------------------------------------------------
 
-var url_args = {}; // Argumentos da URL
+/**
+ * Argumentos da URL.
+ */
+var url_args = {};
 
-var sid = "";      // ID da Sessão
-var lid = "en-US"; // Linguagem
+/**
+ * ID da sessão corrente.
+ * @see setSID
+ */
+var sid = "";
 
+/**
+ * Linguagem atualmente em uso, no formato IETF BCP 47.
+ * @see setLinguagem
+ */
+var lid = "en-US";
+
+/**
+ * Dicionário corrente, conforme {@link lid}.
+ * @see lid
+ */
 var dicionario = dicionario_en_US;
+
+/**
+ * Repositório padrão da API Apache Cordova para armazenamento de arquivos.
+ * @see salvar
+ * @see cordovaSalvar
+ */
 var cordova_repositorio_padrao = null;
-var animacao_espera_total = 0; // Total de atividades em execução
+
+/**
+ * Total de atividades em execução.
+ * @see incrementarEspera
+ * @see decrementarEspera
+ */
+var animacao_espera_total = 0;
+
+/**
+ * Objetos com informações sobre as telas abertas.
+ * @see abrirTela
+ * @see atualizarTelas
+ */
 var telas = {};
+
+/**
+ * Contador de navegação (alternagem de telas).
+ */
 var navegacao_passo = 0;
+
+/**
+ * Contador de geração de ID's.
+ * @see gerarID
+ */
 var id_geracao_sequencia = 0;
 
+/**
+ * {@link MessageFormat} de acordo com a {@link lid}.
+ * @see MessageFormat
+ */
+var formatador;
+
+var mensagem_ampla;
+var mensagem_ampla_fechar;
+var mensagem_ampla_texto;
+
+/**
+ * Mapa que correlaciona caracteres especiais a entidades HTML.
+ * @see textoHTML
+ */
 var HTML_ENTIDADE = {
     ' ': '&#32;',
     '&': '&amp;',
@@ -82,9 +139,12 @@ var HTML_ENTIDADE = {
 
 //--------------------------------------------------------------------------
 
-// Atividade a ser executada quando o dispositivo estiver pronto.
+/**
+ * Atividade a ser executada quando o dispositivo estiver pronto.
+ * @param atividade Função a executar quando "deviceready".
+ */
 function inicio( atividade ) {
-    if( typeof(cordova) != "undefined" ){
+    if( typeof(cordova) !== "undefined" ){
         document.addEventListener("deviceready", atividade, false);
     }else{
         $(atividade);
@@ -93,9 +153,11 @@ function inicio( atividade ) {
 
 //--------------------------------------------------------------------------
 
-// Gera um identificador de objeto.
-// aleatorio : sufixo numérico aleatório?
-// supressao : ID's que não devem ser retornados.
+/**
+ * Gera um identificador de objeto.
+ * @param aleatorio Sufixo numérico aleatório?
+ * @param supressao ID's que não devem ser retornados.
+ */
 function gerarID( aleatorio, supressao ) {
     
     function _gerar() {
@@ -116,11 +178,14 @@ function gerarID( aleatorio, supressao ) {
 
 //--------------------------------------------------------------------------
 
-// Resolve uma rotina de JavaScript com "eval".
-// Retorna "undefined" se falhar.
+/**
+ * Resolve uma rotina de JavaScript com "eval".
+ * @param rotina Rotina a resolver.
+ * @returns a própria rotina se ela não for "string"; "undefined" se falhar.
+ */
 function js( rotina ) {
     try{
-        return eval(rotina);
+        return typeof(rotina) === "string" ? eval(rotina) : rotina;
     }catch(e){
         return undefined;
     }
@@ -128,9 +193,13 @@ function js( rotina ) {
 
 //--------------------------------------------------------------------------
 
-// Resolve e executa uma função JavaScript.
-// funcao = Função ou nome de função.
-// Retorna "undefined" se falhar.
+/**
+ * Resolve e executa uma função JavaScript.
+ * @param funcao Função ou nome de função.
+ * @param arg1 Primeiro argumento para a função.
+ * @param arg2 Segundo argumento para a função.
+ * @returns "undefined" se falhar.
+ */
 function jsExec( funcao, arg1, arg2, arg3, arg4, arg5 ) {
     try{
         if( funcao == undefined || funcao == "" ){
@@ -147,6 +216,12 @@ function jsExec( funcao, arg1, arg2, arg3, arg4, arg5 ) {
 
 //--------------------------------------------------------------------------
 
+/**
+ * Especifica o valor de um "cookie".
+ * @param chave Chave que identifica o cookie.
+ * @param valor Valor do cookie.
+ * @param minutos Tempo máximo de existência.
+ */
 function setCookie( chave, valor, minutos ) {
     if( minutos == undefined ){
       document.cookie = chave + "=" + encodeURI(valor) + ";path=/";
@@ -159,6 +234,12 @@ function setCookie( chave, valor, minutos ) {
 
 //--------------------------------------------------------------------------
 
+/**
+ * Retorna o valor de um "cookie".
+ * @param chave Chave que identifica o cookie.
+ * @param fonte Origem do cookie. undefined == document.cookie
+ * @see setCookie
+ */
 function getCookie( chave, fonte ) {
     if( fonte == undefined ) fonte = document.cookie;
     var inicio = chave + "=";
@@ -174,8 +255,12 @@ function getCookie( chave, fonte ) {
 
 //--------------------------------------------------------------------------
 
-// Substitui caracteres especiais por entidades HTML.
-// Exemplo: & = &amp;
+/**
+ * Substitui caracteres especiais por entidades HTML.<br>
+ * Exemplo: &amp; = &amp;amp;
+ * @param {string} texto Texto a ser normalizado para HTML.
+ * @see HTML_ENTIDADE
+ */
 function textoHTML( texto ) {
     return String( texto ).replace(/[ &<>"'\/\\\n]/g, function(x) {
         return HTML_ENTIDADE[x];
@@ -184,10 +269,12 @@ function textoHTML( texto ) {
 
 //--------------------------------------------------------------------------
 
-// Retorna o sufixo do nome indicado, de acordo com um caractere separador.
-// Se sufixo inexistente, será retornado "undefined".
-// nome     : String que contém um sufixo.
-// separador: Caractere separador.
+/**
+ * Retorna o sufixo do nome indicado, de acordo com um caractere separador.
+ * @param {string} nome String que contém um sufixo.
+ * @param separador Caractere separador.
+ * @returns "undefined" se sufixo inexistente.
+ */
 function sufixo( nome, separador ) {
     if( separador === undefined ) separador = '_';
     var i = nome.lastIndexOf(separador);
@@ -196,15 +283,41 @@ function sufixo( nome, separador ) {
 
 //--------------------------------------------------------------------------
 
-// Incrementa o número de atividades pelas quais se espera,
-// mostrando a animação de execução.
+/**
+ * Verifica se esta aplicação está rodando num navegador Web tradicional.<br>
+ * Atenção: Apache Cordova é considerado navegador apenas se device.platform === "browser".
+ */
+function isNavegadorWeb() {
+    return typeof(cordova) === "undefined" || device.platform === "browser";
+}
+
+//--------------------------------------------------------------------------
+
+/**
+ * Verifica se esta aplicação está rodando sobre a plataforma Apache Cordova nativa.<br>
+ * Atenção: Apache Cordova é considerado nativo apenas se device.platform !== "browser".
+ */
+function isCordovaNativa() {
+    return typeof(cordova) !== "undefined" && device.platform !== "browser";
+}
+
+//--------------------------------------------------------------------------
+
+/**
+ * Incrementa o número de atividades pelas quais se espera,
+ * mostrando a animação de execução.
+ */
 function incrementarEspera() {
     animacao_espera_total++;
     document.getElementById("animacao_espera").style.display = "block";
 }
 
-// Decrementa o número de atividades pelas quais se espera.
-// Se resultar em zero, a animação de execução será removida.
+//--------------------------------------------------------------------------
+
+/**
+ * Decrementa o número de atividades pelas quais se espera.<br>
+ * Se resultar em zero, a animação de execução será removida.
+ */
 function decrementarEspera() {
     animacao_espera_total--;
     if( animacao_espera_total <= 0 ){
@@ -215,7 +328,9 @@ function decrementarEspera() {
 
 //--------------------------------------------------------------------------
 
-// Atualiza todos os componentes sensíveis à "lid".
+/**
+ * Atualiza todos os componentes sensíveis à {@link lid}.
+ */
 function atualizarComponentesCulturais() {
     moment.locale(lid);
     if( iperoxo_script_tela ) atualizarTelas();
@@ -224,9 +339,13 @@ function atualizarComponentesCulturais() {
 
 //--------------------------------------------------------------------------
 
-// Copia os parâmetros/valores de uma URL (query) para um JSON.
+/**
+ * Copia os parâmetros/valores de uma URL (query) para um JSON.
+ * @param {string} url URL.
+ * @param {string} json JSON.
+ */
 function copiarQueryParaJSON( url, json ) {
-   
+    
     if( json === undefined ) json = {};
 
     var inicio = url.indexOf('?');
@@ -246,7 +365,11 @@ function copiarQueryParaJSON( url, json ) {
 
 //--------------------------------------------------------------------------
 
-// Altera a "sid" (ID da Sessão), comumente chamada de "token".
+/**
+ * Altera a {@link sid} (ID da Sessão), comumente chamada de "token".
+ * @param {string} nova_sid Novo valor da {@link sid}.
+ * @param {number} minutos Tempo de vida do cookie correspondente ({@link setCookie}).
+ */
 function setSID( nova_sid, minutos ) {
     sid = nova_sid;
     if( minutos == undefined ) minutos = 365 * 24 * 60;
@@ -256,8 +379,11 @@ function setSID( nova_sid, minutos ) {
 
 //--------------------------------------------------------------------------
 
-// Altera a linguagem atual - variável "lid". Padrão: "en-US"
-// No final, será chamada a função linguagemAlterada(), que deveria chamar atualizarComponentesCulturais()
+/**
+ * Altera a linguagem atual - variável {@link lid}. Padrão: "en-US"<br>
+ * No final, será chamada a função {@link linguagemAlterada}, que deveria chamar {@link atualizarComponentesCulturais}.
+ * @param {string} nome Código da linguagem desejada, preferencialmente no formato IETF BCP 47.
+ */
 function setLinguagem( nome ) {
     
     lid = nome.split("_").join("-");
@@ -268,14 +394,58 @@ function setLinguagem( nome ) {
     if( dicionario == undefined ) dicionario = js( "dicionario_" + nomeDic.split("_")[0] );
     if( dicionario == undefined ) dicionario = dicionario_en_US;
 
-    linguagemAlterada();
+    formatador = new MessageFormat(lid).setIntlSupport(true);
+    formatador.currency = "BRL";
+
+    if( typeof(linguagemAlterada) !== "undefined" ) linguagemAlterada();
 
 }
 
 //--------------------------------------------------------------------------
 
-// Carrega o conteúdo dos componentes textuais, sensíveis à "lid", que estão desatualizados.
+/**
+ * Carrega o conteúdo dos componentes textuais, sensíveis à {@link lid}, que estão desatualizados.
+ */
 function carregarTextoDinamico() {
+
+    function processar( componente, chaveAttr, origemAttr, destinoFunc, normalizar ) {
+
+        var chave = componente.attr(chaveAttr);
+        if( chave == null || chave.length == 0 ) return;
+
+        var origem = componente.attr(origemAttr);
+        if( origem == null || origem.length == 0 ) origem = "javascript";
+
+        if( origem == "javascript" ){
+            var txt = dicionario[chave];
+            if( txt == undefined ) return;
+            if( normalizar ) txt = textoHTML(txt);
+            destinoFunc(componente, txt);
+        }else{
+            var json = {
+                "sid"  : sid,
+                "lid"  : lid,
+                "chave": chave
+            };
+            uxiamarelo( origem, json, function(txt){
+                if( normalizar ) txt = textoHTML(txt);
+                destinoFunc(componente, txt);
+            } );
+        }
+
+    }
+
+    function defHtml( componente, texto ) {
+        componente.html(texto);
+    }
+
+    function defValue( componente, texto ) {
+        componente.val(texto);
+    }
+
+    function defPlaceholder( componente, texto ) {
+        componente.attr("placeholder", texto);
+    }
 
     $(".texto_dinamico").each(function(){
 
@@ -285,28 +455,12 @@ function carregarTextoDinamico() {
         if( lingatual == lid ) return;
         _this.attr("lingatual", lid);
 
-        var origem = _this.attr("origem");
-        if( origem == null || origem.length == 0 ) origem = "javascript";
+        var html = _this.html();
+        var normalizar = html != null && html.length > 0;
 
-        var texto = _this.html();
-        var destino_textual = texto != null && texto.length > 0;
+        processar( _this, "chave", "origem", normalizar ? defHtml : defValue, normalizar );
 
-        if( origem == "javascript" ){
-            var txt = dicionario[_this.attr("chave")];
-            if( txt == undefined ) txt = " ";
-            if( destino_textual ) _this.html(textoHTML(txt));
-            else _this.val(txt);
-        }else{
-            var json = {
-                sid: sid,
-                lid: lid,
-                chave: _this.attr("chave")
-            };
-            uxiamarelo( origem, json, function(txt){
-                if( destino_textual ) _this.html(textoHTML(txt));
-                else _this.val(txt);
-            } );
-        }
+        processar( _this, "chaveph", "origem", defPlaceholder, false );
 
     });
 
@@ -314,10 +468,14 @@ function carregarTextoDinamico() {
 
 //--------------------------------------------------------------------------
 
-// Acrescenta uma mensagem numa região.
-// A classificação segue o padrão da Bootstrap.
-// A mensagem será inserida no primeiro descendente que contém a classe "mensagens".
-// Se região == null, será utilizado o elemento global que possui id = "mensagens".
+/**
+ * Acrescenta uma mensagem estilizada numa região do HTML, no formato Bootstrap (alerts).<br>
+ * A mensagem será inserida no primeiro descendente que contém a classe "mensagens".<br>
+ * Se região == null, será utilizado o elemento global que possui id = "mensagens".
+ * @param {string} classe Classe CSS da biblioteca Bootstrap. Ex.: "alert-success"
+ * @param {string} texto Texto da mensagem, o qual será normalizado com {@link textoHTML}.
+ * @param {string} regiao Objeto jQuery.
+ */
 function mensagemClassificada( classe, texto, regiao ) {
     var destino = regiao == null ? $("#mensagens") : regiao.find(".mensagens:first");
     destino.append(
@@ -331,30 +489,50 @@ function mensagemClassificada( classe, texto, regiao ) {
 
 //--------------------------------------------------------------------------
 
-// Acrescenta mensagemClassificada() como "alert-success".
+/**
+ * {@link mensagemClassificada} como "alert-success".
+ * @see mensagemClassificada
+ */
 function mensagemExito( texto, regiao ) {
     mensagemClassificada( "alert-success", texto, regiao );
 }
 
-// Acrescenta mensagemClassificada() como "alert-info".
+/**
+ * {@link mensagemClassificada} como "alert-info".
+ * @see mensagemClassificada
+ */
 function mensagemInformacao( texto, regiao ) {
     mensagemClassificada( "alert-info", texto, regiao );
 }
 
-// Acrescenta mensagemClassificada() como "alert-warning".
+/**
+ * {@link mensagemClassificada} como "alert-warning".
+ * @see mensagemClassificada
+ */
 function mensagemAtencao( texto, regiao ) {
     mensagemClassificada( "alert-warning", texto, regiao );
 }
 
-// Acrescenta mensagemClassificada() como "alert-danger".
+/**
+ * {@link mensagemClassificada} como "alert-danger".
+ * @see mensagemClassificada
+ */
 function mensagemErro( texto, regiao ) {
     mensagemClassificada( "alert-danger", texto, regiao );
 }
 
 //--------------------------------------------------------------------------
 
-// Remove as mensagens ativas e mostra o conjunto novo de mensagens provenientes de Copaíba.
-// Ver mensagensAmplaCopaiba()
+/**
+ * Remove as mensagens ativas e mostra o conjunto novo de mensagens provenientes de Copaíba.
+ * @param resposta {@linkcode com.joseflavio.urucum.comunicacao.Resposta}
+ * @param regiao Região do HTML, conforme regras da função {@link mensagemClassificada}.
+ * @see mensagemClassificada
+ * @see mensagensAmplaCopaiba
+ * @see limparMensagens
+ * @see http://joseflavio.com/copaiba
+ * @see http://joseflavio.com/urucum
+ */
 function mensagensCopaiba( resposta, status, jqXHR, regiao ) {
     limparMensagens( regiao );
     $.each( resposta.mensagens, function() {
@@ -368,15 +546,26 @@ function mensagensCopaiba( resposta, status, jqXHR, regiao ) {
 
 //--------------------------------------------------------------------------
 
-// Mostra amplamente o conjunto novo de mensagens provenientes de Copaíba.
-// Ver mensagensCopaiba()
-function mensagensAmplaCopaiba( resposta, status, jqXHR, regiao ) {
+/**
+ * Mostra {@link abrirMensagemAmpla amplamente} o conjunto novo de mensagens provenientes de Copaíba.
+ * @param resposta {@linkcode com.joseflavio.urucum.comunicacao.Resposta}
+ * @see abrirMensagemAmpla
+ * @see extrairMensagens
+ * @see mensagensCopaiba
+ * @see http://joseflavio.com/copaiba
+ * @see http://joseflavio.com/urucum
+ */
+function mensagensAmplaCopaiba( resposta, status, jqXHR ) {
     abrirMensagemAmpla( extrairMensagens(resposta) );
 }
 
 //--------------------------------------------------------------------------
 
-// Remove as mensagens ativas e mostra a mensagem de erro proveniente de Uxi-amarelo.
+/**
+ * Remove as mensagens ativas e mostra a mensagem de erro proveniente de Uxi-amarelo.
+ * @see mensagemErro
+ * @see http://joseflavio.com/uxiamarelo
+ */
 function mensagemErroUxiamarelo( jqXHR, status, errorThrown, regiao ) {
     limparMensagens( regiao );
     mensagemErro( jqXHR.responseJSON.mensagem, regiao );
@@ -384,15 +573,22 @@ function mensagemErroUxiamarelo( jqXHR, status, errorThrown, regiao ) {
 
 //--------------------------------------------------------------------------
 
-// Mostra amplamente o conteúdo bruto de um objeto.
+/**
+ * Mostra {@link abrirMensagemAmpla amplamente} o conteúdo bruto de um objeto, conforme {@link JSON#stringify}.
+ * @see abrirMensagemAmpla
+ * @see JSON#stringify
+ */
 function mensagemAmplaBruta( obj ) {
     abrirMensagemAmpla( JSON.stringify(obj) );
 }
 
 //--------------------------------------------------------------------------
 
-// Remove todas as mensagens contidas numa região.
-// Ver mensagemClassificada()
+/**
+ * Remove todas as mensagens contidas numa região do HTML.
+ * @param regiao Região do HTML, conforme regras da função {@link mensagemClassificada}.
+ * @see mensagemClassificada
+ */
 function limparMensagens( regiao ) {
     var destino = regiao == null ? $("#mensagens") : regiao.find(".mensagens:first");
     destino.empty();
@@ -400,7 +596,11 @@ function limparMensagens( regiao ) {
 
 //--------------------------------------------------------------------------
 
-// Extrai as mensagens de uma com.joseflavio.urucum.comunicacao.Resposta
+/**
+ * Extrai as mensagens de uma {@linkcode com.joseflavio.urucum.comunicacao.Resposta}.
+ * @param resposta {@linkcode com.joseflavio.urucum.comunicacao.Resposta}
+ * @param separador Separador a utilizar entre as mensagens extraídas. Padrão: '\n'
+ */
 function extrairMensagens( resposta, separador ) {
     var texto = "";
     if( separador == undefined ) separador = '\n';
@@ -412,18 +612,35 @@ function extrairMensagens( resposta, separador ) {
 
 //--------------------------------------------------------------------------
 
+/**
+ * Mostra uma mensagem textual em destaque na tela toda.
+ * @param {string} texto Texto a ser mostrado, o qual antes será normalizado com {@link textoHTML}.
+ */
 function abrirMensagemAmpla( texto ) {
     mensagem_ampla_texto.innerHTML = textoHTML(texto);
     mensagem_ampla.style.display = "block";
 }
 
+//--------------------------------------------------------------------------
+
+/**
+ * Remove a mensagem textual mostrada através de {@link abrirMensagemAmpla}.
+ */
 function fecharMensagemAmpla() {
     mensagem_ampla.style.display = "none";
 }
 
 //--------------------------------------------------------------------------
 
-// Executa AJAX do tipo POST para um serviço Uxi-amarelo.
+/**
+ * Executa AJAX do tipo POST para um serviço {@link http://joseflavio.com/uxiamarelo Uxi-amarelo}.
+ * @param url URL para Uxi-amarelo.
+ * @param json JSON a ser enviado através de POST.
+ * @param funcExito Função a ser executada, se êxito.
+ * @param funcErro Função a ser executada, se erro.
+ * @param argExtra Argumento para {@linkcode funcExito} ou {@linkcode funcErro}.
+ * @see http://joseflavio.com/uxiamarelo
+ */
 function uxiamarelo( url, json, funcExito, funcErro, argExtra ) {
     
     var req = $.ajax({
@@ -453,12 +670,15 @@ function uxiamarelo( url, json, funcExito, funcErro, argExtra ) {
 
 //--------------------------------------------------------------------------
 
-// Prepara um formulário HTML para ser submetido através de AJAX a um serviço Uxi-amarelo.
-// formulario   : Formulário HTML (objeto jQuery).
-// enviarAgora  : Executar o AJAX imediatamente? Caso contrário, apenas habilitará o "submit" através de AJAX.
-// funcExito    : AJAX "success". Argumento extra: formulario.
-// funcErro     : AJAX "error". Argumento extra: formulario.
-// funcPreEnvio : AJAX "beforeSend". Se retornar "false", cancela o AJAX. Argumento extra: formulario.
+/**
+ * Prepara um formulário HTML para ser submetido através de AJAX a um serviço {@link http://joseflavio.com/uxiamarelo Uxi-amarelo}.
+ * @param formulario Formulário HTML (objeto jQuery).
+ * @param enviarAgora Executar o AJAX imediatamente? Caso contrário, apenas habilitará o "submit" através de AJAX.
+ * @param funcExito Função a ser executada, se êxito. Argumento extra: {@linkcode formulario}.
+ * @param funcErro Função a ser executada, se erro. Argumento extra: {@linkcode formulario}.
+ * @param funcPreEnvio Função a ser executada antes da submissão do formulário. Se retornar "false", cancela o AJAX. Argumento extra: {@linkcode formulario}.
+ * @see http://joseflavio.com/uxiamarelo
+ */
 function uxiamareloPreparar( formulario, enviarAgora, funcExito, funcErro, funcPreEnvio ) {
 
     var conf = {
@@ -500,7 +720,11 @@ function uxiamareloPreparar( formulario, enviarAgora, funcExito, funcErro, funcP
 
 //--------------------------------------------------------------------------
 
-// Atualiza o ambiente de telas.
+/**
+ * <p>Atualiza o ambiente de telas.</p>
+ * <p>Para cada tela reconhecida será mantido um objeto na variável global {@link telas}.</p>
+ * <p>No final, será chamada, se existente, a função {@link telasAtualizadas}.</p>
+ */
 function atualizarTelas() {
 
     if( iperoxo_script_linguagem ) carregarTextoDinamico();
@@ -618,18 +842,22 @@ function atualizarTelas() {
 
     });
 
+    if( typeof(telasAtualizadas) !== "undefined" ) telasAtualizadas();
+
 }
 
 //--------------------------------------------------------------------------
 
-// Abre uma tela especificada em outra página HTML.
-// pagina       : URL da página HTML.
-// autoAtivar   : Ativar automaticamente a tela? Padrão: true. Ver ativarTela()
-// paginaArg    : Argumento a ser enviado para a página.
-// funcExito    : function(tid, funcExitoArg), executada após a carga normal da tela.
-// funcExitoArg : Argumento a ser passado para a funcExito.
+/**
+ * Carrega uma tela, a qual está especificada em outra página HTML.
+ * @param pagina URL da página HTML que contém a tela.
+ * @param autoAtivar Ativar automaticamente a tela? Padrão: true. Ver {@link ativarTela}
+ * @param paginaArg Argumento (JSON ou String) a ser enviado para a página, além das "URL Query Strings".
+ * @param funcExito {@linkcode function(tid, funcExitoArg)}, executada após a carga normal da tela.
+ * @param funcExitoArg Argumento a ser passado para a {@linkcode funcExito}.
+ */
 function abrirTela( pagina, autoAtivar, paginaArg, funcExito, funcExitoArg ) {
-    
+
     if( autoAtivar === undefined ) autoAtivar = true;
 
     var divID  = gerarID();
@@ -641,6 +869,11 @@ function abrirTela( pagina, autoAtivar, paginaArg, funcExito, funcExitoArg ) {
 
     var div = $( "#" + divID );
     var queryJSON = copiarQueryParaJSON(pagina);
+    
+    if( $.isPlainObject(paginaArg) ){
+        $.extend(queryJSON, paginaArg);
+        paginaArg = JSON.parse(JSON.stringify(paginaArg));
+    }
 
     div.load(
         pagina + " .tela",
@@ -680,7 +913,7 @@ function abrirTela( pagina, autoAtivar, paginaArg, funcExito, funcExitoArg ) {
                 );
             });
 
-            if( funcExito != null ) funcExito(tid, funcExitoArg);
+            jsExec( funcExito, tid, funcExitoArg );
 
         }
     );
@@ -689,7 +922,10 @@ function abrirTela( pagina, autoAtivar, paginaArg, funcExito, funcExitoArg ) {
 
 //--------------------------------------------------------------------------
 
-// Determina qual das telas deve estar visível e disponível para uso.
+/**
+ * Determina qual das telas deve estar visível e disponível para uso.
+ * @param {string} tid Identificação da tela desejada.
+ */
 function ativarTela( tid ) {
 
     var tela = $( "#" + tid );
@@ -706,14 +942,20 @@ function ativarTela( tid ) {
 
 //--------------------------------------------------------------------------
 
-// Verifica se a tela indicada está ativa.
+/**
+ * Verifica se a tela indicada está ativa.
+ * @param {string} tid Identificação da tela desejada.
+ */
 function isTelaAtiva( tid ) {
     return ! $( "#" + tid ).hasClass("hidden");
 }
 
 //--------------------------------------------------------------------------
 
-// Fecha e remove uma tela.
+/**
+ * Fecha e remove uma tela.
+ * @param {string} tid Identificação da tela desejada.
+ */
 function fecharTela( tid ) {
 
     var tela = $( "#" + tid );
@@ -750,7 +992,9 @@ function fecharTela( tid ) {
 
 //--------------------------------------------------------------------------
 
-// Fecha e remove todas as telas atuais.
+/**
+ * Fecha e remove todas as telas atuais.
+ */
 function fecharTelas() {
     for( var t in telas ){
         fecharTela(t);
@@ -759,16 +1003,28 @@ function fecharTelas() {
 
 //--------------------------------------------------------------------------
 
-// Fecha a tela ativa.
+/**
+ * Fecha e remove a tela ativa.
+ */
 function fecharTelaAtiva() {
     fecharTela( $(".tela").not(".hidden").attr("id") );
 }
 
 //--------------------------------------------------------------------------
 
-// Armazena um objeto JSON com um exclusivo nome.
+/**
+ * <p>Armazena um objeto JSON (persistência).</p>
+ * <p>Repositório preferencial: {@link cordovaSalvar}</p>
+ * <p>Repositório alternativo: {@link window#localStorage}</p>
+ * @param {string} nome Identificação do objeto no repositório de armazenamento.
+ * @param {object} objeto Objeto a ser armazenado.
+ * @see abrir
+ * @see listar
+ * @see apagar
+ * @see cordovaSalvar
+ */
 function salvar( nome, objeto, funcExito, funcErro ) {
-    if( typeof(cordova) != "undefined" && device.platform != "browser" ){
+    if( isCordovaNativa() ){
         cordovaSalvar( nome, objeto, funcExito, funcErro );
     }else{
         try{
@@ -782,25 +1038,81 @@ function salvar( nome, objeto, funcExito, funcErro ) {
 
 //--------------------------------------------------------------------------
 
-// Recupera um objeto JSON previamente armazenado.
+/**
+ * Recupera um objeto JSON previamente armazenado com {@link salvar}.
+ * @param {string} nome Identificação do objeto no repositório de armazenamento.
+ * @see salvar
+ * @see cordovaAbrir
+ */
 function abrir( nome, funcExito, funcErro ) {
-    if( typeof(cordova) != "undefined" && device.platform != "browser" ){
+    if( isCordovaNativa() ){
         cordovaAbrir( nome, funcExito, funcErro );
     }else{
         try{
             var item = window.localStorage.getItem( nome );
-            if( item === null ) jsExec(funcErro, null);
-            else funcExito( JSON.parse( item ) );
+            if( item === null ) jsExec( funcErro, null );
+            else jsExec( funcExito, JSON.parse( item ) );
         }catch( e ){
-            jsExec(funcErro, e);
+            jsExec( funcErro, e );
         }
     }
 }
 
 //--------------------------------------------------------------------------
 
-// Armazena um objeto JSON num arquivo de texto, através da API do Apache Cordova.
+/**
+ * Lista os nomes de todos os objetos armazenados com {@link salvar}.
+ * @param funcExito Função que receberá a lista de nomes.
+ * @see salvar
+ */
+function listar( funcExito, funcErro ) {
+    if( isCordovaNativa() ){
+        cordovaListar( funcExito, funcErro );
+    }else{
+        try{
+            jsExec( funcExito, Object.keys(window.localStorage) );
+        }catch( e ){
+            jsExec( funcErro, e );
+        }
+    }
+}
+
+//--------------------------------------------------------------------------
+
+/**
+ * Apaga um objeto previamente armazenado com {@link salvar}.
+ * @param {string} nome Identificação do objeto no repositório de armazenamento.
+ * @see salvar
+ * @see cordovaApagar
+ */
+function apagar( nome, funcExito, funcErro ) {
+    if( isCordovaNativa() ){
+        cordovaApagar( nome, funcExito, funcErro );
+    }else{
+        try{
+            window.localStorage.removeItem( nome );
+            jsExec( funcExito, nome );
+        }catch( e ){
+            jsExec( funcErro, e );
+        }
+    }
+}
+
+//--------------------------------------------------------------------------
+
+/**
+ * Armazena um objeto JSON num arquivo de texto, através da API do Apache Cordova.
+ * @param {string} nome Identificação do objeto no repositório de armazenamento.
+ * @param {object} objeto Objeto a ser armazenado.
+ * @see cordova_repositorio_padrao
+ * @see cordovaAbrir
+ * @see cordovaListar
+ * @see cordovaApagar
+ * @see salvar
+ */
 function cordovaSalvar( nome, objeto, funcExito, funcErro ) {
+
+    funcErro = js(funcErro);
 
     window.resolveLocalFileSystemURL( cordova_repositorio_padrao, function(diretorio) {
         diretorio.getFile( nome, { create: true }, function(arquivo) {
@@ -825,8 +1137,16 @@ function cordovaSalvar( nome, objeto, funcExito, funcErro ) {
 
 //--------------------------------------------------------------------------
 
-// Recupera um objeto JSON previamente armazenado num arquivo de texto, através da API do Apache Cordova.
+/**
+ * Recupera um objeto JSON previamente armazenado com {@link cordovaSalvar}.
+ * @param {string} nome Identificação do objeto no repositório de armazenamento.
+ * @see cordova_repositorio_padrao
+ * @see cordovaSalvar
+ * @see abrir
+ */
 function cordovaAbrir( nome, funcExito, funcErro ) {
+
+    funcErro = js(funcErro);
 
     var endereco = cordova_repositorio_padrao + nome;
 
@@ -836,13 +1156,63 @@ function cordovaAbrir( nome, funcExito, funcErro ) {
             var entrada = new FileReader();
 
             entrada.onloadend = function(e) {
-                funcExito( JSON.parse(this.result), arquivo );
+                jsExec( funcExito, JSON.parse(this.result), arquivo );
             };
 
             entrada.onerror = funcErro;
 
             entrada.readAsText( conteudo );
 
+        }, funcErro );
+    }, funcErro );
+
+}
+
+//--------------------------------------------------------------------------
+
+/**
+ * Lista os nomes de todos os objetos armazenados com {@link cordovaSalvar}.
+ * @param funcExito Função que receberá a lista de nomes.
+ * @see cordova_repositorio_padrao
+ * @see cordovaSalvar
+ */
+function cordovaListar( funcExito, funcErro ) {
+
+    funcErro = js(funcErro);
+
+    window.resolveLocalFileSystemURL( cordova_repositorio_padrao, function(diretorio) {
+        diretorio.createReader().readEntries( function(entradas) {
+            jsExec(
+                funcExito,
+                entradas.filter(function(entrada){
+                    return entrada.isFile;
+                }).map(function(v, k){
+                    return v.name;
+                })
+            );
+        }, funcErro );
+    }, funcErro );
+    
+}
+
+//--------------------------------------------------------------------------
+
+/**
+ * Apaga um objeto previamente armazenado com {@link cordovaSalvar}.
+ * @param {string} nome Identificação do objeto no repositório de armazenamento.
+ * @see cordova_repositorio_padrao
+ * @see cordovaSalvar
+ * @see apagar
+ */
+function cordovaApagar( nome, funcExito, funcErro ) {
+
+    funcErro = js(funcErro);
+
+    var endereco = cordova_repositorio_padrao + nome;
+
+    window.resolveLocalFileSystemURL( endereco, function(arquivo) {
+        arquivo.remove( function() {
+            jsExec( funcExito, nome );
         }, funcErro );
     }, funcErro );
 
@@ -861,9 +1231,9 @@ inicio(function(){
     //-----------------------------------
     if( iperoxo_script_mensagem ){
 
-        var mensagem_ampla        = document.getElementById("mensagem_ampla");
-        var mensagem_ampla_fechar = document.getElementsByClassName("mensagem_ampla_fechar")[0];
-        var mensagem_ampla_texto  = document.getElementById("mensagem_ampla_texto");
+        mensagem_ampla        = document.getElementById("mensagem_ampla");
+        mensagem_ampla_fechar = document.getElementsByClassName("mensagem_ampla_fechar")[0];
+        mensagem_ampla_texto  = document.getElementById("mensagem_ampla_texto");
     
         mensagem_ampla_fechar.onclick = function() {
             fecharMensagemAmpla();
@@ -879,7 +1249,7 @@ inicio(function(){
 
     //-----------------------------------
     if( iperoxo_script_persistencia ){
-        if( typeof(cordova) != "undefined" && device.platform != "browser" ){
+        if( isCordovaNativa() ){
             cordova_repositorio_padrao =
                 device.platform == "iOS" ?
                 cordova.file.syncedDataDirectory :
