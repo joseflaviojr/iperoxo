@@ -19,7 +19,7 @@ This file is part of Ipê-roxo - <http://www.joseflavio.com/iperoxo/>.
   <body>
 
     <!-- Tela a ser importada pelo Ipê-roxo, no processo de abertura. -->
-    <div class="tela tamanho_flexivel" id="" funcPreparacao="" funcInicio="inicioTela" funcFim="" funcPreAtivacao="">
+    <div class="tela tamanho_flexivel" id="" funcPreparacao="" funcPreAtivacao="" funcInicio="inicioTela" funcFim="">
 
       <!-- Título da tela -->
       <h3 class="tela_titulo texto_dinamico" chave="tela_exemplo_titulo">&nbsp;</h3>
@@ -82,7 +82,10 @@ This file is part of Ipê-roxo - <http://www.joseflavio.com/iperoxo/>.
         <input type="hidden" name="classe__classe__valor" value="Nível 2!">
 
         <!-- Botão de submissão -->
-        <input type="submit" class="btn btn-default texto_dinamico" chave="enviar" value="ENVIAR">
+        <input type="submit" class="btn btn-default texto_dinamico" chave="enviar" value="">
+
+        <!-- Botão com ação -->
+        <input type="button" class="btn btn-default texto_dinamico" chave="aplicacao_titulo" value="" onclick="acaoTela(this, 'exemploEventoTela')">
 
       </form>
 

@@ -179,7 +179,7 @@ function gerarID( aleatorio, supressao ) {
 //--------------------------------------------------------------------------
 
 /**
- * Resolve uma rotina de JavaScript com "eval".
+ * Resolve uma rotina de JavaScript com {@link eval}.
  * @param rotina Rotina a resolver.
  * @returns a própria rotina se ela não for "string"; "undefined" se falhar.
  */
@@ -194,21 +194,16 @@ function js( rotina ) {
 //--------------------------------------------------------------------------
 
 /**
- * Resolve e executa uma função JavaScript.
+ * Executa uma função JavaScript.<br>
+ * Os argumentos anônimos serão repassados para a {@linkcode funcao}.
  * @param funcao Função ou nome de função.
- * @param arg1 Primeiro argumento para a função.
- * @param arg2 Segundo argumento para a função.
  * @returns "undefined" se falhar.
  */
-function jsExec( funcao, arg1, arg2, arg3, arg4, arg5 ) {
+function jsExec( funcao ) {
     try{
-        if( funcao == undefined || funcao == "" ){
-            return undefined;
-        }else if( typeof(funcao) === "function" ){
-            return funcao( arg1, arg2, arg3, arg4, arg5 );
-        }else{
-            return eval(funcao)( arg1, arg2, arg3, arg4, arg5 );
-        }
+        if( funcao === undefined || funcao === "" ) return undefined;
+        if( typeof(funcao) !== "function" ) funcao = window[funcao];
+        return funcao.apply( this, Array.prototype.slice.call(arguments, 1) );
     }catch(e){
         return undefined;
     }
@@ -830,7 +825,8 @@ function atualizarTelas() {
 
             var inputTimestamp = obj.parent().find("input[type='hidden']");
             var inputTimestampFunc = function() {
-                inputTimestamp.val( obj.data("DateTimePicker").date().valueOf() );
+                var data = obj.data("DateTimePicker").date();
+                inputTimestamp.val( data != null ? data.valueOf() : "" );
             };
             obj.find("input[type='text']").change(inputTimestampFunc);
 
@@ -888,22 +884,18 @@ function abrirTela( pagina, autoAtivar, paginaArg, funcExito, funcExitoArg ) {
                 tela.attr( "id", tid );
             }
 
-            telas[tid] = {
+            var telaObj = telas[tid] = {
                 "tid"   : tid,
                 "args"  : queryJSON,
                 "passo" : navegacao_passo
             };
 
-            atualizarTelas();
-            if( autoAtivar ) ativarTela( tid );
-
-            jsExec( tela.attr("funcPreparacao"), tela, queryJSON );
+            tela.addClass("hidden");
             div.removeClass("hidden");
-            jsExec( tela.attr("funcInicio"), tela, queryJSON );
+            atualizarTelas();
 
-            tela.find(".uxiamarelo_form").each(function(i){
+            tela.find(".uxiamarelo_form").each(function(){
                 var form = $(this);
-                jsExec( form.attr("funcInicio"), form );
                 uxiamareloPreparar(
                     form,
                     false,
@@ -911,9 +903,25 @@ function abrirTela( pagina, autoAtivar, paginaArg, funcExito, funcExitoArg ) {
                     js(form.attr("funcErro")),
                     js(form.attr("funcPreEnvio"))
                 );
+                jsExec( form.attr("funcInicio"), form );
             });
 
-            jsExec( funcExito, tid, funcExitoArg );
+            var posPreparacao = function() {
+                if( autoAtivar ) ativarTela( tid );
+                jsExec( funcExito, tid, funcExitoArg );
+            };
+
+            var resultado = jsExec(
+                tela.attr("funcPreparacao"),
+                tela,
+                queryJSON,
+                tid,
+                telaObj,
+                posPreparacao,
+                posPreparacao
+            );
+
+            if( resultado !== false ) posPreparacao();
 
         }
     );
@@ -928,15 +936,38 @@ function abrirTela( pagina, autoAtivar, paginaArg, funcExito, funcExitoArg ) {
  */
 function ativarTela( tid ) {
 
-    var tela = $( "#" + tid );
+    var tela    = $( "#" + tid );
+    var telaObj = telas[tid];
 
     $( "#navegacao > li" ).removeClass("active");
-    $( "#tab_li_" + tid ).addClass("active");
     $( ".tela" ).addClass("hidden");
 
-    telas[tid].passo = ++navegacao_passo;
-    jsExec( tela.attr("funcPreAtivacao"), tela );
-    tela.removeClass("hidden");
+    telaObj.passo = ++navegacao_passo;
+
+    var posPreAtivacao = function() {
+
+        $( "#tab_li_" + tid ).addClass("active");
+        tela.removeClass("hidden");
+    
+        if( telaObj.iniciada === undefined ){
+            telaObj.iniciada = true;
+            jsExec( tela.attr("funcInicio"), tela, telaObj.args, tid, telaObj );
+        }
+
+    };
+
+    var resultado = jsExec(
+        tela.attr("funcPreAtivacao"),
+        tela,
+        telaObj.args,
+        tid,
+        telaObj,
+        posPreAtivacao,
+        posPreAtivacao
+    );
+
+    if( resultado !== false ) posPreAtivacao();
+    
 
 }
 
@@ -961,32 +992,45 @@ function fecharTela( tid ) {
     var tela = $( "#" + tid );
     if( ! tela.hasClass("tela") ) return;
 
-    var ativa = ! tela.hasClass("hidden");
+    var remocaoEfetiva = function() {
 
-    jsExec( tela.attr("funcFim"), tela );
-    tela.parent().remove();
-    delete telas[tid];
-
-    if( ativa ){
-
-        var maior = -1;
-        var maior_tid = undefined;
-
-        for( var t in telas ){
-            var p = telas[t].passo;
-            if( p > maior ){
-                maior = p;
-                maior_tid = t;
+        tela.parent().remove();
+        delete telas[tid];
+    
+        if( ! tela.hasClass("hidden") ){
+    
+            var maior = -1;
+            var maior_tid = undefined;
+    
+            for( var t in telas ){
+                var p = telas[t].passo;
+                if( p > maior ){
+                    maior = p;
+                    maior_tid = t;
+                }
             }
+    
+            if( maior_tid != undefined ){
+                ativarTela( maior_tid );
+            }
+    
         }
+    
+        atualizarTelas();
 
-        if( maior_tid != undefined ){
-            ativarTela( maior_tid );
-        }
+    };
 
-    }
+    var resultado = jsExec(
+        tela.attr("funcFim"),
+        tela,
+        telas[tid].args,
+        tid,
+        telas[tid],
+        remocaoEfetiva,
+        remocaoEfetiva
+    );
 
-    atualizarTelas();
+    if( resultado !== false ) remocaoEfetiva();
 
 }
 
@@ -1008,6 +1052,46 @@ function fecharTelas() {
  */
 function fecharTelaAtiva() {
     fecharTela( $(".tela").not(".hidden").attr("id") );
+}
+
+//--------------------------------------------------------------------------
+
+/**
+ * Ação disparada por componente de tela.<br>
+ * A função a ser chamada deverá ter minimamente a assinatura da função {@link exemploEventoTela}.<br>
+ * Argumentos extras serão repassados para a {@linkcode funcao}, após a passagem dos argumentos padrões.
+ * @param componente Objeto DOM acionado.
+ * @param funcao Função ou nome da função a ser executada.
+ * @see exemploEventoTela
+ */
+function acaoTela( componente, funcao ) {
+    
+    var tela    = $(componente).parents(".tela");
+    var tid     = tela.attr("id");
+    var telaObj = telas[tid];
+
+    jsExec.apply(
+        this,
+        [ funcao, tela, telaObj.args, tid, telaObj, undefined, undefined ]
+        .concat( Array.prototype.slice.call(arguments, 2) )
+    );
+
+}
+
+//--------------------------------------------------------------------------
+
+/**
+ * Exemplo de evento de tela.
+ * @param tela Objeto jQuery do DOM raiz da tela.
+ * @param args Argumentos passados para a tela durante a abertura.
+ * @param tid Identificação da tela.
+ * @param telaObj Objeto que representa a tela em {@link telas}.
+ * @param funcExito Função de êxito a ser chamada se esta tiver comportamento assíncrono.
+ * @param funcErro Função de erro a ser chamada se esta tiver comportamento assíncrono.
+ * @returns {@linkcode false}, se esta função tem comportamento assíncrono.
+ */
+function exemploEventoTela( tela, args, tid, telaObj, funcExito, funcErro ) {
+    abrirMensagemAmpla(JSON.stringify(telaObj));
 }
 
 //--------------------------------------------------------------------------

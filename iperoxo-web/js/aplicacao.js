@@ -24,13 +24,20 @@ inicio(function(){
 
 //--------------------------------------------------------------------------
 
+/**
+ * @see setLinguagem
+ */
 function linguagemAlterada() {
     atualizarComponentesCulturais();
 }
 
 //--------------------------------------------------------------------------
 
-function inicioTela( tela, args ) {
+/**
+ * {@linkcode funcInicio} de tela.
+ * @see exemploEventoTela
+ */
+function inicioTela( tela, args, tid, telaObj, funcExito, funcErro ) {
 }
 
 //--------------------------------------------------------------------------
