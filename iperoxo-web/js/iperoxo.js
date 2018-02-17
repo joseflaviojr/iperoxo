@@ -265,6 +265,24 @@ function textoHTML( texto ) {
 //--------------------------------------------------------------------------
 
 /**
+ * Codifica uma string para o formato base64url, conforme a RFC 4648, Table 2.
+ */
+function codificarBase64url( str ) {
+    return window.btoa(str).replace(/\+/g, "-").replace(/\//g, "_").replace(/=/g, "");
+}
+
+//--------------------------------------------------------------------------
+
+/**
+ * Decodifica uma string que está no formato base64url, conforme a RFC 4648, Table 2.
+ */
+function decodificarBase64url( base64url ) {
+    return window.atob( base64url.replace(/\-/g, "+").replace(/_/g, "/") );
+}
+
+//--------------------------------------------------------------------------
+
+/**
  * Retorna o sufixo do nome indicado, de acordo com um caractere separador.
  * @param {string} nome String que contém um sufixo.
  * @param separador Caractere separador.
