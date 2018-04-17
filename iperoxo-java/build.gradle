@@ -13,7 +13,7 @@ String descricao = "Ipê-roxo: Modelo de software multicamada."
 
 group = "com.joseflavio"
 archivesBaseName = "iperoxo"
-version = "1.0-A16"
+version = "1.0-A17"
 
 //------------------------------------------------------
 
@@ -55,10 +55,10 @@ repositories {
 
 dependencies {
     compile fileTree(dir:"biblioteca", include:["*.jar"])
-    compile "com.joseflavio:unhadegato:1.0-A14"
+    compile "com.joseflavio:unhadegato:1.0-A15"
     compile "org.apache.tomee:javaee-api:7.0-1"
-    compile "org.apache.commons:commons-dbcp2:2.1.1"
-    compile "org.apache.commons:commons-lang3:3.6"
+    compile "org.apache.commons:commons-dbcp2:2.2.0"
+    compile "org.apache.commons:commons-lang3:3.7"
     compile "org.apache.commons:commons-io:1.3.2"
     compile "org.apache.commons:commons-email:1.5"
     testCompile "junit:junit:4.12"
@@ -143,7 +143,7 @@ uploadArchives {
         name nome
         packaging "jar"
         description descricao
-        url "http://www.joseflavio.com/iperoxo"
+        url "http://joseflavio.com/iperoxo"
 
         scm {
           connection "scm:git:ssh:git@github.com/joseflaviojr/iperoxo.git"
@@ -162,7 +162,7 @@ uploadArchives {
           developer {
             id "joseflaviojr"
             name "José Flávio de Souza Dias Júnior"
-            email "contato@joseflavio.com"
+            email "email@joseflavio.com"
           }
         }
 

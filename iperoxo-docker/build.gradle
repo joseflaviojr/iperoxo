@@ -54,11 +54,11 @@ repositories {
 
 dependencies {
     compile fileTree(dir:"biblioteca", include:["*.jar"])
-    compile "com.joseflavio:iperoxo:1.0-A16"
-    compile "org.apache.tomcat:tomcat-catalina:8.5.20"
+    compile "com.joseflavio:iperoxo:1.0-A17"
+    compile "org.apache.tomcat:tomcat-catalina:8.5.30"
     compile "org.apache.geronimo.specs:geronimo-osgi-locator:1.1"
-    compile "org.eclipse.persistence:eclipselink:2.6.5"
-    compile "org.postgresql:postgresql:9.4.1212"
+    compile "org.eclipse.persistence:eclipselink:2.7.1"
+    compile "org.postgresql:postgresql:42.2.2"
 }
 
 //------------------------------------------------------

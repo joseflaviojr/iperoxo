@@ -1,12 +1,9 @@
 #------------------------------
 
-# Ipe-roxo 1.0-A16
-
-#------------------------------
-
 FROM java:8-jre-alpine
 
-MAINTAINER Jose Flavio de Souza Dias Junior <contato@joseflavio.com>
+LABEL description="Ipe-roxo 1.0-A17"
+LABEL maintainer="Jose Flavio de Souza Dias Junior <email@joseflavio.com>"
 
 #------------------------------
 

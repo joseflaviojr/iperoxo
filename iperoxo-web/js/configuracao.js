@@ -2,7 +2,7 @@
 
 var configuracao = {
     
-    iperoxo_versao                   : "1.0-A16"
+    iperoxo_versao                   : "1.0-A17"
 
 };
 
