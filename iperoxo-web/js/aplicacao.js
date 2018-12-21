@@ -1,43 +1,41 @@
 //--------------------------------------------------------------------------
 
-// Comportamento inicial da aplicação.
-inicio(function(){
+/**
+ * Comportamento inicial da aplicação, executado após a preparação do ambiente Ipê-roxo.
+ * @see configuracao.funcao_inicial
+ */
+function aplicacao() {
     
-    // sid
-	sid = getCookie( "sid" );
-	if( sid == "" ) sid = gerarID();
-	setSID( sid );
-
     // lid
     lid = url_args.lid;
-    if( lid == "" || lid == undefined ) lid = getCookie( "lid" );
-    if( lid == "" || lid == undefined ) lid = navigator.language;
+    if( lid === undefined || lid === "" ) lid = getCookie( "lid" );
+    if( lid === undefined || lid === "" ) lid = navigator.language;
     setLinguagem( lid );
-    
+
+    // sid
+    sid = url_args.sid;
+    if( sid === undefined || sid === "" ) sid = getCookie( "sid" );
+	if( sid === undefined || sid === "" ) sid = gerarID();
+	setSID( sid );
+
     // Código de Exemplo
     setCookie( "cookieTeste", "Ipê-roxo ~ Teste de Cookie!" );
     abrirTela( "html/tela.html" );
-    var msgfunc = new MessageFormat("en").compile( "Bem vindo ao Ipê-roxo {VERSAO}!\nWelcome to Ipê-roxo {VERSAO}!" );
-    abrirMensagemAmpla( msgfunc( { VERSAO: configuracao.iperoxo_versao } ) );
+    abrirMensagemAmpla(formatador.compile(dicionario.bem_vindo)({
+        nome: dicionario.aplicacao_titulo + " " + configuracao.iperoxo_versao
+    }));
 
-});
-
-//--------------------------------------------------------------------------
-
-/**
- * @see setLinguagem
- */
-function linguagemAlterada() {
-    atualizarComponentesCulturais();
 }
 
 //--------------------------------------------------------------------------
 
 /**
- * {@linkcode funcInicio} de tela.
+ * {@linkcode funcInicio} de "tela.html"
  * @see exemploEventoTela
  */
-function inicioTela( tela, args, tid, telaObj, funcExito, funcErro ) {
+function tela_funcInicio( tela, args, tid, telaObj, funcExito, funcErro ) {
+    var texto = getComp("texto", tela);
+    setCompValor(texto, "Ipê-roxo");
 }
 
 //--------------------------------------------------------------------------

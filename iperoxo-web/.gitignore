@@ -1,5 +1,5 @@
 
-# .gitignore universal 1.0
+# .gitignore universal 1.1
 
 # Sistema Operacional
 .DS_Store*
@@ -20,6 +20,7 @@ Thumbs.db
 
 # Geral
 rascunho/
+Rascunho/
 
 # Java
 *.class
@@ -64,6 +65,9 @@ _site
 *.obj
 *.gch
 *.pch
+
+# R
+.Rhistory
 
 # Fortran
 *.mod

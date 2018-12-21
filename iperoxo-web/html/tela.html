@@ -6,86 +6,103 @@ This file is part of Ipê-roxo - <http://joseflavio.com/iperoxo/>.
 <html>
 
   <head>
-    <meta charset="utf-8">
-    <title>&nbsp;</title>
-    <link href="../css-dep/bootstrap.min.css" rel="stylesheet">
-    <link href="../css-dep/bootstrap-theme.min.css" rel="stylesheet">
-    <link href="../css-dep/jasny-bootstrap.min.css" rel="stylesheet">
-    <link href="../css-dep/bootstrap-datetimepicker.min.css" rel="stylesheet">
-    <link href="../css/iperoxo.css" rel="stylesheet">
-    <link href="../css/estilo.css" rel="stylesheet">
+    <meta charset="utf-8" />
+    <title>Ipê-roxo</title>
+    <link href="../css-dep/bootstrap.min.css" rel="stylesheet" />
+    <link href="../css-dep/bootstrap-theme.min.css" rel="stylesheet" />
+    <link href="../css-dep/bootstrap-select.min.css" rel="stylesheet">
+    <link href="../css-dep/jasny-bootstrap.min.css" rel="stylesheet" />
+    <link href="../css-dep/bootstrap-datetimepicker.min.css" rel="stylesheet" />
+    <link href="../css/iperoxo.css" rel="stylesheet" />
+    <link href="../css/estilo.css" rel="stylesheet" />
   </head>
 
   <body>
 
     <!-- Tela a ser importada pelo Ipê-roxo, no processo de abertura. -->
-    <div class="tela tamanho_flexivel" id="" funcPreparacao="" funcPreAtivacao="" funcInicio="inicioTela" funcFim="">
+    <div
+      class="tela tela-flexivel"
+      nome="tela"
+      id=""
+      funcPreparacao=""
+      funcPreAtivacao=""
+      funcInicio=""
+      funcFim="">
 
       <!-- Título da tela -->
-      <h3 class="tela_titulo texto_dinamico" chave="tela_exemplo_titulo">&nbsp;</h3>
+      <ipe-tela-titulo referencia="titulo" titulo="tela_exemplo_titulo" />
 
       <!-- Formulário para encaminhamento através de Uxi-amarelo. -->
-      <form class="uxiamarelo_form" action="/uxiamarelo/servlet/solicitar" method="post" role="form" funcInicio="" funcPreEnvio="" funcExito="mensagensCopaiba" funcErro="mensagemErroUxiamarelo">
+      <form
+        class="uxiamarelo_form"
+        action="/uxiamarelo/servlet/solicitar"
+        method="post"
+        role="form"
+        funcInicio=""
+        funcPreEnvio=""
+        funcExito="mensagensCopaiba"
+        funcErro="mensagemErroUxiamarelo">
 
         <!-- Mensagens -->
         <div class="mensagens">
         </div>
 
         <!-- Especificação da Copaíba, classe e método a ser executado remotamente. -->
-        <input type="hidden" name="copaiba" value="copaiba@com.joseflavio.iperoxo.docker.Exemplo@executar">
+        <ipe-copaiba copaiba="copaiba" classe="com.joseflavio.iperoxo.docker.Exemplo" metodo="executar" />
 
         <!-- Identificador da sessão. Atualização automática. -->
-        <input class="sid" type="hidden" name="sid" value="">
+        <ipe-oculto class="sid" nome="sid" valor="" />
 
         <!-- Identificador da tela corrente. Atualização automática. -->
-        <input class="tid" type="hidden" name="tid" value="">
+        <ipe-oculto class="tid" nome="tid" valor="" />
 
         <!-- Linguagem do usuário. Atualização automática. -->
-        <input class="lid" type="hidden" name="lid" value="pt-BR">
+        <ipe-oculto class="lid" nome="lid" valor="pt-BR" />
 
-        <!-- Texto -->
-        <div class="form-group">
-          <label for="texto"><span class="texto_dinamico" chave="texto" origem="/uxiamarelo/rest/copaiba/solicitar/com.joseflavio.iperoxo.docker.Exemplo/toString">&nbsp;</span>:</label>
-          <input type="text" name="texto" class="form-control texto_dinamico" chaveph="texto">
-        </div>
+        <ipe-painel rotulo="texto" dica="texto" estilo="informacao">
 
-        <!-- Data -->
-        <div class="form-group">
-          <input type="hidden" name="data" value="">
-          <label for="dataTexto"><span class="texto_dinamico" chave="data">&nbsp;</span>:</label>
-          <div class="input-group date datetimepicker" opcoes="">
-            <input type="text" name="dataTexto" class="form-control">
-            <span class="input-group-addon">
-              <span class="glyphicon glyphicon-calendar"></span>
-            </span>
-          </div>
-        </div>
+        <!-- Exemplo de campo para entrada de texto -->
+        <ipe-texto nome="texto" rotulo="texto" rotulo-interno="texto" dica="texto" tipo="texto" valor="" sugestao="sim" />
 
-        <!-- Arquivo -->
-        <div class="form-group">
-          <label for="arquivo"><span class="texto_dinamico" chave="arquivo">&nbsp;</span>:</label>
-          <div class="fileinput fileinput-new" style="display:block;" data-provides="fileinput">
-            <span class="btn btn-default btn-file">
-              <span class="fileinput-new texto_dinamico" chave="selecionar">&nbsp;</span>
-              <span class="fileinput-exists texto_dinamico" chave="alterar">&nbsp;</span>
-              <input type="file" name="arquivo" multiple>
-            </span>
-            <span class="fileinput-filename"></span>
-            <a href="#" class="close fileinput-exists" data-dismiss="fileinput" style="float: none">&times;</a>
-          </div>
-        </div>
+        <!-- Exemplo de campo para entrada de texto mais complexo -->
+        <ipe-texto nome="texto-complexo" rotulo="texto" rotulo-interno="texto" valor="" mascara="(00) 0000-0000" sugestao="nao" rotulo-origem="/uxiamarelo/rest/copaiba/solicitar/com.joseflavio.iperoxo.docker.Exemplo/toString">
+          <ipe-texto-acao icone="remove" ao-clicar="var comp = esteComp(this); if(getCompEditavel(comp)) setCompValor(comp, '');" />
+        </ipe-texto>
 
-        <!-- Teste de encapsulamento -->
-        <input type="hidden" name="classe__valor" value="Nível 1!">
+        </ipe-painel>
+
+        <!-- Exemplo de campo para entrada de data/hora -->
+        <ipe-data nome="data" rotulo="data" rotulo-interno="data" formato="L LT" sugestao="nao" />
+
+        <!-- Exemplo de campo para entrada de arquivo(s) -->
+        <ipe-arquivo nome="arquivo" rotulo="arquivo" rotulo-interno="arquivo" modo="multiplo" aceitar=".txt, .png" />
+        
+        <!-- Exemplo de campo de seleção de valor -->
+        <ipe-selecao nome="selecao" rotulo="linguagem" busca="sim" ao-mudar="setLinguagem(this.value)">
+          <ipe-opcao valor="" rotulo="selecionar" estado="selecionado" />
+          <ipe-opcao valor="en-US">English</ipe-opcao>
+          <ipe-opcao valor="es-ES">Español</ipe-opcao>
+          <ipe-opcao valor="pt-BR">Português</ipe-opcao>
+        </ipe-selecao>
+
+        <!-- Exemplo de grupo de marcação -->
+        <ipe-marcacao-grupo referencia="marcacao-grupo" rotulo="selecionar">
+          <ipe-marcacao nome="marcacao01" valor="01" rotulo="aplicacao_titulo" estado="marcado" />
+          <ipe-marcacao nome="marcacao02" valor="02">Ipê-roxo :-)</ipe-marcacao>
+          <ipe-marcacao nome="marcacao03" valor="03" estado="marcado">Ipê-roxo :-P</ipe-marcacao>
+        </ipe-marcacao-grupo>
 
         <!-- Teste de encapsulamento -->
-        <input type="hidden" name="classe__classe__valor" value="Nível 2!">
+        <ipe-oculto nome="classe__valor" valor="Nível 1!" />
+
+        <!-- Teste de encapsulamento -->
+        <ipe-oculto nome="classe__classe__valor" valor="Nível 2!" />
 
         <!-- Botão de submissão -->
-        <input type="submit" class="btn btn-default texto_dinamico" chave="enviar" value="">
+        <ipe-botao rotulo="enviar" estilo="primario" submeter="sim" nome="botao" valor="21" />
 
         <!-- Botão com ação -->
-        <input type="button" class="btn btn-default texto_dinamico" chave="aplicacao_titulo" value="" onclick="acaoTela(this, 'exemploEventoTela')">
+        <ipe-botao rotulo="aplicacao_titulo" estilo="padrao" ao-clicar="acaoTela(this, 'exemploEventoTela');" />
 
       </form>
 

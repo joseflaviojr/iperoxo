@@ -13,7 +13,7 @@ String descricao = "Ipê-roxo: Modelo de software multicamada."
 
 group = "com.joseflavio"
 archivesBaseName = "iperoxo"
-version = "1.0-A17"
+version = "1.0-A18"
 
 //------------------------------------------------------
 
@@ -22,7 +22,8 @@ version = "1.0-A17"
 "biblioteca", // Dependências diretas: *.jar
 "fonte",      // Código fonte: *.java
 "recurso",    // Anexos que serão embutidos no ".jar"
-"projeto"     // Arquivos de projeto: doc, svg, psd, etc.
+"projeto",    // Arquivos de projeto: doc, svg, psd, etc.
+"rascunho"    // Arquivos temporários e descartáveis
 
 ].each { new File(it).mkdirs() }
 
@@ -55,10 +56,10 @@ repositories {
 
 dependencies {
     compile fileTree(dir:"biblioteca", include:["*.jar"])
-    compile "com.joseflavio:unhadegato:1.0-A15"
-    compile "org.apache.tomee:javaee-api:7.0-1"
-    compile "org.apache.commons:commons-dbcp2:2.2.0"
-    compile "org.apache.commons:commons-lang3:3.7"
+    compile "com.joseflavio:unhadegato:1.0-A16"
+    compile "org.apache.tomee:javaee-api:8.0"
+    compile "org.apache.commons:commons-dbcp2:2.5.0"
+    compile "org.apache.commons:commons-lang3:3.8.1"
     compile "org.apache.commons:commons-io:1.3.2"
     compile "org.apache.commons:commons-email:1.5"
     testCompile "junit:junit:4.12"
@@ -185,9 +186,11 @@ eclipse {
     }
 }
 
-eclipseJdt << {
-    file(".settings/org.eclipse.core.resources.prefs").text =
-        "eclipse.preferences.version=1\nencoding/<project>=" + codificacao
+eclipseJdt {
+    doLast {
+        file(".settings/org.eclipse.core.resources.prefs").text =
+            "eclipse.preferences.version=1\nencoding/<project>=" + codificacao
+    }
 }
 
 //------------------------------------------------------

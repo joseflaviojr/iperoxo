@@ -10,7 +10,7 @@ A aplicação Web do Ipê-roxo é responsável por manter a interface de comunic
 
 ## Versão Atual
 
-1.0-A17
+1.0-A18
 
 Padrão de versionamento: [JFV](http://joseflavio.com/jfv)
 
@@ -29,6 +29,7 @@ A aplicação Web Ipê-roxo possui uma estrutura simples de arquivos, a qual é 
   - **tela.html** : modelo de tela que contém formulário para envio de dados para processamento através de [Uxi-amarelo](http://joseflavio.com/uxiamarelo).
 - **img** : diretório que centraliza os arquivos de imagem, tais como PNG, JPG e GIF.
 - **index.html** : principal arquivo HTML (página inicial), o qual está preparado para aplicações *single page*.
+- **iperoxo.html** : código fonte dos componentes visuais padrões.
 - **js** : diretório que centraliza os arquivos JavaScript.
   - **aplicacao.js** : script que inicializa e controla o ciclo de vida da aplicação.
   - **configuracao.js** : configurações gerais da aplicação.

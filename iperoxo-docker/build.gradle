@@ -21,7 +21,8 @@ version = "1.0"
 "fonte",      // Código fonte: *.java
 "recurso",    // Anexos que serão embutidos no ".jar"
 "dist",       // Anexos da distribuição
-"projeto"     // Arquivos de projeto: doc, svg, psd, etc.
+"projeto",    // Arquivos de projeto: doc, svg, psd, etc.
+"rascunho"    // Arquivos temporários e descartáveis
 
 ].each { new File(it).mkdirs() }
 
@@ -54,11 +55,11 @@ repositories {
 
 dependencies {
     compile fileTree(dir:"biblioteca", include:["*.jar"])
-    compile "com.joseflavio:iperoxo:1.0-A17"
-    compile "org.apache.tomcat:tomcat-catalina:8.5.30"
+    compile "com.joseflavio:iperoxo:1.0-A18"
+    compile "org.apache.tomcat:tomcat-catalina:8.5.37"
     compile "org.apache.geronimo.specs:geronimo-osgi-locator:1.1"
-    compile "org.eclipse.persistence:eclipselink:2.7.1"
-    compile "org.postgresql:postgresql:42.2.2"
+    compile "org.eclipse.persistence:eclipselink:2.7.3"
+    compile "org.postgresql:postgresql:42.2.5"
 }
 
 //------------------------------------------------------
@@ -81,15 +82,16 @@ task distDep(type: Copy, dependsOn: [jar]) {
     from configurations.compile
 }
 
-task distExe << {
-    def destino = new File( "build/exe" )
-    destino.mkdirs()
-    def comando = new File( "build/exe/iperoxo.sh" )
-    def nomeJar = archivesBaseName + "-" + version + ".jar"
-    comando << "#!/bin/sh\n\n"
-    comando << "java -server -XX:+UseConcMarkSweepGC -XX:+TieredCompilation "
-    comando << "-XX:+AggressiveOpts -XX:+UseBiasedLocking "
-    comando << "-jar $nomeJar \"\$@\"\n"
+task distExe {
+    doLast {
+        def destino = new File("build/exe")
+        destino.mkdirs()
+        def comando = new File("build/exe/iperoxo.sh")
+        def nomeJar = archivesBaseName + "-" + version + ".jar"
+        comando << "#!/bin/sh\n\n"
+        comando << "java -server -XX:+TieredCompilation -XX:+UseBiasedLocking "
+        comando << "-jar $nomeJar \"\$@\"\n"
+    }
 }
 
 task dist(type: Copy, dependsOn: [distDep, distExe]) {
@@ -113,9 +115,11 @@ eclipse {
     }
 }
 
-eclipseJdt << {
-    file(".settings/org.eclipse.core.resources.prefs").text =
-        "eclipse.preferences.version=1\nencoding/<project>=" + codificacao
+eclipseJdt {
+    doLast {
+        file(".settings/org.eclipse.core.resources.prefs").text =
+            "eclipse.preferences.version=1\nencoding/<project>=" + codificacao
+    }
 }
 
 //------------------------------------------------------

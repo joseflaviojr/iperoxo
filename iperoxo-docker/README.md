@@ -10,7 +10,7 @@ A aplicação Docker do Ipê-roxo é responsável por manter as regras, os proce
 
 ## Versão Atual
 
-1.0-A17
+1.0-A18
 
 Padrão de versionamento: [JFV](http://joseflavio.com/jfv)
 
@@ -27,7 +27,7 @@ gradle cleanIdea idea
 
 * Git >= 2.8
 * Java >= 1.8
-* Gradle >= 3.1
+* Gradle >= 4.7
 
 ## Execução Local
 
@@ -51,7 +51,7 @@ gradle clean build
 Criar imagem:
 
 ```sh
-docker build --force-rm -t joseflavio/iperoxo:1.0-A17 .
+docker build --force-rm -t joseflavio/iperoxo:1.0-A18 .
 ```
 
 Criar volume de dados:
@@ -63,7 +63,7 @@ docker volume create --name iperoxo
 Executar pela primeira vez:
 
 ```sh
-docker run --name="iperoxo" -d -p 8884:8884 -v iperoxo:/volume --ip=x.x.x.x --net xxxxxx --restart=unless-stopped joseflavio/iperoxo:1.0-A17
+docker run --name="iperoxo" -d -p 8884:8884 -v iperoxo:/volume --ip=x.x.x.x --net xxxxxx --restart=unless-stopped joseflavio/iperoxo:1.0-A18
 ```
 
 > A aplicação Ipê-roxo será inicializada automaticamente no processo de boot, a não ser que seja voluntariamente parada: `docker stop iperoxo`.
@@ -87,7 +87,7 @@ tail /var/lib/docker/volumes/iperoxo/_data/logs/iperoxo.log -n 100
 * Docker >= 17.06
 * Git >= 2.8
 * Java >= 1.8
-* Gradle >= 3.1
+* Gradle >= 4.7
 
 ### Desinstalação
 
@@ -95,7 +95,7 @@ Desinstalar a aplicação Ipê-roxo por completo:
 
 ```sh
 docker rm -f iperoxo
-docker rmi joseflavio/iperoxo:1.0-A17
+docker rmi joseflavio/iperoxo:1.0-A18
 ```
 
 ## Licença

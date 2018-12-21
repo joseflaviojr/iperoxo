@@ -1,12 +1,13 @@
+<!DOCTYPE html>
 <!-- 
 Copyright (C) 2016-2018 José Flávio de Souza Dias Júnior
 This file is part of Ipê-roxo - <http://joseflavio.com/iperoxo/>.
  -->
-<!DOCTYPE html>
 <html>
 
   <head>
     
+    <!-- ========================================== -->
     <!-- Configurações gerais -->
     <meta charset="utf-8">
     <meta name="description" content="Modelo de software multicamada.">
@@ -17,9 +18,11 @@ This file is part of Ipê-roxo - <http://joseflavio.com/iperoxo/>.
     <meta name="format-detection" content="telephone=no">
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, minimum-scale=1, maximum-scale=1">
 
+    <!-- ========================================== -->
     <!-- Configurações de segurança -->
     <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' data: gap: cdvfile: http://joseflavio.com https://*.panoramio.com">
 
+    <!-- ========================================== -->
     <!-- Open Graph protocol -->
     <meta property="og:site_name" content="Ipê-roxo" />
     <meta property="og:title" content="Ipê-roxo" />
@@ -34,10 +37,12 @@ This file is part of Ipê-roxo - <http://joseflavio.com/iperoxo/>.
 
     <title>Ipê-roxo</title>
     
+    <!-- ========================================== -->
     <!-- Estilo gráfico -->
     <link type="image/x-icon" href="img/icone.ico" rel="shortcut icon">
     <link href="css-dep/bootstrap.min.css" rel="stylesheet">
     <link href="css-dep/bootstrap-theme.min.css" rel="stylesheet">
+    <link href="css-dep/bootstrap-select.min.css" rel="stylesheet">
     <link href="css-dep/jasny-bootstrap.min.css" rel="stylesheet">
     <link href="css-dep/bootstrap-datetimepicker.min.css" rel="stylesheet">
     <link href="css/iperoxo.css" rel="stylesheet">
@@ -50,28 +55,17 @@ This file is part of Ipê-roxo - <http://joseflavio.com/iperoxo/>.
     <!-- ========================================== -->
     <!-- Barra de navegação -->
 
-    <nav class="navbar navbar-default">
-      <div class="container-fluid">
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navegacao_div">
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a class="navbar-brand" href="#"><img class="logotipo" src="img/icone.jpg"></a>
-          <a class="navbar-brand texto_dinamico" chave="aplicacao_titulo" href="#">&nbsp;</a>
-        </div>
-        <div class="collapse navbar-collapse" id="navegacao_div">
-          <ul class="nav navbar-nav" id="navegacao">
-          </ul>
-          <ul class="nav navbar-nav navbar-right">
-            <li><img class="bandeira_linguagem" src="img/bandeira/BR.png" onclick="setLinguagem('pt-BR')"></li>
-            <li><img class="bandeira_linguagem" src="img/bandeira/US.png" onclick="setLinguagem('en-US')"></li>
-            <li><a href="#"><span class="glyphicon glyphicon-off"></span></a></li>
-          </ul>
-        </div>
-      </div>
-    </nav>
+    <ipe-navegacao logotipo="img/icone.jpg" titulo="aplicacao_titulo" class="ver-pronto">
+      <ipe-navegacao-adicional>
+        <img class="bandeira-linguagem" src="img/bandeira/BR.png" onclick="setLinguagem('pt-BR')">
+      </ipe-navegacao-adicional>
+      <ipe-navegacao-adicional>
+        <img class="bandeira-linguagem" src="img/bandeira/US.png" onclick="setLinguagem('en-US')">
+      </ipe-navegacao-adicional>
+      <ipe-navegacao-adicional>
+        <a href="#"><span class="glyphicon glyphicon-off"></span></a>
+      </ipe-navegacao-adicional>
+    </ipe-navegacao>
 
     <!-- ========================================== -->
     <!-- Mensagens globais -->
@@ -82,15 +76,15 @@ This file is part of Ipê-roxo - <http://joseflavio.com/iperoxo/>.
     <!-- ========================================== -->
     <!-- Animação de espera -->
 
-    <div id="animacao_espera" class="animacao_espera" onclick="abrirMensagemAmpla(dicionario.animacao_espera_msg + ': ' + animacao_espera_total);"></div>
+    <img id="animacao-espera" class="animacao-espera" src="img/espera.gif" alt="..." onclick="abrirMensagemAmpla(dicionario.animacao_espera_msg + ': ' + animacao_espera_total);" />
 
     <!-- ========================================== -->
     <!-- Mensagem ampla -->
 
-    <div id="mensagem_ampla" class="mensagem_ampla">
-      <div class="mensagem_ampla_conteudo">
-        <span class="mensagem_ampla_fechar">&times;</span>
-        <p id="mensagem_ampla_texto">Mensagem ampla...</p>
+    <div id="mensagem-ampla" class="mensagem-ampla">
+      <div class="mensagem-ampla-conteudo">
+        <span class="mensagem-ampla-fechar">&times;</span>
+        <p id="mensagem-ampla-texto">Mensagem ampla...</p>
       </div>
     </div>
 
@@ -105,7 +99,10 @@ This file is part of Ipê-roxo - <http://joseflavio.com/iperoxo/>.
 
     <script src="js-dep/jquery.min.js"></script>
     <script src="js-dep/jquery.form.min.js"></script>
+    <script src="js-dep/jquery.mask.min.js"></script>
     <script src="js-dep/bootstrap.min.js"></script>
+    <script src="js-dep/bootstrap-select.min.js"></script>
+    <script src="js-dep/bootstrap-select-i18n.js"></script>
     <script src="js-dep/jasny-bootstrap.min.js"></script>
     <script src="js-dep/moment-with-locales.min.js"></script>
     <script src="js-dep/bootstrap-datetimepicker.min.js"></script>
@@ -121,8 +118,6 @@ This file is part of Ipê-roxo - <http://joseflavio.com/iperoxo/>.
     <script src="js/iperoxo.js"></script>
     <script src="js/aplicacao.js"></script>
     
-    <!-- ========================================== -->
-
   </body>
 
 </html>

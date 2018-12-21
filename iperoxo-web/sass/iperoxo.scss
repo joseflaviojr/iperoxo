@@ -5,13 +5,19 @@
 */
 /* ---------------------------------------------- */
 
-/*@import url('https://fonts.googleapis.com/css?family=Roboto');*/
+/* Tamanhos de telas de dispositivos */
 
 $tela_p: "(min-width:    0px) and (max-width:  767px)";
 $tela_m: "(min-width:  768px) and (max-width: 1024px)";
 $tela_g: "(min-width: 1025px)";
 
 /* ---------------------------------------------- */
+
+/* Fontes */
+
+/*
+@import url('https://fonts.googleapis.com/css?family=Roboto');
+*/
 
 /*
 @font-face {
@@ -20,14 +26,18 @@ $tela_g: "(min-width: 1025px)";
     font-weight: normal;
     font-style: normal;
 }
+*/
 
+/*
 @font-face {
     font-family: "Cantarell";
     src: url("../fonts/Cantarell/Cantarell-Bold.ttf") format("truetype");
     font-weight: bold;
     font-style: normal;
 }
+*/
 
+/*
 @font-face {
     font-family: "Cantarell";
     src: url("../fonts/Cantarell/Cantarell-Italic.ttf") format("truetype");
@@ -37,6 +47,17 @@ $tela_g: "(min-width: 1025px)";
 */
 
 /* ---------------------------------------------- */
+
+/* Geral */
+
+a {
+	color: inherit;
+	text-decoration: none;
+	&:hover, &:focus {
+		color: inherit;
+		text-decoration: underline;
+	}
+}
 
 @keyframes aparecimento {
     from { opacity: 0; }
@@ -48,19 +69,21 @@ $tela_g: "(min-width: 1025px)";
     to   { opacity: 0; }
 }
 
-.alert {
-    animation-name: aparecimento;
-    animation-duration: 0.5s;
-}
-
 /* ---------------------------------------------- */
+
+/* Telas Ipê-roxo */
 
 #telas {
     position: relative;
     width: 100%;
 }
 
-.tamanho_flexivel {
+.tela {
+    padding-top: 15px;
+    padding-bottom: 15px;
+}
+
+.tela-flexivel, .tamanho_flexivel {
 
     position: absolute;
     top: 0;
@@ -85,7 +108,7 @@ $tela_g: "(min-width: 1025px)";
 
 }
 
-.tamanho_cheio {
+.tela-cheia, .tamanho_cheio {
     
     position: fixed;
     top: 0;
@@ -98,24 +121,37 @@ $tela_g: "(min-width: 1025px)";
 
 }
 
+.tela-titulo, .tela_titulo {
+    text-align: center;
+    margin-top: 0;
+}
+
+.rotulo {
+    display: inline-block;
+    max-width: 100%;
+    margin-bottom: 4px;
+    font-weight: 700;
+}
+
 /* ---------------------------------------------- */
 
-.logotipo {
+/* Barra de navegação */
+
+.navbar {
+    margin-bottom: 0;
+}
+
+.ipe-navegacao-logotipo {
     width: 32px;
     height: 32px;
     margin-top: -7px;
 }
 
-.tela_titulo {
-    text-align: center;
-}
-
-/* ---------------------------------------------- */
-
-img.bandeira_linguagem {
+.nav > li > img.bandeira-linguagem {
 
     width: 24px;
     padding-top: 12px;
+    margin-left: 15px;
 
     &:hover {
         width: 32px;
@@ -126,11 +162,42 @@ img.bandeira_linguagem {
 
 /* ---------------------------------------------- */
 
-.mensagem_ampla {
+/* Outros componentes Ipê-roxo */
+
+.ver-pronto {
+    display: none;
+}
+
+.cursor-pointer {
+    cursor: pointer;
+}
+
+.marcacao {
+    margin-top: 0;
+}
+
+.ipe-arquivo-editavel {
+    background-color: #fff !important;
+}
+
+.ipe-midia-imagem {
+    width: 64px;
+}
+
+.alert {
+    animation-name: aparecimento;
+    animation-duration: 0.5s;
+}
+
+/* ---------------------------------------------- */
+
+/* Mensagem ampla */
+
+.mensagem-ampla {
 
     display: none;
     position: fixed;
-    z-index: 999999;
+    z-index: 999998;
     left: 0;
     top: 0;
     width: 100%;
@@ -153,7 +220,7 @@ img.bandeira_linguagem {
 
 }
 
-.mensagem_ampla_conteudo {
+.mensagem-ampla-conteudo {
 
     background-color: #fefefe;
     box-sizing: content-box;
@@ -179,7 +246,7 @@ img.bandeira_linguagem {
 
 }
 
-.mensagem_ampla_fechar {
+.mensagem-ampla-fechar {
 
     color: #aaaaaa;
     float: right;
@@ -197,54 +264,16 @@ img.bandeira_linguagem {
 
 /* ---------------------------------------------- */
 
-.animacao_espera {
+/* Animação de espera */
 
+.animacao-espera {
     display: none;
+    width: 4em;
+    height: auto;
     position: fixed;
     right: 0;
     bottom: 0;
-    width: 4em;
-    height: 4em;
-    border-radius: 50%;
-    background: black;
-
-    animation: 1.15s infinite ease-in-out;
-    -o-animation: 1.15s infinite ease-in-out;
-    -ms-animation: 1.15s infinite ease-in-out;
-    -webkit-animation: 1.15s infinite ease-in-out;
-    -moz-animation: 1.15s infinite ease-in-out;
-
-    animation-name: animacao_espera_efeito;
-    -o-animation-name: animacao_espera_efeito;
-    -ms-animation-name: animacao_espera_efeito;
-    -webkit-animation-name: animacao_espera_efeito;
-    -moz-animation-name: animacao_espera_efeito;
-
-}
-
-@keyframes animacao_espera_efeito {
-    from { transform: scale(0); opacity: 1; }
-    to   { transform: scale(1); opacity: 0; }
-}
-
-@-o-keyframes animacao_espera_efeito {
-    from { -o-transform: scale(0); opacity: 1; }
-    to   { -o-transform: scale(1); opacity: 0; }
-}
-
-@-ms-keyframes animacao_espera_efeito {
-    from { -ms-transform: scale(0); opacity: 1; }
-    to   { -ms-transform: scale(1); opacity: 0; }
-}
-
-@-webkit-keyframes animacao_espera_efeito {
-    from { -webkit-transform: scale(0); opacity: 1; }
-    to   { -webkit-transform: scale(1); opacity: 0; }
-}
-
-@-moz-keyframes animacao_espera_efeito {
-    from { -moz-transform: scale(0); opacity: 1; }
-    to   { -moz-transform: scale(1); opacity: 0; }
+    z-index: 999999;
 }
 
 /* ---------------------------------------------- */

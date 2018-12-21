@@ -2,6 +2,8 @@
 var dicionario_es_ES = {
     
     aplicacao_titulo                 : "Ipê-roxo",
+    linguagem                        : "Idioma",
+    abrir                            : "Abrir",
     fechar                           : "Cerrar",
     texto                            : "Texto",
     data                             : "Fecha",
@@ -11,6 +13,7 @@ var dicionario_es_ES = {
     alterar                          : "Cambiar",
     animacao_espera_msg              : "Actividades en ejecución",
 
+    bem_vindo                        : "Bienvenido a {nome}!",
     tela_exemplo_titulo              : "Ejemplo de pantalla"
 
 };
