@@ -14,7 +14,8 @@ ENV PATH ${IPEROXO}/bin:$PATH
 
 RUN mkdir -p ${IPEROXO}/bin && \
     mkdir -p /volume/conf && \
-    mkdir -p /volume/dados
+    mkdir -p /volume/dados && \
+    mkdir -p /volume/logs
 
 ADD build/dist/*.jar ${IPEROXO}/bin/
 ADD build/dist/*.sh ${IPEROXO}/bin/

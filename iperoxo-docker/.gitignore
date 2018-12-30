@@ -1,10 +1,11 @@
 
-# .gitignore universal 1.1
+# .gitignore universal 1.2
 
 # Sistema Operacional
 .DS_Store*
 .Spotlight*
 .Trashes
+._*
 ehthumbs.db
 Thumbs.db
 *.so

@@ -1271,18 +1271,24 @@ function fecharTelaAtiva() {
 //--------------------------------------------------------------------------
 
 /**
- * Ação disparada por elemento de tela.<br>
- * A função a ser chamada deverá ter minimamente a assinatura da função {@link exemploEventoTela}.<br>
+ * Executa uma ação/evento de tela.
+ * A função a ser chamada deverá ter minimamente a assinatura da função {@link exemploEventoTela}.
  * Argumentos extras serão repassados para a {@linkcode funcao}, após a passagem dos argumentos padrões.
- * @param elemento Elemento HTML acionado, ou objeto jQuery correspondente.
- * @param funcao Função ou nome da função a ser executada.
+ * @param elemento Elemento HTML ou objeto jQuery da tela ou de parte dela.
+ * @param funcao Função ou nome da função a ser executada. Se a string iniciar com "_", será prefixada com o nome da tela.
  * @see exemploEventoTela
  */
 function acaoTela( elemento, funcao ) {
     
-    var tela    = estaTela(elemento);
+    elemento = jQueryObj(elemento);
+
+    var tela    = elemento.hasClass("tela") ? elemento : estaTela(elemento);
     var tid     = tela.attr("id");
     var telaObj = telas[tid];
+
+    if( typeof(funcao) === "string" && funcao[0] === "_" ){
+        funcao = telaObj.nome + funcao;
+    }
 
     jsExec.apply(
         this,

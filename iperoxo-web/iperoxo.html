@@ -70,7 +70,7 @@ This file is part of Ipê-roxo - <http://joseflavio.com/iperoxo/>.
   onclick="{ao-clicar}"
   classe-extra-hidden="{oculto, select, sim{hidden} other{}}"
   classe-extra-outras="{class, select, undefined{} other{{class}}}">
-  <span class="componente-ajustar glyphicon glyphicon-{icone}" icone="{icone, select, undefined{remover-elemento} other{{icone}}}"></span>
+  <span class="componente-ajustar glyphicon glyphicon-{icone}" icone="{icone, select, undefined{remover-elemento} other{{icone}}}" aria-hidden="true"></span>
   <span class="componente-ajustar textod" chave="{rotulo, select, undefined{remover-elemento} other{{rotulo}}}"></span>
 </div>
 
@@ -111,7 +111,7 @@ This file is part of Ipê-roxo - <http://joseflavio.com/iperoxo/>.
       autocomplete="{sugestao, select, sim{on} nao{off} other{remover-atributo}}"
       readonly="{editavel, select, nao{readonly} other{remover-atributo}}" />
     <span class="input-group-addon">
-      <span class="glyphicon glyphicon-calendar"></span>
+      <span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>
     </span>
   </div>
 </div>
@@ -145,8 +145,8 @@ This file is part of Ipê-roxo - <http://joseflavio.com/iperoxo/>.
       origem="{rotulo-interno-origem, select, undefined{remover-atributo} other{{rotulo-interno-origem}}}"
       readonly="readonly" />
     <span class="input-group-addon btn btn-default btn-file">
-      <span class="fileinput-new"><span class="glyphicon glyphicon-file"></span></span>
-      <span class="fileinput-exists"><span class="glyphicon glyphicon-file"></span></span>
+      <span class="fileinput-new"><span class="glyphicon glyphicon-file" aria-hidden="true"></span></span>
+      <span class="fileinput-exists"><span class="glyphicon glyphicon-file" aria-hidden="true"></span></span>
       <input
         type="file"
         name="{nome, select, undefined{remover-atributo} other{{nome}}}"
@@ -156,7 +156,7 @@ This file is part of Ipê-roxo - <http://joseflavio.com/iperoxo/>.
         onchange="comp_ipe_arquivo_onchange(esteComp(this));" />
     </span>
     <a href="#" class="input-group-addon btn btn-default fileinput-exists" data-dismiss="fileinput">
-      <span class="glyphicon glyphicon-remove"></span>
+      <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
     </a>
   </div>
 </div>
@@ -256,13 +256,14 @@ This file is part of Ipê-roxo - <http://joseflavio.com/iperoxo/>.
   classe-extra-btn="{estilo, select, undefined{btn-default} padrao{btn-default} primario{btn-primary} sucesso{btn-success} informacao{btn-info} atencao{btn-warning} perigo{btn-danger} link{btn-link} other{btn-default}}"
   classe-extra-hidden="{oculto, select, sim{hidden} other{}}"
   classe-extra-outras="{class, select, undefined{} other{{class}}}"
-  classe-extra-textod="{rotulo, select, undefined{} other{textod}}"
-  chave="{rotulo, select, undefined{remover-atributo} other{{rotulo}}}"
-  origem="{rotulo-origem, select, undefined{remover-atributo} other{{rotulo-origem}}}"
   type="{submeter, select, undefined{button} sim{submit} other{button}}"
   name="{nome, select, undefined{remover-atributo} other{{nome}}}"
   value="{valor, select, undefined{remover-atributo} other{{valor}}}"
-  onclick="{ao-clicar, select, undefined{remover-atributo} other{{ao-clicar}}}">{rotulo, select, undefined{{conteudo}} other{}}</button>
+  onclick="{ao-clicar, select, undefined{remover-atributo} other{{ao-clicar}}}">
+  <span class="componente-ajustar glyphicon glyphicon-{icone}" icone="{icone, select, undefined{remover-elemento} other{{icone}}}" aria-hidden="true"></span>
+  <span class="componente-ajustar textod" chave="{rotulo, select, undefined{remover-elemento} other{{rotulo}}}" origem="{rotulo-origem, select, undefined{remover-atributo} other{{rotulo-origem}}}"></span>
+  {rotulo, select, undefined{{conteudo, select, undefined{} other{{conteudo}}}} other{}}
+</button>
 
 <!-- ========================================== -->
 <!-- Valor oculto -->
