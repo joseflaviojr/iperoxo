@@ -47,6 +47,17 @@
 //--------------------------------------------------------------------------
 
 /**
+ * $(document)
+ * @see document
+ */
+var html_documento = $(document);
+
+/**
+ * $("body")
+ */
+var html_corpo = $("body");
+
+/**
  * Argumentos da URL.
  */
 var url_args = {};
@@ -124,6 +135,10 @@ var HTML_ENTIDADE = {
     '\\': '&#92;',
     '\n': '<br />'
 };
+
+var tmp_tela_ativa;
+var tmp_tela_ativa_id;
+var tmp_elemento_ativo;
 
 //--------------------------------------------------------------------------
 
@@ -278,8 +293,9 @@ function elementoHTML( rotulo, atributos, conteudo ) {
  * @param elemento Elemento HTML ou objeto jQuery correspondente.
  */
 function elementoRotulo( elemento ) {
+    if( elemento === undefined ) return undefined;
     var nome = elemento instanceof jQuery ? elemento.prop("tagName") : elemento.tagName;
-    return nome.toLowerCase();
+    return nome !== undefined ? nome.toLowerCase() : undefined;
 }
 
 //--------------------------------------------------------------------------
@@ -577,7 +593,7 @@ function setLinguagem( nome ) {
     if( typeof(linguagemAlterada) !== "undefined" ) linguagemAlterada();
     else atualizarAmbiente();
 
-    $(document).triggerHandler("iperoxo.lid");
+    html_documento.triggerHandler("iperoxo.lid");
     
 }
 
@@ -1021,7 +1037,7 @@ function atualizarAmbiente() {
         jsExec("telasAtualizadas");
     }
 
-    $(document).triggerHandler("iperoxo.ambiente");
+    html_documento.triggerHandler("iperoxo.ambiente");
 
 }
 
@@ -1052,9 +1068,9 @@ function abrirTela( pagina, autoAtivar, paginaArg, funcExito, funcExitoArg ) {
 
     var divID  = gerarID();
     var divHTML = "<div id=\"" + divID + "\" class=\"hidden\"></div>";
-    var telaAtiva = $(".tela").not(".hidden");
+    var telaAtiva = getTelaAtiva();
 
-    if( telaAtiva.length === 1 ) telaAtiva.parent().after(divHTML);
+    if( telaAtiva !== undefined ) telaAtiva.parent().after(divHTML);
     else $("#telas").append(divHTML);
 
     var div = $( "#" + divID );
@@ -1144,9 +1160,16 @@ function ativarTela( tela ) {
 
     var posPreAtivacao = function() {
 
+        var elemAtivo = telaObj.elementoAtivo;
+
         tela.removeClass("hidden");
-        
+
         atualizarAmbiente();
+    
+        ajustarRolagem();
+
+        if( elemAtivo !== undefined ) elemAtivo.focus();
+        else tela.find(".focavel:first").focus();
     
         if( telaObj.iniciada === undefined ){
             telaObj.iniciada = true;
@@ -1188,6 +1211,32 @@ function isTelaAtiva( tela ) {
 
     return ! tela.hasClass("hidden");
 
+}
+
+//--------------------------------------------------------------------------
+
+/**
+ * Tela atualmente ativa.
+ */
+function getTelaAtiva() {
+    if( telas[tmp_tela_ativa_id] === undefined || tmp_tela_ativa.hasClass("hidden") ){
+        tmp_tela_ativa = $(".tela").not(".hidden");
+        tmp_tela_ativa_id = tmp_tela_ativa.attr("id");
+    }
+    return tmp_tela_ativa.length > 0 ? tmp_tela_ativa : undefined;
+}
+
+//--------------------------------------------------------------------------
+
+/**
+ * Identificação da tela atualmente ativa.
+ */
+function getTelaAtivaId() {
+    if( telas[tmp_tela_ativa_id] === undefined || tmp_tela_ativa.hasClass("hidden") ){
+        tmp_tela_ativa = $(".tela").not(".hidden");
+        tmp_tela_ativa_id = tmp_tela_ativa.attr("id");
+    }
+    return tmp_tela_ativa.length > 0 ? tmp_tela_ativa_id : undefined;
 }
 
 //--------------------------------------------------------------------------
@@ -1265,7 +1314,7 @@ function fecharTelas() {
  * Fecha e remove a tela ativa.
  */
 function fecharTelaAtiva() {
-    fecharTela( $(".tela").not(".hidden") );
+    fecharTela( getTelaAtiva() );
 }
 
 //--------------------------------------------------------------------------
@@ -1312,6 +1361,27 @@ function acaoTela( elemento, funcao ) {
  */
 function exemploEventoTela( tela, args, tid, telaObj, funcExito, funcErro ) {
     abrirMensagemAmpla(JSON.stringify(telaObj));
+}
+
+//--------------------------------------------------------------------------
+
+/**
+ * Ajusta as rolagens horizontal e vertical da tela ativa conforme o último registro de posicionamento.
+ */
+function ajustarRolagem() {
+    var telaAtiva = getTelaAtiva();
+    if( telaAtiva !== undefined ){
+        var telaObj = telas[telaAtiva.attr("id")];
+        if( telaObj !== undefined ){
+            if( telaObj.rolagem_horizontal !== undefined ){
+                html_documento.scrollLeft( telaObj.rolagem_horizontal );
+                html_documento.scrollTop ( telaObj.rolagem_vertical   );
+            }else{
+                html_documento.scrollLeft( 0 );
+                html_documento.scrollTop ( 0 );
+            }
+        }
+    }
 }
 
 //--------------------------------------------------------------------------
@@ -1364,7 +1434,7 @@ function implantarDicas() {
  * pois outras características precisam ser processadas.
  * Portanto, evite utilizar este método de forma direta, prefira chamar {@link atualizarAmbiente}.
  * @see configuracao.componentes
- * @see {@link iperoxo.html}
+ * @see {@link comp/iperoxo.html}
  */
 function implantarComponentes() {
 
@@ -1462,7 +1532,7 @@ function implantarComponentes() {
  * @param {*} conteudo Conteúdo do elemento, o qual pode ser um texto ou um jQuery (subelementos).
  * @param {string} posicao Posição de inserção em relação ao elemento de destino. Valores: "preferencia", "inicio", "fim", "antes" ou "depois". Padrão: "preferencia".
  * @param {boolean} renderizar Executar {@link atualizarAmbiente} logo após a inserção? Padrão: true.
- * @see {@link iperoxo.html}
+ * @see {@link comp/iperoxo.html}
  * @see configuracao.componentes
  * @see elementoHTML
  */
@@ -1732,7 +1802,7 @@ function comp_ipe_data_pre_implantacao( comp, atributos ) {
 
     obj.datetimepicker(opcoes).on("dp.change", inputTimestampFunc);
 
-    $(document).on( "iperoxo.lid", function(){
+    html_documento.on( "iperoxo.lid", function(){
         obj.data("DateTimePicker").locale(lid);
     });
 
@@ -2324,7 +2394,7 @@ inicio(function(){
     }
     
     //-----------------------------------
-    $("body").click(function( evento ){
+    html_corpo.click(function( evento ){
         if( configuracao.recurso_dica && dica_mostrando !== null ){
             if( evento.target !== dica_mostrando ){
                 $(dica_mostrando).tooltip("hide");
@@ -2334,42 +2404,97 @@ inicio(function(){
     });
 
     //-----------------------------------
+    // Registro da rolagem da tela ativa
+    var rolagem = function( evento ){
+        var telaAtiva = getTelaAtiva();
+        if( telaAtiva !== undefined ){
+            var telaObj = telas[telaAtiva.attr("id")];
+            if( telaObj !== undefined ){
+                telaObj.rolagem_horizontal = html_documento.scrollLeft();
+                telaObj.rolagem_vertical   = html_documento.scrollTop();
+            }
+        }
+    };
+    html_documento.scroll(rolagem);
+    html_documento.resize(rolagem);
+
+    //-----------------------------------
+    // Controle de foco
+    setInterval(function(){
+        var elemento = document.activeElement;
+        if( elemento !== tmp_elemento_ativo ){
+            tmp_elemento_ativo = elemento;
+            var rotulo = elementoRotulo(elemento);
+            if( rotulo === "a" || rotulo === "button" ) return;
+            var telaObj = telas[getTelaAtivaId()];
+            if( telaObj === undefined ) return;
+            telaObj.elementoAtivo = elemento;
+        }
+    }, 1000);
+    
+
+    //-----------------------------------
     // Inicialização dos componentes visuais e da aplicação
     if( configuracao.recurso_componente ){
-        $("body").append("<div id=\"componentes\" class=\"hidden\"></div>");
-        $("#componentes").load(
-            "iperoxo.html .tela",
-            function(){
-                var componentes = $(this);
-                componentes.find(".componente").each(function(){
-                    var comp = $(this).clone();
-                    var tipo = comp.attr("componente-tipo").toLowerCase();
-                    if( tipo === undefined || tipo === "" ){
-                        console.error( "componente-tipo ausente: %o", comp );
-                        return true;
+
+        var repositorios = configuracao.componentes_arquivos.slice(0);
+        
+        function _carregar_componentes() {
+
+            var repositorio = $(this);
+
+            repositorio.find(".componente").each(function(){
+
+                var comp = $(this).clone();
+
+                var tipo = comp.attr("componente-tipo").toLowerCase();
+                if( tipo === undefined || tipo === "" ){
+                    console.error( "componente-tipo ausente: %o", comp );
+                    return true;
+                }
+
+                comp.find(".componente").each(function(){
+                    var subcomp = $(this);
+                    var subtipo = subcomp.attr("componente-tipo");
+                    if( subtipo !== undefined && subtipo !== "" ){
+                        subcomp.replaceWith( "<ipe-componente tipo=\"" + subtipo + "\" />" );
                     }
-                    comp.find(".componente").each(function(){
-                        var subcomp = $(this);
-                        var subtipo = subcomp.attr("componente-tipo");
-                        if( subtipo !== undefined && subtipo !== "" ){
-                            subcomp.replaceWith( "<ipe-componente tipo=\"" + subtipo + "\" />" );
-                        }
-                    });
-                    var chave = comp.attr("componente-chave");
-                    var vauto = comp.attr("componente-valor-auto");
-                    comp.removeAttr("componente-chave");
-                    comp.removeAttr("componente-valor-auto");
-                    configuracao.componentes[tipo] = {
-                        "tipo"       : tipo,
-                        "chave"      : chave,
-                        "valor-auto" : vauto,
-                        "html"       : comp.wrap("<div></div>").parent().html()
-                    };
                 });
-                componentes.remove();
-                jsExec( configuracao.funcao_inicial );
+
+                var chave = comp.attr("componente-chave");
+                var vauto = comp.attr("componente-valor-auto");
+
+                comp.removeAttr("componente-chave");
+                comp.removeAttr("componente-valor-auto");
+
+                configuracao.componentes[tipo] = {
+                    "tipo"       : tipo,
+                    "chave"      : chave,
+                    "valor-auto" : vauto,
+                    "html"       : comp.wrap("<div></div>").parent().html()
+                };
+
+            });
+
+            repositorio.remove();
+            
+            if( ! _carregar_repositorio() ) jsExec( configuracao.funcao_inicial );
+
+        }
+
+        function _carregar_repositorio() {
+            var nome = repositorios.shift();
+            if( nome !== undefined ){
+                html_corpo.append("<div id=\"componentes\" class=\"hidden\"></div>");
+                $("#componentes").load("comp/" + nome + " .tela", _carregar_componentes);
+                return true;
+            }else{
+                return false;
             }
-        );
+        }
+
+        _carregar_repositorio();
+
     }else{
         jsExec( configuracao.funcao_inicial );
     }

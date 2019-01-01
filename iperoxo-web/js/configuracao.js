@@ -35,9 +35,14 @@ var configuracao = {
 
     /**
      * Componentes visuais disponíveis.
-     * @see {@link iperoxo.html}
+     * @see {@link comp/iperoxo.html}
      */
-    componentes                      : {}
+    componentes                      : {},
+
+    /**
+     * Arquivos que definem os componentes visuais.
+     */
+    componentes_arquivos             : [ "iperoxo.html", "extra.html" ]
 
 };
 

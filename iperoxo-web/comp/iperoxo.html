@@ -7,18 +7,19 @@ This file is part of Ipê-roxo - <http://joseflavio.com/iperoxo/>.
 
 <head>
 <meta charset="utf-8" />
-<title></title>
-<link href="css-dep/bootstrap.min.css" rel="stylesheet" />
-<link href="css-dep/bootstrap-theme.min.css" rel="stylesheet" />
-<link href="css-dep/jasny-bootstrap.min.css" rel="stylesheet" />
-<link href="css-dep/bootstrap-datetimepicker.min.css" rel="stylesheet" />
-<link href="css/iperoxo.css" rel="stylesheet" />
-<link href="css/estilo.css" rel="stylesheet" />
+<title>Ipê-roxo</title>
+<link href="../css-dep/bootstrap.min.css" rel="stylesheet" />
+<link href="../css-dep/bootstrap-theme.min.css" rel="stylesheet" />
+<link href="../css-dep/bootstrap-select.min.css" rel="stylesheet">
+<link href="../css-dep/jasny-bootstrap.min.css" rel="stylesheet" />
+<link href="../css-dep/bootstrap-datetimepicker.min.css" rel="stylesheet" />
+<link href="../css/iperoxo.css" rel="stylesheet" />
+<link href="../css/estilo.css" rel="stylesheet" />
 </head>
 
 <body>
 
-<!-- Modelos de componentes visuais -->
+<!-- Componentes visuais padrões -->
 <div class="tela tela-flexivel">
 
 <!-- ========================================== -->
@@ -48,7 +49,7 @@ This file is part of Ipê-roxo - <http://joseflavio.com/iperoxo/>.
       data-mask="{mascara, select, undefined{remover-atributo} other{{mascara}}}"
       data-mask-reverse="{mascara-reversa, select, undefined{remover-atributo} other{{mascara-reversa}}}"
       autocomplete="{sugestao, select, sim{on} nao{off} other{remover-atributo}}"
-      class="componente-ajustar form-control textod"
+      class="componente-ajustar form-control focavel textod"
       classe-extra-dica="{dica, select, undefined{} other{dica}}"
       dica="{dica, select, undefined{remover-atributo} other{{dica}}}"
       chaveph="{rotulo-interno, select, undefined{remover-atributo} other{{rotulo-interno}}}"
@@ -103,7 +104,7 @@ This file is part of Ipê-roxo - <http://joseflavio.com/iperoxo/>.
     <input
       type="text"
       name="{nome, select, undefined{remover-atributo} other{{nome}Texto}}"
-      class="componente-ajustar form-control textod"
+      class="componente-ajustar form-control focavel textod"
       classe-extra-dica="{dica, select, undefined{} other{dica}}"
       dica="{dica, select, undefined{remover-atributo} other{{dica}}}"
       chaveph="{rotulo-interno, select, undefined{remover-atributo} other{{rotulo-interno}}}"
@@ -155,7 +156,7 @@ This file is part of Ipê-roxo - <http://joseflavio.com/iperoxo/>.
         accept="{aceitar, select, undefined{remover-atributo} other{{aceitar}}}"
         onchange="comp_ipe_arquivo_onchange(esteComp(this));" />
     </span>
-    <a href="#" class="input-group-addon btn btn-default fileinput-exists" data-dismiss="fileinput">
+    <a href="javascript:void(0)" class="input-group-addon btn btn-default fileinput-exists" data-dismiss="fileinput">
       <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
     </a>
   </div>
@@ -181,7 +182,7 @@ This file is part of Ipê-roxo - <http://joseflavio.com/iperoxo/>.
   </div>
   <select
     name="{nome, select, undefined{remover-atributo} other{{nome}}}"
-    class="componente-ajustar custom-select form-control ipe-selecao-selectpicker"
+    class="componente-ajustar custom-select form-control focavel ipe-selecao-selectpicker"
     data-live-search="{busca, select, sim{true} nao{false} other{remover-atributo}}"
     onchange="{ao-mudar, select, undefined{remover-atributo} other{{ao-mudar}}}" />
   <ipe-componente tipo="ipe-opcao" destino="select:first" />
@@ -231,7 +232,7 @@ This file is part of Ipê-roxo - <http://joseflavio.com/iperoxo/>.
           name="{nome, select, undefined{remover-atributo} other{{nome}}}"
           value="{valor, select, undefined{} other{{valor}}}"
           atributo-boolean-1="{estado, select, marcado{checked} other{}}"
-          class="componente-ajustar"
+          class="componente-ajustar focavel"
           onchange="{ao-mudar, select, undefined{remover-atributo} other{{ao-mudar}}}" />
         <span
           class="componente-ajustar"
@@ -301,7 +302,7 @@ This file is part of Ipê-roxo - <http://joseflavio.com/iperoxo/>.
 <div
   class="componente-ajustar media-body"
   classe-extra-media="{conteudo-v, select, undefined{media-top} cima{media-top} meio{media-middle} baixo{media-bottom} other{media-top}}">
-<a class="componente-ajustar" href="#" onclick="{ao-clicar, select, undefined{remover-elemento-apenas} other{{ao-clicar}}}">
+<a class="componente-ajustar" href="javascript:void(0)" onclick="{ao-clicar, select, undefined{remover-elemento-apenas} other{{ao-clicar}}}">
 <h4
   componente-tipo="ipe-midia-titulo"
   componente-chave="comp_ipe_midia_titulo"
@@ -369,8 +370,8 @@ This file is part of Ipê-roxo - <http://joseflavio.com/iperoxo/>.
           tid="{tid}"
           class="componente"
           classe-extra-active="{ativa, select, sim{active} other{}}">
-          <a href="#" id="tab_a_{tid}" onclick="ativarTela('{tid}');">{titulo}</a>
-          <!-- TODO <a href="#" class="close" aria-label="fechar">&times;</a> -->
+          <a href="javascript:void(0)" id="tab_a_{tid}" onclick="ativarTela('{tid}');">{titulo}</a>
+          <!-- TODO <a href="javascript:void(0)" class="close" aria-label="fechar">&times;</a> -->
         </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -411,6 +412,8 @@ This file is part of Ipê-roxo - <http://joseflavio.com/iperoxo/>.
   type="hidden"
   name="{nome, select, undefined{copaiba} other{{nome}}}"
   value="{copaiba}@{classe}@{metodo}" />
+
+<!-- ========================================== -->
 
 </div>
 </body>

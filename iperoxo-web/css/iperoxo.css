@@ -39,49 +39,66 @@
 /* Geral */
 a {
   color: inherit;
-  text-decoration: none; }
-  a:hover, a:focus {
-    color: inherit;
-    text-decoration: underline; }
+  text-decoration: none;
+}
+a:hover, a:focus {
+  color: inherit;
+  text-decoration: underline;
+}
 
 @keyframes aparecimento {
   from {
-    opacity: 0; }
+    opacity: 0;
+  }
   to {
-    opacity: 1; } }
+    opacity: 1;
+  }
+}
 @keyframes desaparecimento {
   from {
-    opacity: 1; }
+    opacity: 1;
+  }
   to {
-    opacity: 0; } }
+    opacity: 0;
+  }
+}
 /* ---------------------------------------------- */
 /* Telas Ipê-roxo */
 #telas {
   position: relative;
-  width: 100%; }
+  width: 100%;
+}
 
 .tela {
   padding-top: 15px;
-  padding-bottom: 15px; }
+  padding-bottom: 15px;
+}
 
 .tela-flexivel, .tamanho_flexivel {
   position: absolute;
   top: 0;
   width: 100%;
   margin-right: auto;
-  margin-left: auto; }
-  @media (min-width: 0px) and (max-width: 767px) {
-    .tela-flexivel, .tamanho_flexivel {
-      padding-right: 15px;
-      padding-left: 15px; } }
-  @media (min-width: 768px) and (max-width: 1024px) {
-    .tela-flexivel, .tamanho_flexivel {
-      padding-right: 15vw;
-      padding-left: 15vw; } }
-  @media (min-width: 1025px) {
-    .tela-flexivel, .tamanho_flexivel {
-      padding-right: 25vw;
-      padding-left: 25vw; } }
+  margin-left: auto;
+}
+@media (min-width: 0px) and (max-width: 767px) {
+  .tela-flexivel, .tamanho_flexivel {
+    padding-right: 15px;
+    padding-left: 15px;
+  }
+}
+@media (min-width: 768px) and (max-width: 1024px) {
+  .tela-flexivel, .tamanho_flexivel {
+    padding-right: 15vw;
+    padding-left: 15vw;
+  }
+}
+@media (min-width: 1025px) {
+  .tela-flexivel, .tamanho_flexivel {
+    padding-right: 25vw;
+    padding-left: 25vw;
+  }
+}
 
 .tela-cheia, .tamanho_cheio {
   position: fixed;
@@ -89,56 +106,69 @@ a {
   left: 0;
   width: 100vw;
   height: 100vh;
-  overflow: visible; }
+  overflow: visible;
+}
 
 .tela-titulo, .tela_titulo {
   text-align: center;
-  margin-top: 0; }
+  margin-top: 0;
+}
 
 .rotulo {
   display: inline-block;
   max-width: 100%;
   margin-bottom: 4px;
-  font-weight: 700; }
+  font-weight: 700;
+}
 
 /* ---------------------------------------------- */
 /* Barra de navegação */
 .navbar {
-  margin-bottom: 0; }
+  margin-bottom: 0;
+}
 
 .ipe-navegacao-logotipo {
   width: 32px;
   height: 32px;
-  margin-top: -7px; }
+  margin-top: -7px;
+}
 
 .nav > li > img.bandeira-linguagem {
   width: 24px;
   padding-top: 12px;
-  margin-left: 15px; }
-  .nav > li > img.bandeira-linguagem:hover {
-    width: 32px;
-    padding-top: 8px; }
+  margin-left: 15px;
+}
+.nav > li > img.bandeira-linguagem:hover {
+  width: 32px;
+  padding-top: 8px;
+}
 
 /* ---------------------------------------------- */
 /* Outros componentes Ipê-roxo */
 .ver-pronto {
-  display: none; }
+  display: none;
+}
 
 .cursor-pointer {
-  cursor: pointer; }
+  cursor: pointer;
+}
 
 .marcacao {
-  margin-top: 0; }
+  margin-top: 0;
+}
 
 .ipe-arquivo-editavel {
-  background-color: #fff !important; }
+  background-color: #fff !important;
+}
 
 .ipe-midia-imagem {
-  width: 64px; }
+  width: 64px;
+}
 
 .alert {
   animation-name: aparecimento;
-  animation-duration: 0.5s; }
+  animation-duration: 0.5s;
+}
 
 /* ---------------------------------------------- */
 /* Mensagem ampla */
@@ -152,16 +182,23 @@ a {
   height: 100%;
   box-sizing: border-box;
   overflow: auto;
-  background-color: rgba(0, 0, 0, 0.85); }
-  @media (min-width: 0px) and (max-width: 767px) {
-    .mensagem-ampla {
-      padding-top: 15%; } }
-  @media (min-width: 768px) and (max-width: 1024px) {
-    .mensagem-ampla {
-      padding-top: 15%; } }
-  @media (min-width: 1025px) {
-    .mensagem-ampla {
-      padding-top: 10%; } }
+  background-color: rgba(0, 0, 0, 0.85);
+}
+@media (min-width: 0px) and (max-width: 767px) {
+  .mensagem-ampla {
+    padding-top: 15%;
+  }
+}
+@media (min-width: 768px) and (max-width: 1024px) {
+  .mensagem-ampla {
+    padding-top: 15%;
+  }
+}
+@media (min-width: 1025px) {
+  .mensagem-ampla {
+    padding-top: 10%;
+  }
+}
 
 .mensagem-ampla-conteudo {
   background-color: #fefefe;
@@ -169,29 +206,38 @@ a {
   margin: auto;
   border-radius: 10px;
   font-size: 14pt;
-  word-wrap: break-word; }
-  @media (min-width: 0px) and (max-width: 767px) {
-    .mensagem-ampla-conteudo {
-      width: 88%;
-      padding: 4%; } }
-  @media (min-width: 768px) and (max-width: 1024px) {
-    .mensagem-ampla-conteudo {
-      width: 70%;
-      padding: 16px; } }
-  @media (min-width: 1025px) {
-    .mensagem-ampla-conteudo {
-      width: 40%;
-      padding: 20px; } }
+  word-wrap: break-word;
+}
+@media (min-width: 0px) and (max-width: 767px) {
+  .mensagem-ampla-conteudo {
+    width: 88%;
+    padding: 4%;
+  }
+}
+@media (min-width: 768px) and (max-width: 1024px) {
+  .mensagem-ampla-conteudo {
+    width: 70%;
+    padding: 16px;
+  }
+}
+@media (min-width: 1025px) {
+  .mensagem-ampla-conteudo {
+    width: 40%;
+    padding: 20px;
+  }
+}
 
 .mensagem-ampla-fechar {
   color: #aaaaaa;
   float: right;
   font-size: 28px;
-  font-weight: bold; }
-  .mensagem-ampla-fechar:hover, .mensagem-ampla-fechar:focus {
-    color: #000;
-    text-decoration: none;
-    cursor: pointer; }
+  font-weight: bold;
+}
+.mensagem-ampla-fechar:hover, .mensagem-ampla-fechar:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}
 
 /* ---------------------------------------------- */
 /* Animação de espera */
@@ -202,7 +248,8 @@ a {
   position: fixed;
   right: 0;
   bottom: 0;
-  z-index: 999999; }
+  z-index: 999999;
+}
 
 /* ---------------------------------------------- */
 
