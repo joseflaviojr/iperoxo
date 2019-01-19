@@ -1328,10 +1328,10 @@ function fecharTelaAtiva() {
  * @see exemploEventoTela
  */
 function acaoTela( elemento, funcao ) {
-    
+
     elemento = jQueryObj(elemento);
 
-    var tela    = elemento.hasClass("tela") ? elemento : estaTela(elemento);
+    var tela    = estaTela(elemento);
     var tid     = tela.attr("id");
     var telaObj = telas[tid];
 
@@ -1358,6 +1358,7 @@ function acaoTela( elemento, funcao ) {
  * @param funcExito Função de êxito a ser chamada se esta tiver comportamento assíncrono.
  * @param funcErro Função de erro a ser chamada se esta tiver comportamento assíncrono.
  * @returns {@linkcode false}, se esta função tem comportamento assíncrono.
+ * @see acaoTela
  */
 function exemploEventoTela( tela, args, tid, telaObj, funcExito, funcErro ) {
     abrirMensagemAmpla(JSON.stringify(telaObj));
@@ -1780,7 +1781,7 @@ function setCompVisivel( comp, visivel ) {
  */
 function comp_ipe_data_pre_implantacao( comp, atributos ) {
     
-    var obj = comp.find(".datetimepicker");
+    var obj = comp.find(".datetimepicker:first");
     
     var opcoes = jsExec( obj.attr("opcoes") );
     if( opcoes === undefined ) opcoes = {};
@@ -1792,15 +1793,15 @@ function comp_ipe_data_pre_implantacao( comp, atributos ) {
     if( opcoes["showTodayButton"]  === undefined ) opcoes["showTodayButton"]  = true;
     if( opcoes["showClear"]        === undefined ) opcoes["showClear"]        = true;
     if( opcoes["allowInputToggle"] === undefined ) opcoes["allowInputToggle"] = false;
+    if( opcoes["useCurrent"]       === undefined ) opcoes["useCurrent"]       = false;
 
     var inputTimestamp = obj.parent().find("input[type='hidden']");
-    var inputTimestampFunc = function() {
-        var data = obj.data("DateTimePicker").date();
-        inputTimestamp.val( data != null ? data.valueOf() : "" );
-    };
-    obj.find("input[type='text']").change(inputTimestampFunc);
+    var ao_mudar = atributos["ao-mudar"];
 
-    obj.datetimepicker(opcoes).on("dp.change", inputTimestampFunc);
+    obj.datetimepicker(opcoes).on("dp.change", function( evt ){
+        inputTimestamp.val( evt.date ? evt.date.valueOf() : "" );
+        js.call(comp, ao_mudar);
+    });
 
     html_documento.on( "iperoxo.lid", function(){
         obj.data("DateTimePicker").locale(lid);
@@ -2118,22 +2119,26 @@ function comp_ipe_tela_titulo_set_valor( comp, valor ) {
 
 /**
  * Retorna o componente que contém a parte passada por parâmetro.
- * @param parte Elemento HTML ou objeto jQuery contido no componente desejado.
- * @returns Objeto jQuery do componente.
+ * @param parte Elemento HTML ou objeto jQuery contido no componente desejado, podendo ser a raiz do próprio.
+ * @param superior Desconsiderar o próprio componente e buscar o superior hierarquicamente?
+ * @returns Objeto jQuery do componente encontrado.
  */
-function esteComp( parte ) {
-    return jQueryObj(parte).parents(".componente:first");
+function esteComp( parte, superior ) {
+    var jobj = jQueryObj(parte);
+    if( jobj.hasClass("componente") && superior !== true ) return jobj;
+    return jobj.parents(".componente:first");
 }
 
 //--------------------------------------------------------------------------
 
 /**
  * Retorna a tela que contém a parte passada por parâmetro.
- * @param parte Elemento HTML ou objeto jQuery contido na tela desejada.
+ * @param parte Elemento HTML ou objeto jQuery contido na tela desejada, podendo ser a raiz da própria.
  * @returns Objeto jQuery da tela.
  */
 function estaTela( parte ) {
-    return jQueryObj(parte).parents(".tela:first");
+    var jobj = jQueryObj(parte);
+    return jobj.hasClass("tela") ? jobj : jobj.parents(".tela:first");
 }
 
 //--------------------------------------------------------------------------

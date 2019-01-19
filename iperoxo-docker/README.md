@@ -63,7 +63,7 @@ docker volume create --name iperoxo
 Executar pela primeira vez:
 
 ```sh
-docker run --name="iperoxo" -d -p 8884:8884 -v iperoxo:/volume --ip=x.x.x.x --net xxxxxx --restart=unless-stopped joseflavio/iperoxo:1.0-A18
+docker run --name="iperoxo" -d -p 8884:8884 -e TZ=America/Belem -v iperoxo:/volume --ip=x.x.x.x --net xxxxxx --restart=unless-stopped joseflavio/iperoxo:1.0-A18
 ```
 
 > A aplicação Ipê-roxo será inicializada automaticamente no processo de boot, a não ser que seja voluntariamente parada: `docker stop iperoxo`.
@@ -79,6 +79,7 @@ cd /var/lib/docker/volumes/iperoxo/_data/conf
 Verificar arquivos de log:
 
 ```sh
+docker logs --tail 50 -f iperoxo
 tail /var/lib/docker/volumes/iperoxo/_data/logs/iperoxo.log -n 100
 ```
 
