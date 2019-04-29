@@ -1,40 +1,40 @@
 
 /*
- *  Copyright (C) 2016-2018 JosÈ Fl·vio de Souza Dias J˙nior
+ *  Copyright (C) 2016-2018 Jos√© Fl√°vio de Souza Dias J√∫nior
  *  
- *  This file is part of IpÍ-roxo - <http://joseflavio.com/iperoxo/>.
+ *  This file is part of Ip√™-roxo - <http://joseflavio.com/iperoxo/>.
  *  
- *  IpÍ-roxo is free software: you can redistribute it and/or modify
+ *  Ip√™-roxo is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
  *  the Free Software Foundation, either version 3 of the License, or
  *  (at your option) any later version.
  *  
- *  IpÍ-roxo is distributed in the hope that it will be useful,
+ *  Ip√™-roxo is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  *  GNU Lesser General Public License for more details.
  *  
  *  You should have received a copy of the GNU Lesser General Public License
- *  along with IpÍ-roxo. If not, see <http://www.gnu.org/licenses/>.
+ *  along with Ip√™-roxo. If not, see <http://www.gnu.org/licenses/>.
  */
 
 /*
- *  Direitos Autorais Reservados (C) 2016-2018 JosÈ Fl·vio de Souza Dias J˙nior
+ *  Direitos Autorais Reservados (C) 2016-2018 Jos√© Fl√°vio de Souza Dias J√∫nior
  * 
- *  Este arquivo È parte de IpÍ-roxo - <http://joseflavio.com/iperoxo/>.
+ *  Este arquivo √© parte de Ip√™-roxo - <http://joseflavio.com/iperoxo/>.
  * 
- *  IpÍ-roxo È software livre: vocÍ pode redistribuÌ-lo e/ou modific·-lo
- *  sob os termos da LicenÁa P˙blica Menos Geral GNU conforme publicada pela
- *  Free Software Foundation, tanto a vers„o 3 da LicenÁa, como
- *  (a seu critÈrio) qualquer vers„o posterior.
+ *  Ip√™-roxo √© software livre: voc√™ pode redistribu√≠-lo e/ou modific√°-lo
+ *  sob os termos da Licen√ßa P√∫blica Menos Geral GNU conforme publicada pela
+ *  Free Software Foundation, tanto a vers√£o 3 da Licen√ßa, como
+ *  (a seu crit√©rio) qualquer vers√£o posterior.
  * 
- *  IpÍ-roxo È distribuÌdo na expectativa de que seja ˙til,
- *  porÈm, SEM NENHUMA GARANTIA; nem mesmo a garantia implÌcita de
- *  COMERCIABILIDADE ou ADEQUA«√O A UMA FINALIDADE ESPECÕFICA. Consulte a
- *  LicenÁa P˙blica Menos Geral do GNU para mais detalhes.
+ *  Ip√™-roxo √© distribu√≠do na expectativa de que seja √∫til,
+ *  por√©m, SEM NENHUMA GARANTIA; nem mesmo a garantia impl√≠cita de
+ *  COMERCIABILIDADE ou ADEQUA√á√ÉO A UMA FINALIDADE ESPEC√çFICA. Consulte a
+ *  Licen√ßa P√∫blica Menos Geral do GNU para mais detalhes.
  * 
- *  VocÍ deve ter recebido uma cÛpia da LicenÁa P˙blica Menos Geral do GNU
- *  junto com IpÍ-roxo. Se n„o, veja <http://www.gnu.org/licenses/>.
+ *  Voc√™ deve ter recebido uma c√≥pia da Licen√ßa P√∫blica Menos Geral do GNU
+ *  junto com Ip√™-roxo. Se n√£o, veja <http://www.gnu.org/licenses/>.
  */
 
 package com.joseflavio.iperoxo;
@@ -47,8 +47,8 @@ import java.io.Serializable;
 import java.util.Locale;
 
 /**
- * Base, n„o obrigatÛria, para serviÁos a serem expostos atravÈs de {@link CopaibaConexao#solicitar(String, String, String)}.
- * @author JosÈ Fl·vio de Souza Dias J˙nior
+ * Base, n√£o obrigat√≥ria, para servi√ßos a serem expostos atrav√©s de {@link CopaibaConexao#solicitar(String, String, String)}.
+ * @author Jos√© Fl√°vio de Souza Dias J√∫nior
  */
 public abstract class Servico <T extends Serializable> {
 	
@@ -69,7 +69,7 @@ public abstract class Servico <T extends Serializable> {
 	public abstract Resposta<T> executar();
 	
 	/**
-	 * Identificador da sess„o.
+	 * Identificador da sess√£o.
 	 */
 	public String getSid() {
 		return sid;
@@ -93,7 +93,7 @@ public abstract class Servico <T extends Serializable> {
 	}
 	
 	/**
-	 * Linguagem do usu·rio, no formato IETF BCP 47.
+	 * Linguagem do usu√°rio, no formato IETF BCP 47.
 	 * @see Locale#toLanguageTag()
 	 * @see IpeRoxo#getResourceBundle(String)
 	 * @see IpeRoxo#getMensagem(String, String, Object...)

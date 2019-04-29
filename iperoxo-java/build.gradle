@@ -30,7 +30,7 @@ version = "1.0-A18"
 //------------------------------------------------------
 
 float javaVersao = 1.8
-String codificacao = "ISO-8859-1"
+String codificacao = "UTF-8"
 
 sourceCompatibility = javaVersao
 

@@ -1,40 +1,40 @@
 
 /*
- *  Copyright (C) 2016-2018 JosÈ Fl·vio de Souza Dias J˙nior
+ *  Copyright (C) 2016-2018 Jos√© Fl√°vio de Souza Dias J√∫nior
  *  
- *  This file is part of IpÍ-roxo - <http://joseflavio.com/iperoxo/>.
+ *  This file is part of Ip√™-roxo - <http://joseflavio.com/iperoxo/>.
  *  
- *  IpÍ-roxo is free software: you can redistribute it and/or modify
+ *  Ip√™-roxo is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
  *  the Free Software Foundation, either version 3 of the License, or
  *  (at your option) any later version.
  *  
- *  IpÍ-roxo is distributed in the hope that it will be useful,
+ *  Ip√™-roxo is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  *  GNU Lesser General Public License for more details.
  *  
  *  You should have received a copy of the GNU Lesser General Public License
- *  along with IpÍ-roxo. If not, see <http://www.gnu.org/licenses/>.
+ *  along with Ip√™-roxo. If not, see <http://www.gnu.org/licenses/>.
  */
 
 /*
- *  Direitos Autorais Reservados (C) 2016-2018 JosÈ Fl·vio de Souza Dias J˙nior
+ *  Direitos Autorais Reservados (C) 2016-2018 Jos√© Fl√°vio de Souza Dias J√∫nior
  * 
- *  Este arquivo È parte de IpÍ-roxo - <http://joseflavio.com/iperoxo/>.
+ *  Este arquivo √© parte de Ip√™-roxo - <http://joseflavio.com/iperoxo/>.
  * 
- *  IpÍ-roxo È software livre: vocÍ pode redistribuÌ-lo e/ou modific·-lo
- *  sob os termos da LicenÁa P˙blica Menos Geral GNU conforme publicada pela
- *  Free Software Foundation, tanto a vers„o 3 da LicenÁa, como
- *  (a seu critÈrio) qualquer vers„o posterior.
+ *  Ip√™-roxo √© software livre: voc√™ pode redistribu√≠-lo e/ou modific√°-lo
+ *  sob os termos da Licen√ßa P√∫blica Menos Geral GNU conforme publicada pela
+ *  Free Software Foundation, tanto a vers√£o 3 da Licen√ßa, como
+ *  (a seu crit√©rio) qualquer vers√£o posterior.
  * 
- *  IpÍ-roxo È distribuÌdo na expectativa de que seja ˙til,
- *  porÈm, SEM NENHUMA GARANTIA; nem mesmo a garantia implÌcita de
- *  COMERCIABILIDADE ou ADEQUA«√O A UMA FINALIDADE ESPECÕFICA. Consulte a
- *  LicenÁa P˙blica Menos Geral do GNU para mais detalhes.
+ *  Ip√™-roxo √© distribu√≠do na expectativa de que seja √∫til,
+ *  por√©m, SEM NENHUMA GARANTIA; nem mesmo a garantia impl√≠cita de
+ *  COMERCIABILIDADE ou ADEQUA√á√ÉO A UMA FINALIDADE ESPEC√çFICA. Consulte a
+ *  Licen√ßa P√∫blica Menos Geral do GNU para mais detalhes.
  * 
- *  VocÍ deve ter recebido uma cÛpia da LicenÁa P˙blica Menos Geral do GNU
- *  junto com IpÍ-roxo. Se n„o, veja <http://www.gnu.org/licenses/>.
+ *  Voc√™ deve ter recebido uma c√≥pia da Licen√ßa P√∫blica Menos Geral do GNU
+ *  junto com Ip√™-roxo. Se n√£o, veja <http://www.gnu.org/licenses/>.
  */
 
 package com.joseflavio.iperoxo;
@@ -65,8 +65,8 @@ import java.sql.SQLException;
 import java.util.*;
 
 /**
- * IpÍ-roxo: Modelo de software multicamada.
- * @author JosÈ Fl·vio de Souza Dias J˙nior
+ * Ip√™-roxo: Modelo de software multicamada.
+ * @author Jos√© Fl√°vio de Souza Dias J√∫nior
  */
 public final class IpeRoxo {
 	
@@ -87,7 +87,7 @@ public final class IpeRoxo {
 	private static final Logger log = LogManager.getLogger( IpeRoxo.class.getPackage().getName() );
 	
 	/**
-	 * MÈtodo inicial.
+	 * M√©todo inicial.
 	 */
 	public static void main( String[] args ) {
 		
@@ -129,7 +129,7 @@ public final class IpeRoxo {
 	}
 	
 	/**
-	 * Configura a aplicaÁ„o conforme os argumentos passados por linha de comando.
+	 * Configura a aplica√ß√£o conforme os argumentos passados por linha de comando.
 	 */
 	private static void executarConfiguracao( String[] args ) throws IOException {
 		
@@ -369,9 +369,9 @@ public final class IpeRoxo {
 	}
 	
 	/**
-	 * Busca por um cÛdigo inteiro definido em "Codigos.properties".<br>
-	 * CÛdigo normalmente representa um estado do sistema, seja de progress„o ou de erro.
-	 * @return 0, se cÛdigo indefinido.
+	 * Busca por um c√≥digo inteiro definido em "Codigos.properties".<br>
+	 * C√≥digo normalmente representa um estado do sistema, seja de progress√£o ou de erro.
+	 * @return 0, se c√≥digo indefinido.
 	 * @see Resposta#getCodigo()
 	 */
 	public static int getCodigo( String chave ) {
@@ -380,7 +380,7 @@ public final class IpeRoxo {
 	}
 	
 	/**
-	 * ObtÈm uma propriedade da aplicaÁ„o.
+	 * Obt√©m uma propriedade da aplica√ß√£o.
 	 * @param chave Chave da propriedade.
 	 * @see Properties#getProperty(String)
 	 */
@@ -389,7 +389,7 @@ public final class IpeRoxo {
 	}
 	
 	/**
-	 * ObtÈm uma propriedade da aplicaÁ„o.
+	 * Obt√©m uma propriedade da aplica√ß√£o.
 	 * @param chave Chave da propriedade.
 	 * @param nulo Valor a retornar, se propriedade nula ou indefinida.
 	 * @see Properties#getProperty(String)
@@ -400,8 +400,8 @@ public final class IpeRoxo {
 	}
 
 	/**
-	 * Determina o valor de uma propriedade da aplicaÁ„o.<br>
-	 * A alteraÁ„o n„o ser· persistida, tendo efeito apenas durante o tempo de execuÁ„o corrente.
+	 * Determina o valor de uma propriedade da aplica√ß√£o.<br>
+	 * A altera√ß√£o n√£o ser√° persistida, tendo efeito apenas durante o tempo de execu√ß√£o corrente.
 	 * @see #getPropriedade(String)
 	 */
 	public static void setPropriedade( String chave, String valor ) {
@@ -431,7 +431,7 @@ public final class IpeRoxo {
 	
 	/**
 	 * {@link UnhaDeGato}
-	 * @param nome IdentificaÁ„o da {@link UnhaDeGato} desejada.
+	 * @param nome Identifica√ß√£o da {@link UnhaDeGato} desejada.
 	 * @see #getUnhaDeGato()
 	 */
 	public static UnhaDeGato getUnhaDeGato( String nome ) {
@@ -485,7 +485,7 @@ public final class IpeRoxo {
 	}
 	
 	/**
-	 * {@link IpeRoxo} est· inicializada e publicamente disponÌvel?
+	 * {@link IpeRoxo} est√° inicializada e publicamente dispon√≠vel?
 	 * @see Copaiba#isAberta()
 	 */
 	public static boolean isDisponivel() {
@@ -493,7 +493,7 @@ public final class IpeRoxo {
 	}
 	
 	/**
-	 * {@link Logger} da aplicaÁ„o.
+	 * {@link Logger} da aplica√ß√£o.
 	 */
 	public static Logger getLog() {
 		return log;

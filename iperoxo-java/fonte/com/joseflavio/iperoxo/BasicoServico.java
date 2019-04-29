@@ -1,40 +1,40 @@
 
 /*
- *  Copyright (C) 2016-2018 JosÈ Fl·vio de Souza Dias J˙nior
+ *  Copyright (C) 2016-2018 Jos√© Fl√°vio de Souza Dias J√∫nior
  *
- *  This file is part of IpÍ-roxo - <http://joseflavio.com/iperoxo/>.
+ *  This file is part of Ip√™-roxo - <http://joseflavio.com/iperoxo/>.
  *
- *  IpÍ-roxo is free software: you can redistribute it and/or modify
+ *  Ip√™-roxo is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
  *  the Free Software Foundation, either version 3 of the License, or
  *  (at your option) any later version.
  *
- *  IpÍ-roxo is distributed in the hope that it will be useful,
+ *  Ip√™-roxo is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  *  GNU Lesser General Public License for more details.
  *
  *  You should have received a copy of the GNU Lesser General Public License
- *  along with IpÍ-roxo. If not, see <http://www.gnu.org/licenses/>.
+ *  along with Ip√™-roxo. If not, see <http://www.gnu.org/licenses/>.
  */
 
 /*
- *  Direitos Autorais Reservados (C) 2016-2018 JosÈ Fl·vio de Souza Dias J˙nior
+ *  Direitos Autorais Reservados (C) 2016-2018 Jos√© Fl√°vio de Souza Dias J√∫nior
  *
- *  Este arquivo È parte de IpÍ-roxo - <http://joseflavio.com/iperoxo/>.
+ *  Este arquivo √© parte de Ip√™-roxo - <http://joseflavio.com/iperoxo/>.
  *
- *  IpÍ-roxo È software livre: vocÍ pode redistribuÌ-lo e/ou modific·-lo
- *  sob os termos da LicenÁa P˙blica Menos Geral GNU conforme publicada pela
- *  Free Software Foundation, tanto a vers„o 3 da LicenÁa, como
- *  (a seu critÈrio) qualquer vers„o posterior.
+ *  Ip√™-roxo √© software livre: voc√™ pode redistribu√≠-lo e/ou modific√°-lo
+ *  sob os termos da Licen√ßa P√∫blica Menos Geral GNU conforme publicada pela
+ *  Free Software Foundation, tanto a vers√£o 3 da Licen√ßa, como
+ *  (a seu crit√©rio) qualquer vers√£o posterior.
  *
- *  IpÍ-roxo È distribuÌdo na expectativa de que seja ˙til,
- *  porÈm, SEM NENHUMA GARANTIA; nem mesmo a garantia implÌcita de
- *  COMERCIABILIDADE ou ADEQUA«√O A UMA FINALIDADE ESPECÕFICA. Consulte a
- *  LicenÁa P˙blica Menos Geral do GNU para mais detalhes.
+ *  Ip√™-roxo √© distribu√≠do na expectativa de que seja √∫til,
+ *  por√©m, SEM NENHUMA GARANTIA; nem mesmo a garantia impl√≠cita de
+ *  COMERCIABILIDADE ou ADEQUA√á√ÉO A UMA FINALIDADE ESPEC√çFICA. Consulte a
+ *  Licen√ßa P√∫blica Menos Geral do GNU para mais detalhes.
  *
- *  VocÍ deve ter recebido uma cÛpia da LicenÁa P˙blica Menos Geral do GNU
- *  junto com IpÍ-roxo. Se n„o, veja <http://www.gnu.org/licenses/>.
+ *  Voc√™ deve ter recebido uma c√≥pia da Licen√ßa P√∫blica Menos Geral do GNU
+ *  junto com Ip√™-roxo. Se n√£o, veja <http://www.gnu.org/licenses/>.
  */
 
 package com.joseflavio.iperoxo;
@@ -51,26 +51,26 @@ import java.io.Serializable;
 import java.util.ResourceBundle;
 
 /**
- * {@link Servico} b·sico que monta uma {@link Resposta} enquanto utiliza, opcionalmente, um {@link BancoDeDados}.
- * @author JosÈ Fl·vio de Souza Dias J˙nior
+ * {@link Servico} b√°sico que monta uma {@link Resposta} enquanto utiliza, opcionalmente, um {@link BancoDeDados}.
+ * @author Jos√© Fl√°vio de Souza Dias J√∫nior
  */
 public abstract class BasicoServico <T extends Serializable> extends Servico<T> {
 	
 	protected BasicoServicoConf $Configuracao;
 	
 	/**
-	 * {@link Resposta} que ser· enviada ao {@link CopaibaConexao cliente}.
+	 * {@link Resposta} que ser√° enviada ao {@link CopaibaConexao cliente}.
 	 * @see #executar()
 	 */
 	protected Resposta<T> $Resposta;
 	
 	/**
-	 * {@link BancoDeDados} do {@link IpeRoxo}, se existente e {@link BasicoServicoConf#bancoDeDados() necess·rio}.
+	 * {@link BancoDeDados} do {@link IpeRoxo}, se existente e {@link BasicoServicoConf#bancoDeDados() necess√°rio}.
 	 */
 	protected BancoDeDados $BancoDeDados;
 	
 	/**
-	 * {@link ResourceBundle} correspondente ‡ {@link #getLid()}.
+	 * {@link ResourceBundle} correspondente √† {@link #getLid()}.
 	 * @see IpeRoxo#getResourceBundle(String)
 	 */
 	protected ResourceBundle $ResourceBundle;
@@ -129,22 +129,22 @@ public abstract class BasicoServico <T extends Serializable> extends Servico<T> 
 	
 	/**
 	 * Montagem da {@link Resposta} deste {@link Servico}.<br>
-	 * {@link Resposta#setExito(boolean)} ser· determinada automaticamente, sendo <code>false</code>
-	 * quando este mÈtodo disparar uma {@link Exception}.<br>
-	 * Se {@link BasicoServicoConf#commit()}, ser· feito um {@link BancoDeDados#commit()} (se Íxito) ou um {@link BancoDeDados#rollback()}.
+	 * {@link Resposta#setExito(boolean)} ser√° determinada automaticamente, sendo <code>false</code>
+	 * quando este m√©todo disparar uma {@link Exception}.<br>
+	 * Se {@link BasicoServicoConf#commit()}, ser√° feito um {@link BancoDeDados#commit()} (se √™xito) ou um {@link BancoDeDados#rollback()}.
 	 */
 	protected abstract void processar() throws IOException;
 	
 	/**
-	 * Atividade prÈ-{@link #processar() processamento}.<br>
-	 * {@link Exception}s s„o desconsideradas.
+	 * Atividade pr√©-{@link #processar() processamento}.<br>
+	 * {@link Exception}s s√£o desconsideradas.
 	 */
 	protected void preProcessamento() {
 	}
 	
 	/**
-	 * Atividade pÛs-{@link #processar() processamento}.<br>
-	 * {@link Exception}s s„o desconsideradas.
+	 * Atividade p√≥s-{@link #processar() processamento}.<br>
+	 * {@link Exception}s s√£o desconsideradas.
 	 */
 	protected void posProcessamento() {
 	}
@@ -171,12 +171,12 @@ public abstract class BasicoServico <T extends Serializable> extends Servico<T> 
 	}
 	
 	/**
-	 * Encerra a {@link #executar() execuÁ„o} do {@link BasicoServico} atravÈs de {@link IOException},
-	 * definindo na {@link Resposta} um {@link Resposta#setCodigo(int) cÛdigo} e
+	 * Encerra a {@link #executar() execu√ß√£o} do {@link BasicoServico} atrav√©s de {@link IOException},
+	 * definindo na {@link Resposta} um {@link Resposta#setCodigo(int) c√≥digo} e
 	 * uma {@link Resposta#mais(Mensagem.Tipo, String, Serializable) mensagem} de {@link Mensagem.Tipo#ERRO erro}.
-	 * @param chave Chave do {@link IpeRoxo#getCodigo(String) cÛdigo} e da {@link IpeRoxo#getMensagem(String, String, Object...) mensagem} de {@link Mensagem.Tipo#ERRO erro}.
-	 * @param parametros Par‚metros para {@link IpeRoxo#getMensagem(String, String, Object...)}.
-	 * @throws IOException disparada incondicionalmente, a fim de encerrar a {@link #executar() execuÁ„o} do {@link BasicoServico}.
+	 * @param chave Chave do {@link IpeRoxo#getCodigo(String) c√≥digo} e da {@link IpeRoxo#getMensagem(String, String, Object...) mensagem} de {@link Mensagem.Tipo#ERRO erro}.
+	 * @param parametros Par√¢metros para {@link IpeRoxo#getMensagem(String, String, Object...)}.
+	 * @throws IOException disparada incondicionalmente, a fim de encerrar a {@link #executar() execu√ß√£o} do {@link BasicoServico}.
 	 */
 	protected void retornarErro( String chave, Object... parametros ) throws IOException {
 		if( StringUtil.tamanho( chave ) == 0 ) throw new IllegalArgumentException();
