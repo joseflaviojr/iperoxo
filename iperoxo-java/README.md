@@ -79,7 +79,7 @@ gradle clean uploadArchives
 
 ### Português
 
-Direitos Autorais Reservados &copy; 2016-2018 [José Flávio de Souza Dias Júnior](http://joseflavio.com)
+Direitos Autorais Reservados &copy; 2016-2019 [José Flávio de Souza Dias Júnior](http://joseflavio.com)
 
 Este arquivo é parte de Ipê-roxo - [http://joseflavio.com/iperoxo](http://joseflavio.com/iperoxo).
 
@@ -98,7 +98,7 @@ junto com Ipê-roxo. Se não, veja [https://www.gnu.org/licenses/lgpl.html](http
 
 ### English
 
-Copyright &copy; 2016-2018 [José Flávio de Souza Dias Júnior](http://joseflavio.com)
+Copyright &copy; 2016-2019 [José Flávio de Souza Dias Júnior](http://joseflavio.com)
 
 This file is part of Ipê-roxo - [http://joseflavio.com/iperoxo](http://joseflavio.com/iperoxo).
 
