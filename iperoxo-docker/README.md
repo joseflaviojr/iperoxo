@@ -4,13 +4,13 @@ Modelo de aplicação Java para execução em container Docker, compondo parte d
 
 ## Descrição
 
-A aplicação Docker do Ipê-roxo é responsável por manter as regras, os procedimentos e os bancos de dados do sistema. No esquema geral do Ipê-roxo (figura abaixo), o módulo "Aplicação Java" corresponde à aplicação Docker aqui especificada.
+A aplicação Docker do Ipê-roxo é responsável por manter as regras, os procedimentos e os dados do sistema. No esquema geral do Ipê-roxo (figura abaixo), o módulo "Aplicação Java" corresponde à aplicação Docker aqui especificada.
 
 <img src="../projeto/EsquemaGeral.png">
 
 ## Versão Atual
 
-1.0-A18
+1.0-A19
 
 Padrão de versionamento: [JFV](http://joseflavio.com/jfv)
 
@@ -51,7 +51,7 @@ gradle clean build
 Criar imagem:
 
 ```sh
-docker build --force-rm -t joseflavio/iperoxo:1.0-A18 .
+docker build --force-rm -t joseflavio/iperoxo:1.0-A19 .
 ```
 
 Criar volume de dados:
@@ -63,7 +63,7 @@ docker volume create --name iperoxo
 Executar pela primeira vez:
 
 ```sh
-docker run --name="iperoxo" -d -p 8884:8884 -e TZ=America/Belem -v iperoxo:/volume --ip=x.x.x.x --net xxxxxx --restart=unless-stopped joseflavio/iperoxo:1.0-A18
+docker run --name="iperoxo" -d -p 8884:8884 -e TZ=America/Belem -v iperoxo:/volume --ip=x.x.x.x --net xxxxxx --restart=unless-stopped joseflavio/iperoxo:1.0-A19
 ```
 
 > A aplicação Ipê-roxo será inicializada automaticamente no processo de boot, a não ser que seja voluntariamente parada: `docker stop iperoxo`.
@@ -96,7 +96,7 @@ Desinstalar a aplicação Ipê-roxo por completo:
 
 ```sh
 docker rm -f iperoxo
-docker rmi joseflavio/iperoxo:1.0-A18
+docker rmi joseflavio/iperoxo:1.0-A19
 ```
 
 ## Licença

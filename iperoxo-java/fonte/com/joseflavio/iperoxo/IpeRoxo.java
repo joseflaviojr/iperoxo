@@ -39,30 +39,57 @@
 
 package com.joseflavio.iperoxo;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.Reader;
+import java.security.KeyPair;
+import java.security.PrivateKey;
+import java.security.PublicKey;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.MissingResourceException;
+import java.util.Properties;
+import java.util.PropertyResourceBundle;
+import java.util.ResourceBundle;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
+
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+import javax.sql.DataSource;
+
+import com.google.protobuf.ByteString;
+import com.ibm.etcd.api.KeyValue;
+import com.ibm.etcd.api.RangeResponse;
+import com.ibm.etcd.client.EtcdClient;
+import com.ibm.etcd.client.kv.KvClient;
 import com.joseflavio.copaiba.Copaiba;
 import com.joseflavio.copaiba.CopaibaConexao;
 import com.joseflavio.copaiba.CopaibaException;
-import com.joseflavio.unhadegato.UnhaDeGato;
+import com.joseflavio.copaiba.Erro;
 import com.joseflavio.urucum.arquivo.ResourceBundleCharsetControl;
 import com.joseflavio.urucum.comunicacao.Resposta;
 import com.joseflavio.urucum.comunicacao.SocketServidor;
 import com.joseflavio.urucum.json.JSON;
+import com.joseflavio.urucum.seguranca.SegurancaUtil;
 import com.joseflavio.urucum.texto.StringUtil;
+
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.apache.commons.io.IOUtils;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
-import javax.naming.Context;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
-import javax.sql.DataSource;
-import java.io.*;
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.util.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Ipê-roxo: Modelo de software multicamada.
@@ -70,21 +97,41 @@ import java.util.*;
  */
 public final class IpeRoxo {
 	
-	private static final Properties configuracaoGeral = new Properties();
-	
+	/**
+	 * Configuracao.properties
+	 */
+	private static File configuracaoArquivo;
+
+	/**
+	 * {@link Properties} correspondente a Configuracao.properties
+	 */
 	private static final Properties configuracao = new Properties();
 	
+	/**
+	 * Mensagens_pt.properties, Mensagens_en.properties, etc.
+	 */
 	private static final Map<String,ResourceBundle> mensagens = new HashMap<>();
 	
+	/**
+	 * Codigos.properties
+	 */
 	private static final Map<String,Integer> codigos = new HashMap<>();
+
+	private static EtcdClient etcdClient;
+
+	private static Copaiba copaiba;
 	
 	private static BasicDataSource dataSource;
 	
 	private static EntityManagerFactory emf;
+
+	private static String emfUnitName;
+
+	private static PublicKey chavePublica;
+
+	private static PrivateKey chavePrivada;
 	
-	private static Copaiba copaiba;
-	
-	private static final Logger log = LogManager.getLogger( IpeRoxo.class.getPackage().getName() );
+	private static final Logger log = LoggerFactory.getLogger( IpeRoxo.class.getPackage().getName() );
 	
 	/**
 	 * Método inicial.
@@ -92,20 +139,142 @@ public final class IpeRoxo {
 	public static void main( String[] args ) {
 		
 		try{
+
+			// Configuração básica ------------------------------------------------------
+			
+			configuracaoArquivo = args.length > 0 ? new File( args[0] ) : null;
+			
+			carregarConfiguracao( configuracaoArquivo, configuracao, false, false );
+
+
+			// Configuração completa ----------------------------------------------------
 			
 			log.info( getMensagem( null, "Log.Inicio" ) );
+
+			for( int i = 0; i < 15; i++ ){
+				try{
+					carregarConfiguracao( configuracaoArquivo, configuracao, true, i == 0 );
+					break;
+				}catch( Exception e ){
+					if( i == 14 ) throw e;
+					else if( i == 0 ) log.error( e.getMessage() );
+					Thread.sleep( 4000 );
+				}
+			}
+
+
+			// Codigos.properties -------------------------------------------------------
 			
-			executarConfiguracaoGeral();
-			executarConfiguracao( args );
-			executarFonteDeDados();
-			
+			InputStream codigosIS = IpeRoxo.class.getResourceAsStream( "/Codigos.properties" );
+			if( codigosIS != null ){
+				Properties codigosProps = new Properties();
+				try( Reader texto = new InputStreamReader( codigosIS, "UTF-8" ) ){
+					codigosProps.load( texto );
+				}
+				for( Object chave : codigosProps.keySet() ){
+					String nome = chave.toString();
+					codigos.put( nome, Integer.parseInt( codigosProps.getProperty( nome ) ) );
+				}
+			}
+
+
+			// Procedimentos gerais -----------------------------------------------------
+
+			Runtime.getRuntime().addShutdownHook( new Encerrador() );
+
+
+			// Chaves criptográficas ----------------------------------------------------
+
+			try{
+
+				log.info( getMensagem( null, "Log.Carregando", KeyPair.class.getName() ) );
+
+				File chavePubArq = new File( getPropriedade( "Chave.Publica" ) );
+				File chavePriArq = new File( getPropriedade( "Chave.Privada" ) );
+	
+				if( ! chavePubArq.exists() && ! chavePriArq.exists() ){
+					KeyPair kp = SegurancaUtil.gerarChaveAssimetrica();
+					SegurancaUtil.salvarChave( kp.getPublic(),  chavePubArq );
+					SegurancaUtil.salvarChave( kp.getPrivate(), chavePriArq );
+				}
+				
+				chavePublica = SegurancaUtil.obterChavePublica( chavePubArq );
+				chavePrivada = SegurancaUtil.obterChavePrivada( chavePriArq );
+
+			}catch( Exception e ){
+				log.error( e.getMessage(), e );
+			}
+
+
+			// Fonte de dados -----------------------------------------------------------
+
+			ajustarDataSource( true, true, true, true );
+
 			if( Boolean.parseBoolean( getPropriedade( "IpeRoxo.FinalizarAposDataSource" ) ) ){
 				log.info( getMensagem( null, "Log.FinalizandoAposDataSource" ) );
 				System.exit( 0 );
 			}
+
+
+			// Copaíba: pré-inicialização -----------------------------------------------
+
+			int     copaibaPorta    = Integer.parseInt    ( getPropriedade( "Copaiba.Porta",    "8884"  ) );
+			boolean copaibaSegura   = Boolean.parseBoolean( getPropriedade( "Copaiba.Segura",   "false" ) );
+			boolean copaibaExpressa = Boolean.parseBoolean( getPropriedade( "Copaiba.Expressa", "true"  ) );
+		
+			copaiba = new Copaiba();
+		
+			copaiba.setPermitirAtribuicao   ( false );
+			copaiba.setPermitirLeitura      ( false );
+			copaiba.setPermitirMensagem     ( false );
+			copaiba.setPermitirRemocao      ( false );
+			copaiba.setPermitirRotina       ( false );
+			copaiba.setPermitirSolicitacao  ( true  );
+			copaiba.setPermitirTransferencia( false );
+			copaiba.setPublicarCertificados ( false );
 			
-			executarInicializacao();
-			executarCopaiba();
+			copaiba.setAuditor( new PacoteAuditor() );
+	
+
+			// Inicialização ------------------------------------------------------------
+			
+			String inicialClasseNome = getPropriedade( "IpeRoxo.Inicializacao" );
+
+			if( StringUtil.tamanho( inicialClasseNome ) > 0 ){
+
+				log.info( getMensagem( null, "Log.Executando.Inicializacao", inicialClasseNome ) );
+				
+				((Inicializacao)
+					Class
+					.forName( inicialClasseNome )
+					.getConstructor()
+					.newInstance()
+				).inicializar();
+				
+			}
+
+			
+			// Rotinas periódicas -------------------------------------------------------
+
+			ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor( 1 );
+    
+			executor.scheduleWithFixedDelay(
+				new Mantenedor(),
+				5,
+				5,
+				TimeUnit.MINUTES
+			);
+
+
+			// Copaíba: pós-inicialização -----------------------------------------------
+			
+			log.info( getMensagem( null, "Log.Iniciando.Copaiba", copaibaPorta ) );
+			
+			if( copaibaExpressa ){
+				copaiba.abrir( copaibaPorta, copaibaSegura, true );
+			}else{
+				copaiba.abrir( new SocketServidor( copaibaPorta, copaibaSegura, true ) );
+			}
 			
 		}catch( Exception e ){
 			log.error( e.getMessage(), e );
@@ -115,37 +284,25 @@ public final class IpeRoxo {
 	}
 	
 	/**
-	 * ~/Iperoxo.properties
+	 * Carrega as propriedades definidas em arquivo e em fontes externas.
+	 * @throws IOException caso ocorra uma falha, o que torna o resultado não confiável.
 	 */
-	private static void executarConfiguracaoGeral() throws IOException {
+	private static void carregarConfiguracao( File arquivo, Properties propriedades, boolean externasEssenciais, boolean logInfo ) throws IOException {
 		
-		File arquivo = new File( System.getProperty( "user.home" ), "Iperoxo.properties" );
-		if( ! arquivo.exists() ) return;
-		
-		try( Reader texto = new InputStreamReader( new FileInputStream( arquivo ), "UTF-8" ) ){
-			configuracaoGeral.load( texto );
-		}
-		
-	}
-	
-	/**
-	 * Configura a aplicação conforme os argumentos passados por linha de comando.
-	 */
-	private static void executarConfiguracao( String[] args ) throws IOException {
-		
-		// Configuracao.Padrao.properties
+		// Configuracao.Padrao.properties -----------------------------------------------
 		
 		InputStream conf = IpeRoxo.class.getResourceAsStream( "/Configuracao.Padrao.properties" );
 		try( Reader texto = new InputStreamReader( conf, "UTF-8" ) ){
-			configuracao.load( texto );
+			propriedades.load( texto );
 		}
 		
-		// Configuracao.properties
+		// Configuracao.properties ------------------------------------------------------
 		
-		if( args.length >= 1 ){
-			
-			File arquivo = new File( args[0] );
-			log.info( getMensagem( null, "Log.Carregando.Configuracao" ) + ": " + arquivo.getAbsolutePath() );
+		if( arquivo != null ){
+
+			if( logInfo ){
+				log.info( getMensagem( null, "Log.Carregando.Configuracao", arquivo.getAbsolutePath() ) );
+			}
 			
 			if( ! arquivo.exists() ){
 				try(
@@ -160,176 +317,291 @@ public final class IpeRoxo {
 			
 		}else{
 			
-			log.info( getMensagem( null, "Log.Carregando.Configuracao.Padrao" ) );
+			if( logInfo ){
+				log.info( getMensagem( null, "Log.Carregando.Configuracao.Padrao" ) );
+			}
+
 			conf = IpeRoxo.class.getResourceAsStream( "/Configuracao.properties" );
 			
 		}
 		
 		try( Reader texto = new InputStreamReader( conf, "UTF-8" ) ){
-			configuracao.load( texto );
-		}
-		
-		// Codigos.properties
-		
-		conf = IpeRoxo.class.getResourceAsStream( "/Codigos.properties" );
-		if( conf != null ){
-			Properties props = new Properties();
-			try( Reader texto = new InputStreamReader( conf, "UTF-8" ) ){
-				props.load( texto );
-			}
-			for( Object chave : props.keySet() ){
-				String nome = chave.toString();
-				codigos.put( nome, Integer.parseInt( props.getProperty( nome ) ) );
-			}
-		}
-		
-	}
-	
-	/**
-	 * Inicia a {@link DataSource} e a {@link EntityManagerFactory}.
-	 */
-	private static void executarFonteDeDados() throws IOException, NamingException {
-		
-		if( Boolean.parseBoolean( getPropriedade( "DataSource.Enable" ) ) ){
-			log.info( getMensagem( null, "Log.Iniciando.DataSource" ) );
-		}else{
-			return;
+			propriedades.load( texto );
 		}
 
-		System.setProperty( Context.INITIAL_CONTEXT_FACTORY, "org.apache.naming.java.javaURLContextFactory" );
-		System.setProperty( Context.URL_PKG_PREFIXES, "org.apache.naming" );
-		
-		dataSource = new BasicDataSource();
-		dataSource.setDriverClassName( getPropriedade( "DataSource.Driver" ) );
-		dataSource.setUrl( getPropriedade( "DataSource.URL" ) );
-		dataSource.setUsername( getPropriedade( "DataSource.Username" ) );
-		dataSource.setPassword( getPropriedade( "DataSource.Password" ) );
-		dataSource.setInitialSize( Integer.parseInt( getPropriedade( "DataSource.InitialSize" ) ) );
-		dataSource.setMaxTotal( Integer.parseInt( getPropriedade( "DataSource.MaxTotal" ) ) );
-		dataSource.setMinIdle( Integer.parseInt( getPropriedade( "DataSource.MinIdle" ) ) );
-		dataSource.setMaxIdle( Integer.parseInt( getPropriedade( "DataSource.MaxIdle" ) ) );
-		dataSource.setTestOnCreate( Boolean.parseBoolean( getPropriedade( "DataSource.TestOnCreate" ) ) );
-		dataSource.setTestWhileIdle( Boolean.parseBoolean( getPropriedade( "DataSource.TestWhileIdle" ) ) );
-		dataSource.setTestOnBorrow( Boolean.parseBoolean( getPropriedade( "DataSource.TestOnBorrow" ) ) );
-		dataSource.setTestOnReturn( Boolean.parseBoolean( getPropriedade( "DataSource.TestOnReturn" ) ) );
+		// Propriedades externas --------------------------------------------------------
 
-		Context contexto = new InitialContext();
-		try{
-			contexto.bind( "FONTE", dataSource );
-		}finally{
-			contexto.close();
-		}
+		List<String> propsFontes = Arrays.asList( propriedades.getProperty( "Propriedades.Fontes", "" ).split( "," ) );
+		propsFontes.replaceAll( (s) -> s.trim().toLowerCase() );
 		
-		while( true ){
-			try( Connection con = getConnection() ){
-				break;
+		// etcd -------------------------------------------------------------------------
+
+		if( propsFontes.contains( "etcd" ) ){
+
+			try{
+
+				if( logInfo ){
+					log.info( getMensagem( null, "Log.Carregando.Propriedades", "etcd" ) );
+				}
+
+				// Conexão
+
+				EtcdClient etcd   = getEtcd();
+				KvClient   etcdKV = etcd.getKvClient();
+
+				// Propriedades primárias prefixadas com a classe da aplicação
+
+				if( Boolean.parseBoolean( propriedades.getProperty( "Propriedades.Classe" ) ) ){
+					importarPropriedades(
+						etcdKV,
+						propriedades,
+						propriedades.getProperty( "IpeRoxo.Aplicacao.Classe" ) + ".",
+						true
+					);
+				}
+
+
+				// Propriedades primárias prefixadas com a identificação da aplicação
+
+				if( Boolean.parseBoolean( propriedades.getProperty( "Propriedades.Aplicacao" ) ) ){
+					importarPropriedades(
+						etcdKV,
+						propriedades,
+						propriedades.getProperty( "IpeRoxo.Aplicacao.Identificacao" ) + ".",
+						true
+					);
+				}
+
+
+				// Propriedades secundárias
+
+				List<String> prefixos = Arrays.asList( propriedades.getProperty( "Propriedades.Prefixos", "" ).split( "," ) );
+				prefixos.replaceAll( (s) -> s.trim() );
+
+				for( String prefixo : prefixos ){
+					importarPropriedades(
+						etcdKV,
+						propriedades,
+						prefixo,
+						false
+					);
+				}
+
 			}catch( Exception e ){
-				try{
-					Thread.sleep( 2000 );
-				}catch( InterruptedException f ){
+				if( externasEssenciais ){
+					if( e instanceof IOException ) throw e;
+					else throw new IOException( e );
+				}else{
+					log.error( "etcd: " + e.getMessage() );
 				}
 			}
-		}
-		
-		if( Boolean.parseBoolean( getPropriedade( "DataSource.JPA.Enable" ) ) ){
-			log.info( getMensagem( null, "Log.Iniciando.JPA" ) );
-		}else{
-			return;
-		}
-		
-		emf = Persistence.createEntityManagerFactory( "JPA" );
-		
-		try{
-			emf.createEntityManager().close();
-		}catch( Exception e ){
-			log.error( e.getMessage(), e );
-		}
-		
-	}
-	
-	/**
-	 * @see Inicializacao
-	 */
-	private static void executarInicializacao()
-							throws IOException, ClassNotFoundException,
-							IllegalAccessException, InstantiationException {
-		
-		String nome = getPropriedade( "IpeRoxo.Inicializacao" );
-		if( nome == null || nome.isEmpty() ) return;
-		
-		log.info( getMensagem( null, "Log.Executando.Inicializacao" ) );
-		
-		Class<?> classe = Class.forName( nome );
-		
-		try{
 			
-			((Inicializacao)classe.newInstance()).inicializar();
-		
-		}catch( InstantiationException e ){
-			throw e;
-		}catch( IllegalAccessException e ){
-			throw e;
-		}catch( Exception e ){
-			if( Boolean.parseBoolean( getPropriedade( "IpeRoxo.Inicializacao.Essencial" ) ) ){
-				throw e instanceof IOException ? (IOException) e : new IOException( e );
-			}else{
-				log.error( e.getMessage(), e );
-			}
 		}
 		
 	}
+
+	private static void importarPropriedades( KvClient origem, Properties destino, String prefixo, boolean removerPrefixo ) {
+
+		int tamanho = prefixo.length();
+		if( tamanho == 0 ) return;
+		if( ! removerPrefixo ) tamanho = 0;
+
+		RangeResponse resposta = origem.get( ByteString.copyFromUtf8( prefixo ) ).asPrefix().sync();
+		
+		for( KeyValue kv : resposta.getKvsList() ){
+			
+			String chave = kv.getKey().toStringUtf8();
+			String valor = kv.getValue().toStringUtf8();
+			
+			destino.put(
+				removerPrefixo ? chave.substring( tamanho ) : chave,
+				valor
+			);
+
+		}
+
+	}
 	
 	/**
-	 * {@link Copaiba#abrir(int, boolean) Inicia} a {@link Copaiba}.
+	 * Ajusta a {@link DataSource} e a {@link EntityManagerFactory} de acordo com a configuração corrente.
+	 * @param atualizar Atualizar propriedades da {@link DataSource} que podem ser alteradas em tempo de execução?
+	 * @param reiniciar Reiniciar {@link DataSource} para absorver propriedades que são imutáveis em tempo de execução?
+	 * @param esperarConexao Esperar por uma conexão efetiva à {@link DataSource}? Ver {@link #getConnection()}.
 	 */
-	private static void executarCopaiba() throws IOException, CopaibaException {
-		
-		copaiba = new Copaiba();
-		
-		copaiba.setPermitirRotina( false );
-		copaiba.setPermitirMensagem( false );
-		copaiba.setPermitirLeitura( false );
-		copaiba.setPermitirAtribuicao( false );
-		copaiba.setPermitirRemocao( false );
-		copaiba.setPermitirTransferencia( false );
-		
-		copaiba.setPublicarCertificados( false );
-		
-		copaiba.setAuditor( new PacoteAuditor() );
+	private static void ajustarDataSource( boolean atualizar, boolean reiniciar, boolean esperarConexao, boolean logInfo ) throws IOException {
 
-		int porta = 8884;
-		String portaStr = getPropriedade( "Copaiba.Porta" );
-		
 		try{
-			porta = Integer.parseInt( portaStr );
-		}catch( NumberFormatException e ){
-			try{
-				porta = Integer.parseInt( configuracaoGeral.getProperty( portaStr ) );
-			}catch( NumberFormatException f ){
+
+			// Propriedades globais da JNDI ---------------------------------------------
+
+			System.setProperty( Context.INITIAL_CONTEXT_FACTORY, "org.apache.naming.java.javaURLContextFactory" );
+			System.setProperty( Context.URL_PKG_PREFIXES       , "org.apache.naming"                            );
+
+			// Propriedades -------------------------------------------------------------
+
+			boolean ds_enable     = Boolean.parseBoolean( getPropriedade( "DataSource.Enable"     ) );
+			boolean jpa_enable    = Boolean.parseBoolean( getPropriedade( "DataSource.JPA.Enable" ) );
+			String  jpa_unit_name = getPropriedade( "DataSource.JPA.Unit.Name" );
+			String  jpa_jndi_name = getPropriedade( "DataSource.JPA.JNDI.Name" );
+
+			BasicDataSource velhoDS = dataSource;
+			BasicDataSource novoDS  = null;
+
+			// Situação da DataSource ---------------------------------------------------
+
+			if( ds_enable ){
+				if( velhoDS == null || velhoDS.isClosed() || reiniciar ){
+					if( logInfo ) log.info( getMensagem( null, "Log.Iniciando.DataSource" ) );
+					novoDS = new BasicDataSource();
+					setDataSourceVars0( novoDS, configuracao );
+				}else{
+					novoDS = velhoDS;
+				}
+				if( atualizar || reiniciar ){
+					setDataSourceVars1( novoDS, configuracao );
+				}
 			}
+
+			// Mudança de DataSource ----------------------------------------------------
+
+			if( velhoDS != novoDS ){
+
+				Context contexto = new InitialContext();
+				try{
+					contexto.rebind( jpa_jndi_name, novoDS );
+				}finally{
+					contexto.close();
+				}
+
+				dataSource = novoDS;
+
+				if( velhoDS != null && ! velhoDS.isClosed() ){
+					try{
+						velhoDS.close();
+					}catch( Exception e ){
+					}
+				}
+				
+			}
+
+			// EntityManagerFactory -----------------------------------------------------
+
+			if( jpa_enable ){
+
+				if( emfUnitName == null || ! emfUnitName.equals( jpa_unit_name ) ){
+					
+					if( emf != null && emf.isOpen() ){
+						try{
+							emf.close();
+						}catch( Exception e ){
+						}
+					}
+
+					if( logInfo ){
+						log.info( getMensagem( null, "Log.Iniciando.JPA" ) );
+					}
+
+					emf = Persistence.createEntityManagerFactory( jpa_unit_name );
+					emfUnitName = jpa_unit_name;
+
+				}
+
+			}else if( emf != null ){
+
+				try{
+					if( emf.isOpen() ) emf.close();
+				}catch( Exception e ){
+				}finally{
+					emf = null;
+					emfUnitName = null;
+				}
+
+			}
+
+			// Esperar conexão ----------------------------------------------------------
+
+			if( esperarConexao && dataSource != null ){
+				boolean avisar = true;
+				while( true ){
+					try( Connection con = getConnection() ){
+						break;
+					}catch( Exception e ){
+						if( logInfo && avisar ){
+							log.info( getMensagem( null, "Log.Esperando", "DataSource" ) );
+							log.error( e.getMessage(), e );
+							avisar = false;
+						}
+						try{
+							Thread.sleep( 2000 );
+						}catch( InterruptedException f ){
+							break;
+						}
+					}
+				}
+			}
+
+		}catch( Exception e ){
+			if( e instanceof IOException ) throw (IOException) e;
+			else throw new IOException( e );
 		}
 		
-		boolean segura = Boolean.parseBoolean( getPropriedade( "Copaiba.Segura" ) );
+	}
+
+	private static void setDataSourceVars0( BasicDataSource ds, Properties props ) {
+		ds.setDriverClassName( props.getProperty( "DataSource.Driver" ) );
+		ds.setUrl( props.getProperty( "DataSource.URL" ) );
+		ds.setUsername( props.getProperty( "DataSource.Username" ) );
+		ds.setPassword( props.getProperty( "DataSource.Password" ) );
+		ds.setInitialSize( Integer.parseInt( props.getProperty( "DataSource.InitialSize" ) ) );
+	}
+
+	private static void setDataSourceVars1( BasicDataSource ds, Properties props ) {
+		ds.setMaxTotal( Integer.parseInt( props.getProperty( "DataSource.MaxTotal" ) ) );
+		ds.setMinIdle( Integer.parseInt( props.getProperty( "DataSource.MinIdle" ) ) );
+		ds.setMaxIdle( Integer.parseInt( props.getProperty( "DataSource.MaxIdle" ) ) );
+		ds.setTestOnCreate( Boolean.parseBoolean( props.getProperty( "DataSource.TestOnCreate" ) ) );
+		ds.setTestWhileIdle( Boolean.parseBoolean( props.getProperty( "DataSource.TestWhileIdle" ) ) );
+		ds.setTestOnBorrow( Boolean.parseBoolean( props.getProperty( "DataSource.TestOnBorrow" ) ) );
+		ds.setTestOnReturn( Boolean.parseBoolean( props.getProperty( "DataSource.TestOnReturn" ) ) );
+	}
+
+	/**
+	 * {@link #getPropriedade(String) Propriedade} "ResourceBundle.Locale.Default" ou {@link Locale#getDefault()}.
+	 * @see Locale#toLanguageTag()
+	 */
+	public static String getLinguagemPadrao() {
 		
-		log.info( getMensagem( null, "Log.Iniciando.Copaiba", porta ) );
+		String linguagem = getPropriedade( "ResourceBundle.Locale.Default" );
 		
-		copaiba.abrir( new SocketServidor( porta, segura, true ) );
-		
+		if( StringUtil.tamanho( linguagem ) == 0 ){
+			return Locale.getDefault().toLanguageTag();
+		}else{
+			return linguagem;
+		}
+
 	}
 	
 	/**
 	 * {@link ResourceBundle} correspondente a uma {@link Locale}.<br>
 	 * {@link ResourceBundle#getBaseBundleName()} == {@link #getPropriedade(String) propriedade} "ResourceBundle.BaseName"<br>
 	 * {@link PropertyResourceBundle}'s (arquivos ".properties") devem estar codificados conforme {@link #getPropriedade(String) propriedade} "ResourceBundle.Charset". Veja {@link ResourceBundleCharsetControl}.
-	 * @param linguagem Formato IETF BCP 47. Veja {@link Locale#toLanguageTag()}. {@code null} ou {@code vazio} == {@link IpeRoxo#getPropriedade(String) propriedade} "ResourceBundle.Locale.Default".
+	 * @param linguagem Formato IETF BCP 47. Veja {@link Locale#toLanguageTag()}. {@code null} ou {@code vazio} == {@link #getLinguagemPadrao()}.
 	 * @see #getMensagem(String, String, Object...)
 	 */
 	public static ResourceBundle getResourceBundle( String linguagem ) throws IOException {
 		
-		final boolean padrao = StringUtil.tamanho( linguagem ) == 0;
+		boolean padrao     = StringUtil.tamanho( linguagem ) == 0;
+		Locale  localidade = null;
 		
-		if( padrao ) linguagem = getPropriedade( "ResourceBundle.Locale.Default", "pt" );
-		else linguagem = linguagem.replace( '_', '-' );
+		if( padrao ){
+			linguagem = getPropriedade( "ResourceBundle.Locale.Default" );
+			if( StringUtil.tamanho( linguagem ) == 0 ){
+				localidade = Locale.getDefault();
+				linguagem  = localidade.toLanguageTag();
+			}
+		}
+		
+		linguagem = linguagem.replace( '_', '-' );
 		
 		ResourceBundle rb = mensagens.get( linguagem );
 		if( rb != null ) return rb;
@@ -337,10 +609,14 @@ public final class IpeRoxo {
 		String baseName = getPropriedade( "ResourceBundle.BaseName", "Mensagens" );
 		
 		try{
+
+			if( localidade == null ){
+				localidade = Locale.forLanguageTag( linguagem );
+			}
 			
 			rb = ResourceBundle.getBundle(
                 baseName,
-                Locale.forLanguageTag( linguagem ),
+                localidade,
                 new ResourceBundleCharsetControl( getPropriedade( "ResourceBundle.Charset", "UTF-8" ) )
             );
 			
@@ -407,7 +683,7 @@ public final class IpeRoxo {
 	public static void setPropriedade( String chave, String valor ) {
 		configuracao.setProperty( chave, valor );
 	}
-	
+
 	/**
 	 * {@link DataSource}, se "DataSource.Enable"
 	 */
@@ -428,60 +704,114 @@ public final class IpeRoxo {
 	public static EntityManagerFactory getEntityManagerFactory() {
 		return emf;
 	}
+
+	/**
+	 * Retorna a conexão ao servidor etcd, reconectando se necessário.
+	 */
+	private static EtcdClient getEtcd() throws IOException {
+
+		try{
+
+			if( etcdClient == null || etcdClient.isClosed() ){
+	
+				String etcdEndereco = configuracao.getProperty( "etcd.Endereco", "localhost" );
+				String etcdPorta    = configuracao.getProperty( "etcd.Porta", "2379" );
+				String etcdUsuario  = configuracao.getProperty( "etcd.Usuario", "" );
+				String etcdSenha    = configuracao.getProperty( "etcd.Senha", "" );
+	
+				EtcdClient.Builder etcdBuilder = EtcdClient.forEndpoint( etcdEndereco, Integer.parseInt(etcdPorta) ).withPlainText();
+				if( etcdUsuario.length() > 0 ) etcdBuilder.withCredentials( etcdUsuario, etcdSenha );
+				
+				etcdClient = etcdBuilder.build();
+	
+			}
+			
+			return etcdClient;
+
+		}catch( Exception e ){
+
+			try{
+				if( etcdClient != null ) etcdClient.close();
+			}catch( Exception f ){
+			}finally{
+				etcdClient = null;
+			}
+
+			if( e instanceof IOException ) throw e;
+			else throw new IOException( e );
+
+		}
+
+	}
 	
 	/**
-	 * {@link UnhaDeGato}
-	 * @param nome Identificação da {@link UnhaDeGato} desejada.
-	 * @see #getUnhaDeGato()
+	 * Obtém uma nova {@link CopaibaConexao conexão} com um sistema parceiro.
+	 * @param nome Identificação do parceiro, prefixo de suas propriedades de conexão.
+	 * @see #getParceiro()
 	 */
-	public static UnhaDeGato getUnhaDeGato( String nome ) {
+	public static CopaibaConexao getParceiro( String nome ) throws CopaibaException {
 		
-		String  udgEndereco = getPropriedade( "UnhaDeGato." + nome + ".Endereco" );
-		int     udgPorta    = Integer.parseInt( getPropriedade( "UnhaDeGato." + nome + ".Porta" ) );
-		boolean udgSegura   = Boolean.parseBoolean( getPropriedade( "UnhaDeGato." + nome + ".Segura" ) );
-		boolean udgIgnorar  = Boolean.parseBoolean( getPropriedade( "UnhaDeGato." + nome + ".IgnorarCertificado" ) );
-		
-		return new UnhaDeGato( udgEndereco, udgPorta, udgSegura, udgIgnorar );
+		String  parcEndereco = getPropriedade( nome + ".Endereco" );
+		int     parcPorta    = Integer.parseInt( getPropriedade( nome + ".Porta" ) );
+		boolean parcSegura   = Boolean.parseBoolean( getPropriedade( nome + ".Segura" ) );
+		boolean parcIgnorar  = Boolean.parseBoolean( getPropriedade( nome + ".IgnorarCertificado" ) );
+		String  parcUsuario  = getPropriedade( nome + ".Usuario" );
+		String  parcSenha    = getPropriedade( nome + ".Senha" );
+		boolean parcExpressa = Boolean.parseBoolean( getPropriedade( nome + ".Expressa" ) );
+
+		if( parcExpressa ){
+			return new CopaibaConexao( parcEndereco, parcPorta, parcSegura, parcIgnorar, parcExpressa );
+		}else{
+			return new CopaibaConexao( parcEndereco, parcPorta, parcSegura, parcIgnorar, parcUsuario, parcSenha );
+		}
 		
 	}
 	
 	/**
-	 * {@link UnhaDeGato} "Principal".
-	 * @see #getUnhaDeGato(String)
+	 * Obtém uma nova {@link CopaibaConexao conexão} com o sistema parceiro principal.
+	 * @see #getParceiro(String)
 	 */
-	public static UnhaDeGato getUnhaDeGato() {
-		return getUnhaDeGato( "Principal" );
+	public static CopaibaConexao getParceiro() throws CopaibaException {
+		return getParceiro( getPropriedade( "Parceria.Principal" ) );
 	}
 	
 	/**
-	 * @see UnhaDeGato#solicitar(String, String, String, String)
+	 * Executa uma {@link CopaibaConexao#solicitar(String, String, String) solicitação} remota com base em {@link JSON}.
+	 * A {@link CopaibaConexao} não será {@link CopaibaConexao#fechar(boolean) fechada}.
 	 * @see CopaibaConexao#solicitar(String, String, String)
 	 */
-	public static JSON solicitar( UnhaDeGato unhaDeGato, String copaiba, String classe, JSON estado, String metodo ) throws IOException {
-		return new JSON( unhaDeGato.solicitar(
-			copaiba,
-			classe,
-			estado.toString(),
-			metodo
-		) );
+	public static JSON solicitar( CopaibaConexao copaiba, String classe, JSON estado, String metodo ) throws CopaibaException {
+		return new JSON(
+			copaiba.solicitar(
+				classe,
+				estado.toString(),
+				metodo
+			)
+		);
 	}
 	
 	/**
-	 * @see #getUnhaDeGato()
-	 * @see #solicitar(UnhaDeGato, String, String, JSON, String)
+	 * {@link CopaibaConexao#solicitar(String, String, String) Solicita} uma ação a um {@link #getParceiro(String) parceiro},
+	 * abrindo e {@link CopaibaConexao#close() fechando} adequadamente a conexão.
+	 * @see #getParceiro(String)
+	 * @see CopaibaConexao#solicitar(String, String, String)
 	 */
-	public static JSON solicitar( String copaiba, String classe, JSON estado, String metodo ) throws IOException {
-		return solicitar( getUnhaDeGato(), copaiba, classe, estado, metodo );
+	public static JSON solicitar( String parceiro, String classe, JSON estado, String metodo ) throws CopaibaException {
+		try( CopaibaConexao copaiba = getParceiro( parceiro ) ){
+			return solicitar( copaiba, classe, estado, metodo );
+		}catch( IOException e ){
+			throw new CopaibaException( Erro.DESCONHECIDO, e );
+		}
 	}
-	
+
 	/**
-	 * {@link #getUnhaDeGato()}, {@link Servico#executar()}.
-	 * @see #getUnhaDeGato()
-	 * @see Servico#executar()
-	 * @see #solicitar(UnhaDeGato, String, String, JSON, String)
+	 * {@link CopaibaConexao#solicitar(String, String, String) Solicita} uma ação ao {@link #getParceiro() parceiro} principal,
+	 * abrindo e {@link CopaibaConexao#close() fechando} adequadamente a conexão.
+	 * @see #getParceiro()
+	 * @see CopaibaConexao#solicitar(String, String, String)
 	 */
-	public static JSON solicitar( String copaiba, String classe, JSON estado ) throws IOException {
-		return solicitar( getUnhaDeGato(), copaiba, classe, estado, "executar" );
+	public static JSON solicitar( String classe, JSON estado, String metodo ) throws CopaibaException {
+		return solicitar( getPropriedade( "Parceria.Principal" ), classe, estado, metodo );
 	}
 	
 	/**
@@ -491,12 +821,180 @@ public final class IpeRoxo {
 	public static boolean isDisponivel() {
 		return copaiba != null && copaiba.isAberta();
 	}
+
+	/**
+	 * {@link PrivateKey} especificada através da {@link #getPropriedade(String) propriedade} "Chave.Privada".
+	 * @see SegurancaUtil#obterChavePrivada(File)
+	 */
+	public static PrivateKey getChavePrivada() {
+		return chavePrivada;
+	}
+
+	/**
+	 * {@link PublicKey} especificada através da {@link #getPropriedade(String) propriedade} "Chave.Publica".
+	 * @see SegurancaUtil#obterChavePublica(File)
+	 */
+	public static PublicKey getChavePublica() {
+		return chavePublica;
+	}
 	
 	/**
 	 * {@link Logger} da aplicação.
 	 */
 	public static Logger getLog() {
 		return log;
+	}
+
+	/**
+	 * Encerramento normal dos recursos utilizados pelo sistema.
+	 * @see Runtime#addShutdownHook(Thread)
+	 */
+	private static class Encerrador extends Thread {
+
+		@Override
+		public void run() {
+			
+			try{
+				if( emf != null ){
+					log.info( getMensagem( null, "Log.Encerrando", "EntityManagerFactory" ) );
+					emf.close();
+				}
+			}catch( Exception e ){
+			}finally{
+				emf = null;
+			}
+
+			try{
+				if( dataSource != null ){
+					log.info( getMensagem( null, "Log.Encerrando", "DataSource" ) );
+					dataSource.close();
+				}
+			}catch( Exception e ){
+			}finally{
+				dataSource = null;
+			}
+
+			try{
+				if( etcdClient != null ){
+					log.info( getMensagem( null, "Log.Encerrando", "etcd" ) );
+					etcdClient.close();
+				}
+			}catch( Exception e ){
+			}finally{
+				etcdClient = null;
+			}
+
+			try{
+				if( copaiba != null ){
+					log.info( getMensagem( null, "Log.Encerrando", "Copaíba" ) );
+					copaiba.close();
+				}
+			}catch( Exception e ){
+			}finally{
+				copaiba = null;
+			}
+
+		}
+
+	}
+
+	/**
+	 * Manutenção do sistema conforme estado atual da configuração.
+	 */
+	private static class Mantenedor implements Runnable {
+
+		@Override
+		public void run() {
+			
+			try{
+
+				// Carregando novas configurações ---------------------------------------
+
+				Properties config_nova = new Properties();
+				carregarConfiguracao( configuracaoArquivo, config_nova, true, false );
+
+				// Detectando alterações ------------------------------------------------
+
+				boolean ds_reiniciar = ! iguais(
+					configuracao,
+					config_nova,
+					"DataSource.Enable",
+					"DataSource.Driver",
+					"DataSource.URL",
+					"DataSource.Username",
+					"DataSource.Password",
+					"DataSource.InitialSize"
+				);
+
+				boolean ds_atualizar = ! iguais(
+					configuracao,
+					config_nova,
+					"DataSource.JPA.Enable",
+					"DataSource.JPA.Unit.Name",
+					"DataSource.JPA.JNDI.Name",
+					"DataSource.MaxTotal",
+					"DataSource.MinIdle",
+					"DataSource.MaxIdle",
+					"DataSource.TestOnCreate",
+					"DataSource.TestWhileIdle",
+					"DataSource.TestOnBorrow",
+					"DataSource.TestOnReturn"
+				);
+
+				boolean etcd_reiniciar = ! iguais(
+					configuracao,
+					config_nova,
+					"etcd.Endereco",
+					"etcd.Porta",
+					"etcd.Usuario",
+					"etcd.Senha"
+				);
+
+				// Atualizando a configuração oficial -----------------------------------
+
+				for( Object chave : config_nova.keySet() ){
+					configuracao.put( chave, config_nova.get( chave ) );
+				}
+
+				// Ajustando etcd -------------------------------------------------------
+
+				if( etcd_reiniciar ){
+					try{
+						log.info( getMensagem( null, "Log.Atualizando", "etcd" ) );
+						if( etcdClient != null && ! etcdClient.isClosed() ) etcdClient.close();
+						getEtcd();
+					}catch( Exception e ){
+						log.error( e.getMessage(), e );
+					}
+				}
+
+				// Ajustando DataSource -------------------------------------------------
+
+				if( ds_atualizar || ds_reiniciar ){
+					try{
+						log.info( getMensagem( null, "Log.Atualizando", "DataSource" ) );
+						ajustarDataSource( ds_atualizar, ds_reiniciar, false, true );
+						try( Connection con = getConnection() ){}
+					}catch( Exception e ){
+						log.error( e.getMessage(), e );
+					}
+				}
+
+			}catch( Exception e ){
+				log.error( e.getMessage(), e );
+			}
+
+		}
+
+		private static boolean iguais( Properties p1, Properties p2, String... chaves ) {
+			for( String chave : chaves ){
+				if( ! p1.get( chave ).equals( p2.get( chave ) ) ){
+					return false;
+				}
+			}
+			return true;
+		}
+
 	}
 	
 }

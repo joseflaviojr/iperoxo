@@ -2,7 +2,7 @@
 
 FROM openjdk:slim
 
-LABEL description="Ipe-roxo 1.0-A18"
+LABEL description="Ipe-roxo 1.0-A19"
 LABEL maintainer="Jose Flavio de Souza Dias Junior <email@joseflavio.com>"
 
 #------------------------------

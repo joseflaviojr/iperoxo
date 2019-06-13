@@ -4,18 +4,18 @@ Biblioteca Java que fornece os recursos básicos para o pleno funcionamento de u
 
 ## Versão Atual
 
-1.0-A18
+1.0-A19
 
 Padrão de versionamento: [JFV](http://joseflavio.com/jfv)
 
 ## Como Usar
 
-Ipê-roxo está disponível como biblioteca Java no repositório [Maven](http://search.maven.org/#artifactdetails%7Ccom.joseflavio%7Ciperoxo%7C1.0-A18%7Cjar).
+Ipê-roxo está disponível como biblioteca Java no repositório [Maven](http://search.maven.org/#artifactdetails%7Ccom.joseflavio%7Ciperoxo%7C1.0-A19%7Cjar).
 
 Gradle:
 
 ```
-compile 'com.joseflavio:iperoxo:1.0-A18'
+compile 'com.joseflavio:iperoxo:1.0-A19'
 ```
 
 Maven:
@@ -24,7 +24,7 @@ Maven:
 <dependency>
     <groupId>com.joseflavio</groupId>
     <artifactId>iperoxo</artifactId>
-    <version>1.0-A18</version>
+    <version>1.0-A19</version>
 </dependency>
 ```
 
@@ -69,7 +69,7 @@ gradle clean build
 
 ## Publicação
 
-Para compilar e publicar os arquivos finais do projeto no repositório [Maven](http://search.maven.org/#artifactdetails%7Ccom.joseflavio%7Ciperoxo%7C1.0-A18%7Cjar), executar no terminal:
+Para compilar e publicar os arquivos finais do projeto no repositório [Maven](http://search.maven.org/#artifactdetails%7Ccom.joseflavio%7Ciperoxo%7C1.0-A19%7Cjar), executar no terminal:
 
 ```sh
 gradle clean uploadArchives

@@ -14,7 +14,7 @@ A figura a seguir ilustra o esquema geral do Ipê-roxo:
 
 ## Versão Atual
 
-1.0-A18
+1.0-A19
 
 Padrão de versionamento: [JFV](http://joseflavio.com/jfv)
 

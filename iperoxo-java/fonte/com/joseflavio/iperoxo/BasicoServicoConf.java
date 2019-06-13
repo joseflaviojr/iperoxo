@@ -39,17 +39,12 @@
 
 package com.joseflavio.iperoxo;
 
-import com.joseflavio.urucum.validacao.Escopo;
-import com.joseflavio.urucum.validacao.ValidacaoUtil;
-
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
-import java.util.List;
-import java.util.Map;
-import java.util.ResourceBundle;
-import java.util.Set;
+
+import com.joseflavio.urucum.validacao.Escopo;
 
 /**
  * Configuração de {@link BasicoServico}.
@@ -60,7 +55,8 @@ import java.util.Set;
 public @interface BasicoServicoConf {
     
     /**
-     * O {@link BasicoServico} necessita de {@link BancoDeDados}?
+     * Inicializar automaticamente o {@link BancoDeDados}?
+     * @see BasicoServico#$BancoDeDados
      */
     boolean bancoDeDados() default true;
     
@@ -70,18 +66,18 @@ public @interface BasicoServicoConf {
     int transacoes() default 1;
     
     /**
-     * O {@link BasicoServico} necessita de {@link BancoDeDados#commit()} ou {@link BancoDeDados#rollback()} automático?
+     * {@link BancoDeDados#commit()} ou {@link BancoDeDados#rollback()} automático?
      */
     boolean commit() default true;
     
     /**
-     * É necessário {@link ValidacaoUtil#validar(Object, List, boolean, Map, ResourceBundle, Set) validar} o {@link BasicoServico}?
-     * @see ValidacaoUtil#validar(Object, List, boolean, Map, ResourceBundle, Set)
+     * {@link BasicoServico#validar() Validar} automaticamente o {@link BasicoServico}?
+     * @see BasicoServico#validar()
      */
     boolean validacao() default true;
     
     /**
-     * {@link Escopo}s a desconsiderar na {@link ValidacaoUtil#validar(Object, List, boolean, Map, ResourceBundle, Set) validação} do {@link BasicoServico}.
+     * {@link Escopo}s a desconsiderar na {@link BasicoServico#validar() validação} do {@link BasicoServico}.
      */
     String[] omissao() default { "Automatico" };
 	

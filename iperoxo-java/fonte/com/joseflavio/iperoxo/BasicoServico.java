@@ -39,16 +39,18 @@
 
 package com.joseflavio.iperoxo;
 
+import java.io.IOException;
+import java.io.Serializable;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.util.ResourceBundle;
+
 import com.joseflavio.copaiba.CopaibaConexao;
 import com.joseflavio.urucum.comunicacao.Mensagem;
 import com.joseflavio.urucum.comunicacao.Mensagem.Tipo;
 import com.joseflavio.urucum.comunicacao.Resposta;
 import com.joseflavio.urucum.texto.StringUtil;
 import com.joseflavio.urucum.validacao.ValidacaoUtil;
-
-import java.io.IOException;
-import java.io.Serializable;
-import java.util.ResourceBundle;
 
 /**
  * {@link Servico} básico que monta uma {@link Resposta} enquanto utiliza, opcionalmente, um {@link BancoDeDados}.
@@ -83,7 +85,7 @@ public abstract class BasicoServico <T extends Serializable> extends Servico<T> 
 		
 		try{
 			
-			if( lid == null ) lid = IpeRoxo.getPropriedade( "ResourceBundle.Locale.Default", "pt" );
+			if( lid == null ) lid = IpeRoxo.getLinguagemPadrao();
 			$ResourceBundle = IpeRoxo.getResourceBundle( lid );
 			
 			if( is$BancoDeDados() && IpeRoxo.getEntityManagerFactory() != null ){
@@ -92,7 +94,7 @@ public abstract class BasicoServico <T extends Serializable> extends Servico<T> 
 			
 			try{
 				
-				if( is$Validacao() && ! ValidacaoUtil.validar( this, $Resposta.getMensagens(), $ResourceBundle, get$Omissao() ) ){
+				if( is$Validacao() && ! validar() ){
 					throw new IOException();
 				}
 				
@@ -149,7 +151,6 @@ public abstract class BasicoServico <T extends Serializable> extends Servico<T> 
 	protected void posProcessamento() {
 	}
 	
-	
 	private boolean is$BancoDeDados() {
 		return $Configuracao != null ? $Configuracao.bancoDeDados() : true;
 	}
@@ -170,6 +171,81 @@ public abstract class BasicoServico <T extends Serializable> extends Servico<T> 
 		return $Configuracao != null ? $Configuracao.omissao() : new String[]{ "Automatico" };
 	}
 	
+	/**
+	 * {@link ValidacaoUtil#validar(Object, java.util.List, ResourceBundle, String...) Validação}
+	 * deste {@link BasicoServico} considerando seus próprios recursos.
+	 * @see ValidacaoUtil#validar(Object, java.util.List, ResourceBundle, String...)
+	 */
+	public boolean validar()
+		throws IllegalAccessException, InstantiationException, InvocationTargetException {
+		
+		return ValidacaoUtil.validar(
+			this,
+			$Resposta.getMensagens(),
+			$ResourceBundle,
+			get$Omissao()
+		);
+
+	}
+	
+	/**
+	 * {@link ValidacaoUtil#validar(Object, java.util.List, boolean, java.util.Map, ResourceBundle, String...) Validação}
+	 * deste {@link BasicoServico} considerando seus próprios recursos.
+	 * @see ValidacaoUtil#validar(Object, java.util.List, boolean, java.util.Map, ResourceBundle, String...)
+	 */
+	public boolean validar( boolean recursivamente, String... desconsiderar )
+		throws IllegalAccessException, InstantiationException, InvocationTargetException {
+		
+		return ValidacaoUtil.validar(
+			this,
+			$Resposta.getMensagens(),
+			recursivamente,
+			null,
+			$ResourceBundle,
+			desconsiderar
+		);
+
+	}
+
+	/**
+	 * {@link ValidacaoUtil#validar(Object, java.util.List, boolean, java.util.Map, ResourceBundle, String...) Validação}
+	 * de um {@link Object objeto} qualquer considerando os recursos deste {@link BasicoServico}.
+	 * @see ValidacaoUtil#validar(Object, java.util.List, boolean, java.util.Map, ResourceBundle, String...)
+	 */
+	public boolean validar( Object objeto, boolean recursivamente, String... desconsiderar )
+		throws IllegalAccessException, InstantiationException, InvocationTargetException {
+		
+		return ValidacaoUtil.validar(
+			objeto,
+			$Resposta.getMensagens(),
+			recursivamente,
+			null,
+			$ResourceBundle,
+			desconsiderar
+		);
+
+	}
+
+	/**
+	 * {@link ValidacaoUtil#validar(Object, String, java.util.List, boolean, java.util.Map, ResourceBundle, java.util.Set) Validação}
+	 * de um {@link Field campo} de {@link Object objeto} qualquer considerando os recursos deste {@link BasicoServico}.
+	 * @see ValidacaoUtil#validar(Object, String, java.util.List, boolean, java.util.Map, ResourceBundle, java.util.Set)
+	 */
+	public boolean validar( Object objeto, String campo, boolean recursivamente )
+		throws IllegalAccessException, InstantiationException, InvocationTargetException, NoSuchFieldException {
+		
+		return ValidacaoUtil.validar(
+			objeto,
+			campo,
+			$Resposta.getMensagens(),
+			recursivamente,
+			null,
+			$ResourceBundle,
+			null
+		);
+
+	}
+
 	/**
 	 * Encerra a {@link #executar() execução} do {@link BasicoServico} através de {@link IOException},
 	 * definindo na {@link Resposta} um {@link Resposta#setCodigo(int) código} e

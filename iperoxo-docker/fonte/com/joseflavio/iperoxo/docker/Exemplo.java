@@ -39,6 +39,9 @@
 
 package com.joseflavio.iperoxo.docker;
 
+import java.io.IOException;
+import java.util.Date;
+
 import com.joseflavio.iperoxo.BasicoServico;
 import com.joseflavio.iperoxo.BasicoServicoConf;
 import com.joseflavio.urucum.aparencia.Nome;
@@ -47,9 +50,6 @@ import com.joseflavio.urucum.comunicacao.Mensagem.Tipo;
 import com.joseflavio.urucum.texto.StringUtil;
 import com.joseflavio.urucum.validacao.NaoNulo;
 import com.joseflavio.urucum.validacao.NaoVazio;
-
-import java.io.IOException;
-import java.util.Date;
 
 /**
  * Exemplo de {@link BasicoServico}.
@@ -68,7 +68,6 @@ public class Exemplo extends BasicoServico<String> {
 	private Date data;
 	
 	@NaoNulo(mensagem="IpeRoxo.Exemplo.Arquivo.Vazio")
-	@NaoVazio(mensagem="IpeRoxo.Exemplo.Arquivo.Vazio")
 	private Arquivo[] arquivo;
 
 	private String cookieTeste;
@@ -81,6 +80,10 @@ public class Exemplo extends BasicoServico<String> {
 	protected void processar() throws IOException {
 		
 		try{
+
+			if( arquivo.length == 0 ){
+				retornarErro( "IpeRoxo.Exemplo.Arquivo.Vazio" );
+			}
 
 			$Resposta.mais( Tipo.EXITO, null, getMensagem( "IpeRoxo.Exemplo.Exito" ) );
 			$Resposta.mais( Tipo.INFORMACAO, null, texto + "\n" + data.toString() );
@@ -100,8 +103,8 @@ public class Exemplo extends BasicoServico<String> {
 			}
 			
 			$Resposta.mais( Tipo.INFORMACAO, null, "JSON: " + $CopaibaEstado );
-			
-			$Resposta.setResultado( getMensagem( "IpeRoxo.Exemplo.Teste", "Exemplo" ) );
+
+			$Resposta.setResultado( getMensagem( "IpeRoxo.Exemplo.Teste", Exemplo.class.getName() ) );
 			
 		}catch( Exception e ){
 			if( e instanceof IOException ) throw (IOException) e;

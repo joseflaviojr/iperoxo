@@ -10,7 +10,7 @@ A aplicação Web do Ipê-roxo é responsável por manter a interface de comunic
 
 ## Versão Atual
 
-1.0-A18
+1.0-A19
 
 Padrão de versionamento: [JFV](http://joseflavio.com/jfv)
 
