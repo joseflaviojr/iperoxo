@@ -4,6 +4,8 @@ Modelo de software multicamada.
 
 Multilayered software model.
 
+**ATENÇÃO!!!** Parte do modelo Web está sendo remodelada para receber novos recursos que proporcionarão uma maior integração entre Java e JavaScript, a fim de reduzir diferenças de codificação entre as camadas servidor/cliente. Para mais informações, entrar em contato através de *email@joseflavio.com*.
+
 ## Descrição
 
 O Ipê-roxo é um modelo de software multicamada que utiliza a [Copaíba](http://joseflavio.com/copaiba) como base de comunicação.

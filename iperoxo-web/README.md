@@ -2,6 +2,8 @@
 
 Modelo de aplicação Web para execução em navegador ou [Cordova](https://cordova.apache.org/), baseado em HTML5, CSS3 e JavaScript, compondo parte do [Ipê-roxo](https://github.com/joseflaviojr/iperoxo).
 
+**ATENÇÃO!!!** Parte do modelo Web está sendo remodelada para receber novos recursos que proporcionarão uma maior integração entre Java e JavaScript, a fim de reduzir diferenças de codificação entre as camadas servidor/cliente. Para mais informações, entrar em contato através de *email@joseflavio.com*.
+
 ## Descrição
 
 A aplicação Web do Ipê-roxo é responsável por manter a interface de comunicação do usuário com o sistema. No esquema geral do Ipê-roxo (figura abaixo), o módulo "Navegador Web" contém a aplicação Web aqui especificada.
