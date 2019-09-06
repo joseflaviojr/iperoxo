@@ -8,7 +8,7 @@ var configuracao = {
     /**
      * Versão do Ipê-roxo.
      */
-    iperoxo_versao                   : "1.0-A19",
+    iperoxo_versao                   : "1.0-A20",
 
     /**
      * Nome da função que inicializa a aplicação.
@@ -35,14 +35,15 @@ var configuracao = {
 
     /**
      * Componentes visuais disponíveis.
-     * @see {@link comp/iperoxo.html}
+     * @see {@link html-dep/iperoxo-componentes.html}
+     * @see {@link html/componentes.html}
      */
     componentes                      : {},
 
     /**
      * Arquivos que definem os componentes visuais.
      */
-    componentes_arquivos             : [ "iperoxo.html", "extra.html" ]
+    componentes_arquivos             : [ "html-dep/iperoxo-componentes.html", "html/componentes.html" ]
 
 };
 

@@ -39,6 +39,7 @@
 
 package com.joseflavio.iperoxo;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -52,6 +53,7 @@ import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.time.ZoneId;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -61,6 +63,7 @@ import java.util.MissingResourceException;
 import java.util.Properties;
 import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
+import java.util.TimeZone;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
@@ -75,6 +78,7 @@ import com.ibm.etcd.api.KeyValue;
 import com.ibm.etcd.api.RangeResponse;
 import com.ibm.etcd.client.EtcdClient;
 import com.ibm.etcd.client.kv.KvClient;
+import com.ibm.icu.text.MessageFormat;
 import com.joseflavio.copaiba.Copaiba;
 import com.joseflavio.copaiba.CopaibaConexao;
 import com.joseflavio.copaiba.CopaibaException;
@@ -106,12 +110,17 @@ public final class IpeRoxo {
 	 * {@link Properties} correspondente a Configuracao.properties
 	 */
 	private static final Properties configuracao = new Properties();
+
+	/**
+	 * Fragmentos.txt
+	 */
+	private static final Map<String,String> fragmentos = new HashMap<>();
 	
 	/**
 	 * Mensagens_pt.properties, Mensagens_en.properties, etc.
 	 */
 	private static final Map<String,ResourceBundle> mensagens = new HashMap<>();
-	
+
 	/**
 	 * Codigos.properties
 	 */
@@ -163,18 +172,85 @@ public final class IpeRoxo {
 			}
 
 
+			// Linguagem ----------------------------------------------------------------
+
+			String linguagem = getPropriedade( "Locale.Default" );
+		
+			if( StringUtil.tamanho( linguagem ) > 0 ){
+				Locale.setDefault( Locale.forLanguageTag( linguagem ) );
+			}
+
+
+			// Zona de Tempo ------------------------------------------------------------
+
+			String zonatempo = getPropriedade( "TimeZone.Default" );
+		
+			if( StringUtil.tamanho( zonatempo ) > 0 ){
+				TimeZone.setDefault( TimeZone.getTimeZone( ZoneId.of(zonatempo) ) );
+			}
+
+
+			// Fragmentos.txt -----------------------------------------------------------
+
+			String      alvo = "Fragmentos.txt";
+			InputStream is   = IpeRoxo.class.getResourceAsStream( "/" + alvo );
+
+			if( is != null ){
+				
+				log.info( getMensagem( null, "Log.Carregando", alvo ) );
+
+				try( BufferedReader texto = new BufferedReader( new InputStreamReader( is, "UTF-8" ) ) ){
+					
+					String        chave = null;
+					StringBuilder valor = new StringBuilder(256);
+
+					String linha;
+					while( ( linha = texto.readLine() ) != null ){
+						int tam = linha.length();
+						if( tam > 2 && linha.charAt(0) == '[' && linha.charAt(tam-1) == ']' ){
+							if( chave != null ){
+								int ult = valor.length() - 1;
+								if( valor.charAt(ult) == '\n' ) valor.deleteCharAt(ult);
+								fragmentos.put( chave, valor.toString() );
+								valor.delete( 0, valor.length() );
+							}
+							chave = linha.substring( 1, tam - 1 );
+						}else if( chave != null ){
+							valor.append( valor.length() > 0 ? "\n" + linha : linha );
+						}
+					}
+
+					if( chave != null ){
+						int ult = valor.length() - 1;
+						if( valor.charAt(ult) == '\n' ) valor.deleteCharAt(ult);
+						fragmentos.put( chave, valor.toString() );
+						valor.delete( 0, valor.length() );
+					}
+
+				}
+
+			}
+
+
 			// Codigos.properties -------------------------------------------------------
-			
-			InputStream codigosIS = IpeRoxo.class.getResourceAsStream( "/Codigos.properties" );
-			if( codigosIS != null ){
+
+			alvo = "Codigos.properties";
+			is   = IpeRoxo.class.getResourceAsStream( "/" + alvo );
+
+			if( is != null ){
+				
+				log.info( getMensagem( null, "Log.Carregando", alvo ) );
+
 				Properties codigosProps = new Properties();
-				try( Reader texto = new InputStreamReader( codigosIS, "UTF-8" ) ){
+				try( Reader texto = new InputStreamReader( is, "UTF-8" ) ){
 					codigosProps.load( texto );
 				}
+
 				for( Object chave : codigosProps.keySet() ){
 					String nome = chave.toString();
 					codigos.put( nome, Integer.parseInt( codigosProps.getProperty( nome ) ) );
 				}
+
 			}
 
 
@@ -566,12 +642,12 @@ public final class IpeRoxo {
 	}
 
 	/**
-	 * {@link #getPropriedade(String) Propriedade} "ResourceBundle.Locale.Default" ou {@link Locale#getDefault()}.
+	 * {@link #getPropriedade(String) Propriedade} "Locale.Default" ou {@link Locale#getDefault()}.
 	 * @see Locale#toLanguageTag()
 	 */
-	public static String getLinguagemPadrao() {
+	public static String getLinguagem() {
 		
-		String linguagem = getPropriedade( "ResourceBundle.Locale.Default" );
+		String linguagem = getPropriedade( "Locale.Default" );
 		
 		if( StringUtil.tamanho( linguagem ) == 0 ){
 			return Locale.getDefault().toLanguageTag();
@@ -580,43 +656,45 @@ public final class IpeRoxo {
 		}
 
 	}
-	
+
+	/**
+	 * {@link #getPropriedade(String) Propriedade} "TimeZone.Default" ou {@link ZoneId#systemDefault()}.
+	 * @see ZoneId#of(String)
+	 */
+	public static String getZonaTempo() {
+		
+		String zona = getPropriedade( "TimeZone.Default" );
+		
+		if( StringUtil.tamanho( zona ) == 0 ){
+			return ZoneId.systemDefault().getId();
+		}else{
+			return zona;
+		}
+
+	}
+
 	/**
 	 * {@link ResourceBundle} correspondente a uma {@link Locale}.<br>
 	 * {@link ResourceBundle#getBaseBundleName()} == {@link #getPropriedade(String) propriedade} "ResourceBundle.BaseName"<br>
 	 * {@link PropertyResourceBundle}'s (arquivos ".properties") devem estar codificados conforme {@link #getPropriedade(String) propriedade} "ResourceBundle.Charset". Veja {@link ResourceBundleCharsetControl}.
-	 * @param linguagem Formato IETF BCP 47. Veja {@link Locale#toLanguageTag()}. {@code null} ou {@code vazio} == {@link #getLinguagemPadrao()}.
+	 * @param linguagem Formato IETF BCP 47. Veja {@link Locale#toLanguageTag()}. {@code null} ou {@code vazio} == {@link #getLinguagem()}.
 	 * @see #getMensagem(String, String, Object...)
 	 */
 	public static ResourceBundle getResourceBundle( String linguagem ) throws IOException {
 		
-		boolean padrao     = StringUtil.tamanho( linguagem ) == 0;
-		Locale  localidade = null;
+		boolean padrao = StringUtil.tamanho( linguagem ) == 0;
 		
-		if( padrao ){
-			linguagem = getPropriedade( "ResourceBundle.Locale.Default" );
-			if( StringUtil.tamanho( linguagem ) == 0 ){
-				localidade = Locale.getDefault();
-				linguagem  = localidade.toLanguageTag();
-			}
-		}
-		
+		if( padrao ) linguagem = getLinguagem();
 		linguagem = linguagem.replace( '_', '-' );
 		
 		ResourceBundle rb = mensagens.get( linguagem );
 		if( rb != null ) return rb;
 		
-		String baseName = getPropriedade( "ResourceBundle.BaseName", "Mensagens" );
-		
 		try{
 
-			if( localidade == null ){
-				localidade = Locale.forLanguageTag( linguagem );
-			}
-			
 			rb = ResourceBundle.getBundle(
-                baseName,
-                localidade,
+                getPropriedade( "ResourceBundle.BaseName", "Mensagens" ),
+                Locale.forLanguageTag( linguagem ),
                 new ResourceBundleCharsetControl( getPropriedade( "ResourceBundle.Charset", "UTF-8" ) )
             );
 			
@@ -640,8 +718,8 @@ public final class IpeRoxo {
 	 * @see StringUtil#formatar(ResourceBundle, String, Object...)
 	 * @see #getResourceBundle(String)
 	 */
-	public static String getMensagem( String linguagem, String mensagem, Object... parametros ) throws IOException, MissingResourceException {
-		return StringUtil.formatar( getResourceBundle( linguagem ), mensagem, parametros );
+	public static String getMensagem( String linguagem, String mensagem, Object... argumentos ) throws IOException, MissingResourceException {
+		return StringUtil.formatar( getResourceBundle( linguagem ), mensagem, argumentos );
 	}
 	
 	/**
@@ -653,6 +731,18 @@ public final class IpeRoxo {
 	public static int getCodigo( String chave ) {
 		Integer codigo = codigos.get( chave );
 		return codigo != null ? codigo : 0;
+	}
+
+	/**
+	 * Obtém e formata um fragmento de código fonte armazenado em "Fragmentos.txt".
+	 * @param chave Chave de identificação do fragmento.
+	 * @return null, se inexistente.
+	 * @see MessageFormat#format(String, Object...)
+	 */
+	public static String getFragmento( String chave, Object... argumentos ) {
+		String frag = fragmentos.get( chave );
+		if( frag == null ) return null;
+		else return MessageFormat.format( frag, argumentos );
 	}
 	
 	/**

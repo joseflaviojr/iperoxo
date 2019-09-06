@@ -12,8 +12,7 @@ This file is part of Ipê-roxo - <http://joseflavio.com/iperoxo/>.
     <link href="../css-dep/bootstrap-theme.min.css" rel="stylesheet" />
     <link href="../css-dep/bootstrap-select.min.css" rel="stylesheet">
     <link href="../css-dep/jasny-bootstrap.min.css" rel="stylesheet" />
-    <link href="../css-dep/bootstrap-datetimepicker.min.css" rel="stylesheet" />
-    <link href="../css/iperoxo.css" rel="stylesheet" />
+    <link href="../css-dep/iperoxo.css" rel="stylesheet" />
     <link href="../css/estilo.css" rel="stylesheet" />
   </head>
 
@@ -41,7 +40,7 @@ This file is part of Ipê-roxo - <http://joseflavio.com/iperoxo/>.
         funcInicio=""
         funcPreEnvio=""
         funcExito="mensagensCopaiba"
-        funcErro="mensagemErroUxiamarelo">
+        funcErro="mensagensErroHTTP">
 
         <!-- Mensagens -->
         <div class="mensagens">
@@ -50,14 +49,19 @@ This file is part of Ipê-roxo - <http://joseflavio.com/iperoxo/>.
         <!-- Especificação da Copaíba, classe e método a ser executado remotamente. -->
         <ipe-copaiba copaiba="copaiba" classe="com.joseflavio.iperoxo.docker.Exemplo" metodo="executar" />
 
-        <!-- Identificador da sessão. Atualização automática. -->
-        <ipe-oculto class="sid" nome="sid" valor="" />
-
-        <!-- Identificador da tela corrente. Atualização automática. -->
-        <ipe-oculto class="tid" nome="tid" valor="" />
-
-        <!-- Linguagem do usuário. Atualização automática. -->
-        <ipe-oculto class="lid" nome="lid" valor="pt-BR" />
+        <!-- Identificador da sessão. -->
+        <ipe-oculto class="sid" nome="sid" />
+        
+        <!-- Linguagem do usuário no formato IETF BCP 47. -->
+        <!-- https://docs.oracle.com/javase/8/docs/api/java/util/Locale.html#forLanguageTag-java.lang.String- -->
+        <ipe-oculto class="lid" nome="lid" />
+        
+        <!-- Zona de tempo do usuário. -->
+        <!-- https://docs.oracle.com/javase/8/docs/api/java/time/ZoneId.html#of-java.lang.String- -->
+        <ipe-oculto class="zid" nome="zid" />
+        
+        <!-- Identificador da tela corrente. -->
+        <ipe-oculto class="tid" nome="tid" />
 
         <ipe-painel rotulo="texto" dica="texto" estilo="informacao">
 
@@ -65,14 +69,14 @@ This file is part of Ipê-roxo - <http://joseflavio.com/iperoxo/>.
         <ipe-texto nome="texto" rotulo="texto" rotulo-interno="texto" dica="texto" tipo="texto" valor="" sugestao="sim" />
 
         <!-- Exemplo de campo para entrada de texto mais complexo -->
-        <ipe-texto nome="texto-complexo" rotulo="texto" rotulo-interno="texto" valor="" mascara="(00) 0000-0000" sugestao="nao" rotulo-origem="/uxiamarelo/rest/copaiba/solicitar/com.joseflavio.iperoxo.docker.Exemplo/toString">
-          <ipe-texto-acao icone="remove" ao-clicar="var comp = esteComp(this); if(getCompEditavel(comp)) setCompValor(comp, '');" />
+        <ipe-texto nome="texto-complexo" rotulo="texto" rotulo-interno="texto" valor="" mascara="(00) 0000[0]-`0000" sugestao="nao" rotulo-origem="/uxiamarelo/rest/copaiba/solicitar/com.joseflavio.iperoxo.docker.Exemplo/toString">
+          <ipe-texto-acao icone="remove" ao-clicar="var comp = esteComp(this, true); if(getCompEditavel(comp)) setCompValor(comp, '');" />
         </ipe-texto>
 
         </ipe-painel>
 
         <!-- Exemplo de campo para entrada de data/hora -->
-        <ipe-data nome="data" rotulo="data" rotulo-interno="data" formato="L LT" sugestao="nao" ao-mudar="" />
+        <ipe-data nome="data" rotulo="data" rotulo-interno="data" data="sim" hora="sim" sugestao="nao" />
 
         <!-- Exemplo de campo para entrada de arquivo(s) -->
         <ipe-arquivo nome="arquivo" rotulo="arquivo" rotulo-interno="arquivo" modo="multiplo" aceitar=".txt, .png" />

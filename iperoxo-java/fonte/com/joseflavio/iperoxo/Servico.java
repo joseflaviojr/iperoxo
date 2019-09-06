@@ -39,12 +39,13 @@
 
 package com.joseflavio.iperoxo;
 
-import com.joseflavio.copaiba.CopaibaConexao;
-import com.joseflavio.urucum.comunicacao.Resposta;
-
 import java.io.IOException;
 import java.io.Serializable;
+import java.time.ZoneId;
 import java.util.Locale;
+
+import com.joseflavio.copaiba.CopaibaConexao;
+import com.joseflavio.urucum.comunicacao.Resposta;
 
 /**
  * Base, não obrigatória, para serviços a serem expostos através de {@link CopaibaConexao#solicitar(String, String, String)}.
@@ -54,9 +55,11 @@ public abstract class Servico <T extends Serializable> {
 	
 	protected String sid;
 	
-	protected String tid;
-	
 	protected String lid;
+
+	protected String zid;
+	
+	protected String tid;
 	
 	protected String $CopaibaEstado;
 	
@@ -81,20 +84,9 @@ public abstract class Servico <T extends Serializable> {
 	}
 
 	/**
-	 * Identificador da tela corrente.
-	 */
-	public String getTid() {
-		return tid;
-	}
-
-	public Servico<T> setTid( String tid ) {
-		this.tid = tid;
-		return this;
-	}
-	
-	/**
-	 * Linguagem do usuário, no formato IETF BCP 47.
+	 * Linguagem do usuário no formato IETF BCP 47.
 	 * @see Locale#toLanguageTag()
+	 * @see IpeRoxo#getLinguagem()
 	 * @see IpeRoxo#getResourceBundle(String)
 	 * @see IpeRoxo#getMensagem(String, String, Object...)
 	 */
@@ -107,6 +99,35 @@ public abstract class Servico <T extends Serializable> {
 	 */
 	public Servico<T> setLid( String lid ) {
 		this.lid = lid;
+		return this;
+	}
+
+	/**
+	 * Zona de tempo do usuário.
+	 * @see ZoneId#of(String)
+	 * @see IpeRoxo#getZonaTempo()
+	 */
+	public String getZid() {
+		return zid;
+	}
+	
+	/**
+	 * @see #getZid()
+	 */
+	public Servico<T> setZid( String zid ) {
+		this.zid = zid;
+		return this;
+	}
+
+	/**
+	 * Identificador da tela corrente.
+	 */
+	public String getTid() {
+		return tid;
+	}
+
+	public Servico<T> setTid( String tid ) {
+		this.tid = tid;
 		return this;
 	}
 	

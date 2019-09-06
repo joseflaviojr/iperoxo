@@ -45,6 +45,26 @@
 */
 
 //--------------------------------------------------------------------------
+// Importação e definição de tipos
+
+$.each([ "ChronoField", "ChronoLocalDate", "ChronoLocalDateTime",
+         "ChronoUnit", "ChronoZonedDateTime", "Clock", "DateTimeException",
+         "DateTimeFormatter", "DateTimeFormatterBuilder",
+         "DateTimeParseException", "DayOfWeek", "Duration", "Instant",
+         "IsoChronology", "IsoFields", "LocalDate", "LocalDateTime",
+         "LocalTime", "Month", "MonthDay", "Period", "Temporal",
+         "TemporalAccessor", "TemporalAdjuster", "TemporalAdjusters",
+         "TemporalAmount", "TemporalField", "TemporalQueries",
+         "TemporalQuery", "TemporalUnit", "Year", "YearConstants",
+         "YearMonth", "ZonedDateTime", "ZoneId", "ZoneOffset",
+         "ZoneOffsetTransition", "ZoneRegion", "ZoneRules",
+         "ZoneRulesProvider" ],
+    function(i, classe){
+        window[classe] = JSJoda[classe];
+    }
+);
+
+//--------------------------------------------------------------------------
 
 /**
  * $(document)
@@ -69,10 +89,24 @@ var url_args = {};
 var sid = "";
 
 /**
- * Linguagem atualmente em uso, no formato IETF BCP 47.
+ * Linguagem em uso, no formato IETF BCP 47.
  * @see setLinguagem
+ * @see https://docs.oracle.com/javase/8/docs/api/java/util/Locale.html#forLanguageTag-java.lang.String-
  */
-var lid = "en-US";
+var lid = "en";
+
+/**
+ * Identificador da zona de tempo em uso, podendo ser deslocamento fixo (offset).
+ * @see setZonaTempo
+ * @see https://docs.oracle.com/javase/8/docs/api/java/time/ZoneId.html#of-java.lang.String-
+ */
+var zid = "+00:00";
+
+/**
+ * Objeto {@link ZoneId} correspondente ao {@link zid}.
+ * @see setZonaTempo
+ */
+var zona_tempo = ZoneId.of(zid).normalized();
 
 /**
  * Dicionário corrente, conforme {@link lid}.
@@ -143,10 +177,10 @@ var tmp_elemento_ativo;
 //--------------------------------------------------------------------------
 
 /**
- * Atividade a ser executada quando o dispositivo estiver pronto.
- * @param atividade Função a executar quando "deviceready".
+ * Atividade a ser executada quando todos os recursos, inclusive o DOM, estiverem prontos para uso.
+ * Evento $(document).ready() em jQuery ou "deviceready" em Cordova.
  */
-function inicio( atividade ) {
+function pronto( atividade ) {
     if( typeof(cordova) !== "undefined" ){
         document.addEventListener("deviceready", atividade, false);
     }else{
@@ -157,7 +191,18 @@ function inicio( atividade ) {
 //--------------------------------------------------------------------------
 
 /**
- * Gera um identificador de objeto.
+ * @deprecated
+ * @see pronto
+ */
+function inicio( atividade ) {
+    console.warn("Método inicio() em desuso. Usar pronto().");
+    return pronto(atividade);
+}
+
+//--------------------------------------------------------------------------
+
+/**
+ * Gera um identificador de objeto JavaScript.
  * @param aleatorio Sufixo numérico aleatório?
  * @param supressao ID's que não devem ser retornados.
  */
@@ -167,7 +212,7 @@ function gerarID( aleatorio, supressao ) {
         return "id_" + ( aleatorio ? Math.floor( Math.random() * 999999999 ) : ++id_geracao_sequencia );
     }
 
-    if( supressao != undefined && supressao.length > 0 ){
+    if( supressao !== undefined && supressao.length > 0 ){
         var id;
         do{
             id = _gerar();
@@ -177,6 +222,20 @@ function gerarID( aleatorio, supressao ) {
 
     return _gerar();
 
+}
+
+//--------------------------------------------------------------------------
+
+/**
+ * Normaliza um nome para que se torne um identificador JavaScript válido.
+ * @param {string} nome Nome a ser normalizado.
+ * @param {RegExp} padrao Expressão regular que define os caracteres que serão substituídos. Padrão = /[-.~/\\@&#:()\[\]{}]/g
+ * @param {string} subst Valor a ser utilizado em substituição. Opcional. Padrão = '_'.
+ */
+function normalizarID( nome, padrao, subst ) {
+    if( padrao === undefined ) padrao = /[-.~/\\@&#:()\[\]{}]/g;
+    if( subst  === undefined ) subst  = '_';
+    return nome.replace(padrao, subst);
 }
 
 //--------------------------------------------------------------------------
@@ -215,18 +274,55 @@ function jsExec( funcao ) {
 //--------------------------------------------------------------------------
 
 /**
- * Especifica o valor de um "cookie".
+ * Retorna o primeiro entre os valores passados por parâmetro que não é vazio.
+ * Entende-se aqui por vazio qualquer valor igual a undefined, null ou "".
+ * Valores do tipo função serão preliminarmente invocados com jsExec().
+ */
+function valorNaoVazio( valor1, valor2, valor3, valor4, valor5 ) {
+
+    function valor( v ) {
+        return typeof(v) === "function" ? jsExec(v) : v;
+    }
+
+    valor1 = valor(valor1);
+    if( valor1 != null && valor1 !== "" ) return valor1;
+
+    valor2 = valor(valor2);
+    if( valor2 != null && valor2 !== "" ) return valor2;
+
+    valor3 = valor(valor3);
+    if( valor3 != null && valor3 !== "" ) return valor3;
+
+    valor4 = valor(valor4);
+    if( valor4 != null && valor4 !== "" ) return valor4;
+
+    return valor5;
+    
+}
+
+//--------------------------------------------------------------------------
+
+/**
+ * Especifica o valor de um "cookie", seja na efetiva estrutura de Cookie HTTP, ou
+ * numa estrutura de chave/valor de um objeto-repositório.
  * @param chave Chave que identifica o cookie.
  * @param valor Valor do cookie.
- * @param minutos Tempo máximo de existência.
+ * @param minutos Tempo máximo de existência. Apenas para Cookie HTTP.
+ * @param repositorio Repositório de cookies. undefined == document.cookie
+ * @see getCookie
+ * @see https://pt.wikipedia.org/wiki/Cookie_(inform%C3%A1tica)
  */
-function setCookie( chave, valor, minutos ) {
-    if( minutos === undefined ){
-      document.cookie = chave + "=" + encodeURI(valor) + ";path=/";
+function setCookie( chave, valor, minutos, repositorio ) {
+    if( repositorio === undefined ){
+        if( minutos === undefined || minutos === 0 ){
+          document.cookie = chave + "=" + encodeURI(valor) + ";path=/";
+        }else{
+          var expiracao = new Date();
+          expiracao.setTime( expiracao.getTime() + (minutos*60*1000) );
+          document.cookie = chave + "=" + encodeURI(valor) + ";expires=" + expiracao.toUTCString() + ";path=/";
+        }
     }else{
-      var expiracao = new Date();
-      expiracao.setTime( expiracao.getTime() + (minutos*60*1000) );
-      document.cookie = chave + "=" + encodeURI(valor) + ";expires=" + expiracao.toUTCString() + ";path=/";
+        repositorio[chave] = valor;
     }
 }
 
@@ -235,20 +331,24 @@ function setCookie( chave, valor, minutos ) {
 /**
  * Retorna o valor de um "cookie".
  * @param chave Chave que identifica o cookie.
- * @param fonte Origem do cookie. undefined == document.cookie
+ * @param repositorio Repositório de cookies. undefined == document.cookie
  * @see setCookie
+ * @see https://pt.wikipedia.org/wiki/Cookie_(inform%C3%A1tica)
  */
-function getCookie( chave, fonte ) {
-    if( fonte === undefined ) fonte = document.cookie;
-    var inicio = chave + "=";
-    var partes = fonte.split(';');
-    for( var i = 0; i < partes.length; i++ ){
-        var p = partes[i].replace(/^\s+/,"");
-        if( p.indexOf(inicio) === 0 ){
-            return decodeURI(p.substring(inicio.length, p.length));
+function getCookie( chave, repositorio ) {
+    if( repositorio === undefined ){
+        var inicio = chave + "=";
+        var partes = document.cookie.split(';');
+        for( var i = 0; i < partes.length; i++ ){
+            var p = partes[i].replace(/^\s+/,"");
+            if( p.indexOf(inicio) === 0 ){
+                return decodeURI(p.substring(inicio.length, p.length));
+            }
         }
+        return "";
+    }else{
+        return repositorio[chave];
     }
-    return "";
 }
 
 //--------------------------------------------------------------------------
@@ -419,14 +519,29 @@ function decodificarBase64url( base64url ) {
 /**
  * Obtém todos os atributos de um elemento HTML, e seus respectivos valores.
  * @param elemento Elemento HTML ou objeto jQuery correspondente.
+ * @param normalizar Função para normalizar/transformar o nome de atributo. Opcional.
+ * @param manterOrig Ao normalizar o nome do atributo, manter também o nome original no resultado? Padrão: false.
  */
-function obterAtributos( elemento ) {
+function obterAtributos( elemento, normalizar, manterOrig ) {
+    
     var lista = elemento instanceof jQuery ? elemento[0].attributes : elemento.attributes;
     var atrib = {};
+
+    if( normalizar === undefined ) normalizar = function(nome){ return nome };
+
     $.each( lista, function(i, o){
-        atrib[o.name] = o.value;
+
+        var nome_orig = o.name;
+        var nome_norm = normalizar(nome_orig);
+
+        atrib[nome_norm] = o.value;
+
+        if( manterOrig ) atrib[nome_orig] = o.value;
+
     } );
+
     return atrib;
+
 }
 
 //--------------------------------------------------------------------------
@@ -522,9 +637,9 @@ function decrementarEspera() {
  * @deprecated
  * @see atualizarAmbiente
  */
-function atualizarComponentesCulturais() {//TODO Remover por desuso
-    console.warn("Método atualizarComponentesCulturais em desuso. Usar atualizarAmbiente.");
-    atualizarAmbiente();
+function atualizarComponentesCulturais() {
+    console.warn("Método atualizarComponentesCulturais() em desuso. Usar atualizarAmbiente().");
+    return atualizarAmbiente();
 }
 
 //--------------------------------------------------------------------------
@@ -557,44 +672,123 @@ function copiarQueryParaJSON( url, json ) {
 
 /**
  * Altera a {@link sid} (ID da Sessão), comumente chamada de "token".
+ * Evento a disparar no final: "iperoxo.sid" (document).
  * @param {string} nova_sid Novo valor da {@link sid}.
- * @param {number} minutos Tempo de vida do cookie correspondente ({@link setCookie}).
+ * @param {function} funcExito Função a ser chamada depois de atualizarAmbiente().
  */
-function setSID( nova_sid, minutos ) {
+function setSID( nova_sid, funcExito ) {
     sid = nova_sid;
-    if( minutos === undefined ) minutos = 365 * 24 * 60;
-    if( configuracao.recurso_geral ) setCookie( "sid", nova_sid, minutos );
     atualizarAmbiente();
+    jsExec(funcExito);
+    html_documento.triggerHandler("iperoxo.sid");
 }
 
 //--------------------------------------------------------------------------
 
 /**
- * Altera a linguagem atual - variável {@link lid}. Padrão: "en-US".
+ * Altera a linguagem atual - variável {@link lid}. Padrão: "en".
  * No final, será chamada a função {@link linguagemAlterada}, se existente, que deveria chamar {@link atualizarAmbiente}.
  * Evento a disparar no final: "iperoxo.lid" (document).
  * @param {string} nome Código da linguagem desejada, preferencialmente no formato IETF BCP 47.
+ * @param {function} funcExito Função a ser chamada depois de atualizarAmbiente().
+ * @see https://docs.oracle.com/javase/8/docs/api/java/util/Locale.html#forLanguageTag-java.lang.String-
  */
-function setLinguagem( nome ) {
+function setLinguagem( nome, funcExito ) {
     
-    lid = nome.split("_").join("-");
-    setCookie( "lid", lid, 365 * 24 * 60 );
+    var _nome = nome.split("-").join("_");
+    var _dic  = js( "dicionario_" + _nome );
+    if( _dic === undefined ) _dic = js( "dicionario_" + _nome.split("_")[0] );
+    if( _dic === undefined ) _dic = dicionario_en_US;
 
-    var nomeDic = nome.split("-").join("_");
-    dicionario = js( "dicionario_" + nomeDic );
-    if( dicionario === undefined ) dicionario = js( "dicionario_" + nomeDic.split("_")[0] );
-    if( dicionario === undefined ) dicionario = dicionario_en_US;
+    $.ajax({
+        
+        url: "etc/" + _dic.mensagens_arquivo,
+        dataType: "text"
 
-    formatador = new MessageFormat(lid).setIntlSupport(true);
-    formatador.currency = "BRL";
+    }).done(function(txt){
 
-    moment.locale(lid);
+        $.extend( _dic, DotProperties.parse(txt) );
 
-    if( typeof(linguagemAlterada) !== "undefined" ) linguagemAlterada();
-    else atualizarAmbiente();
-
-    html_documento.triggerHandler("iperoxo.lid");
+        lid = nome.split("_").join("-");
+        dicionario = _dic;
+        
+        formatador = new MessageFormat(lid);
+        formatador.currency = "BRL";
     
+        if( typeof(linguagemAlterada) !== "undefined" ) linguagemAlterada();
+        else atualizarAmbiente();
+    
+        jsExec(funcExito);
+    
+        html_documento.triggerHandler("iperoxo.lid");
+
+    });
+
+}
+
+//--------------------------------------------------------------------------
+
+/**
+ * Altera a zona de tempo corrente - variável {@link zid}. Padrão: "+00:00".
+ * Números inteiros representando deslocamento fixo em minutos, serão convertidos para o formato "+00:00".
+ * A variável {@link zona_tempo} também será atualizada.
+ * Evento a disparar no final: "iperoxo.zid" (document).
+ * @param {string} zonaId Identificador da zona de tempo, podendo ser um objeto ZoneId ou um deslocamento fixo (offset). Exemplos: "America/Belem", "-03:00", -180
+ * @param {function} funcExito Função a ser chamada depois de atualizarAmbiente().
+ * @see https://docs.oracle.com/javase/8/docs/api/java/time/ZoneId.html#of-java.lang.String-
+ * @see https://docs.oracle.com/javase/8/docs/api/java/time/ZoneId.html#getAvailableZoneIds--
+ */
+function setZonaTempo( zonaId, funcExito ) {
+
+    if( Number.isInteger(zonaId) ){
+        var z;
+        if( zonaId >= 0 ){
+            z = "+";
+        }else{
+            z = "-";
+            zonaId = - zonaId;
+        }
+        var hm = zonaId / 60;
+        z += ("0" + parseInt(hm)).slice(-2);
+        z += ":" + ("0" + Math.round(hm % 1 * 60)).slice(-2);
+        zonaId = z;
+    }
+    
+    if( typeof(zonaId) === "string" ){
+        zid        = zonaId;
+        zona_tempo = ZoneId.of(zid).normalized();
+    }else{
+        zid        = zonaId._id;
+        zona_tempo = zonaId.normalized();
+    }
+
+    atualizarAmbiente();
+    jsExec(funcExito);
+    html_documento.triggerHandler("iperoxo.zid");
+    
+}
+
+//--------------------------------------------------------------------------
+
+/**
+ * Retorna o Unix timestamp, milissegundos desde 01/jan/1970 00:00 UTC, do
+ * objeto do tipo data/hora passado por parâmetro.
+ * @param o Date, Instant, ZonedDateTime, LocalDateTime, LocalDate ou LocalTime.
+ * @param z Zona de tempo a considerar. Opcional.
+ * @throws Error se o tipo do objeto é incompatível.
+ */
+function getTimestamp( o, z ) {
+    
+    if( z == undefined ) z = zona_tempo;
+
+    if     ( o instanceof Date          ) return o.valueOf();
+    else if( o instanceof Instant       ) return o.toEpochMilli();
+    else if( o instanceof ZonedDateTime ) return o.toEpochSecond() * 1000;
+    else if( o instanceof LocalDateTime ) return o.toEpochSecond(z) * 1000;
+    else if( o instanceof LocalDate     ) return o.atStartOfDay(z).toEpochSecond() * 1000;
+    else if( o instanceof LocalTime     ) return o.atDate(LocalDate.of(1970,1,1)).toEpochSecond(z) * 1000;
+    else throw new Error(typeof(o));
+
 }
 
 //--------------------------------------------------------------------------
@@ -710,8 +904,8 @@ function setTexto( elemento, conteudo, carregar ) {
 //--------------------------------------------------------------------------
 
 /**
- * Acrescenta uma mensagem estilizada numa região do HTML, no formato Bootstrap (alerts).<br>
- * A mensagem será inserida no primeiro descendente que contém a classe "mensagens".<br>
+ * Acrescenta uma mensagem estilizada numa região do HTML, no formato Bootstrap (alerts).
+ * A mensagem será inserida no primeiro descendente que contém a classe "mensagens".
  * Se região == null, será utilizado o elemento global que possui id = "mensagens".
  * @param {string} classe Classe CSS da biblioteca Bootstrap. Ex.: "alert-success"
  * @param {string} texto Texto da mensagem, o qual será normalizado com {@link textoHTML}.
@@ -765,7 +959,8 @@ function mensagemErro( texto, regiao ) {
 //--------------------------------------------------------------------------
 
 /**
- * Remove as mensagens ativas e mostra o conjunto novo de mensagens provenientes de Copaíba.
+ * Mostra o conjunto novo de mensagens provenientes de Copaíba.
+ * As mensagens atualmente ativas serão removidas.
  * @param resposta {@link com.joseflavio.urucum.comunicacao.Resposta}
  * @param regiao Região do HTML, conforme regras da função {@link mensagemClassificada}.
  * @see mensagemClassificada
@@ -803,17 +998,58 @@ function mensagensAmplaCopaiba( resposta, status, jqXHR ) {
 //--------------------------------------------------------------------------
 
 /**
- * Remove as mensagens ativas e mostra a mensagem de erro proveniente de Uxi-amarelo.
- * @see mensagemErro
- * @see http://joseflavio.com/uxiamarelo
+ * @deprecated
+ * @see mensagensErroHTTP
  */
 function mensagemErroUxiamarelo( jqXHR, status, errorThrown, regiao ) {
-    limparMensagens( regiao );
-    if( jqXHR.responseJSON !== undefined ){
-        mensagemErro( jqXHR.responseJSON.mensagem, regiao );
-    }else{
-        mensagemErro( jqXHR.status + " - " + jqXHR.statusText, regiao );
+    console.warn("Método mensagemErroUxiamarelo() em desuso. Usar mensagensErroHTTP().");
+    return mensagensErroHTTP( jqXHR, status, errorThrown, regiao );
+}
+
+//--------------------------------------------------------------------------
+
+/**
+ * Mostra as mensagens de erro HTTP recebidas do navegador/cliente, servidor Web, proxy ou Uxi-amarelo.
+ * As mensagens atualmente ativas serão removidas.
+ * @see mensagemErro
+ * @see https://tools.ietf.org/html/rfc7231#section-6.6
+ * @see http://joseflavio.com/uxiamarelo
+ */
+function mensagensErroHTTP( jqXHR, status, errorThrown, regiao ) {
+    
+    function _msgerro( str ) {
+        limparMensagens( regiao );
+        mensagemErro( str, regiao );
     }
+
+    if( jqXHR != null ){
+        
+        var resposta = jqXHR.responseJSON;
+
+        if( resposta != null ){
+
+            if( resposta.mensagens != null ){
+                mensagensCopaiba( resposta, status, jqXHR, regiao );
+
+            }else if( resposta.mensagem != null ){
+                _msgerro( resposta.mensagem );
+
+            }else{
+                _msgerro( JSON.stringify(resposta) );
+            }
+
+        }else if( jqXHR.status != null ){
+            if( jqXHR.status == 0 ) _msgerro( dicionario.erro_comunicacao );
+            else _msgerro( jqXHR.status + " - " + jqXHR.statusText );
+
+        }else{
+            _msgerro( typeof(jqXHR) === "string" ? jqXHR : JSON.stringify(jqXHR) );
+        }
+
+    }else{
+        _msgerro( dicionario.erro_desconhecido );
+    }
+
 }
 
 //--------------------------------------------------------------------------
@@ -824,7 +1060,7 @@ function mensagemErroUxiamarelo( jqXHR, status, errorThrown, regiao ) {
  * @see JSON#stringify
  */
 function mensagemAmplaBruta( obj ) {
-    abrirMensagemAmpla( JSON.stringify(obj) );
+    abrirMensagemAmpla( typeof(obj) === "string" ? obj : JSON.stringify(obj) );
 }
 
 //--------------------------------------------------------------------------
@@ -1018,8 +1254,9 @@ function atualizarAmbiente() {
 
             // Campos padrões
             tela.find(".sid:first").val(sid);
-            tela.find(".tid:first").val(tid);
             tela.find(".lid:first").val(lid);
+            tela.find(".zid:first").val(zid);
+            tela.find(".tid:first").val(tid);
 
         });
 
@@ -1033,7 +1270,7 @@ function atualizarAmbiente() {
 
     //TODO Remover por desuso
     if( js("telasAtualizadas") !== undefined ){
-        console.warn("telasAtualizadas em desuso. Usar evento 'iperoxo.ambiente'.");
+        console.warn("telasAtualizadas() em desuso. Usar evento 'iperoxo.ambiente'.");
         jsExec("telasAtualizadas");
     }
 
@@ -1047,9 +1284,9 @@ function atualizarAmbiente() {
  * @deprecated
  * @see atualizarAmbiente
  */
-function atualizarTelas() {//TODO Remover por desuso
-    console.warn("Método atualizarTelas em desuso. Usar atualizarAmbiente.");
-    atualizarAmbiente();
+function atualizarTelas() {
+    console.warn("Método atualizarTelas() em desuso. Usar atualizarAmbiente().");
+    return atualizarAmbiente();
 }
 
 //--------------------------------------------------------------------------
@@ -1435,7 +1672,8 @@ function implantarDicas() {
  * pois outras características precisam ser processadas.
  * Portanto, evite utilizar este método de forma direta, prefira chamar {@link atualizarAmbiente}.
  * @see configuracao.componentes
- * @see {@link comp/iperoxo.html}
+ * @see {@link html-dep/iperoxo-componentes.html}
+ * @see {@link html/componentes.html}
  */
 function implantarComponentes() {
 
@@ -1447,7 +1685,7 @@ function implantarComponentes() {
         var comp = $(tipos).first();
         if( comp.length === 0 ) break;
 
-        var atributos = obterAtributos(comp);
+        var atributos = obterAtributos(comp, normalizarID, true);
         var conteudo  = comp.html();
         if( conteudo !== "" ) atributos["conteudo"] = conteudo;
 
@@ -1533,7 +1771,8 @@ function implantarComponentes() {
  * @param {*} conteudo Conteúdo do elemento, o qual pode ser um texto ou um jQuery (subelementos).
  * @param {string} posicao Posição de inserção em relação ao elemento de destino. Valores: "preferencia", "inicio", "fim", "antes" ou "depois". Padrão: "preferencia".
  * @param {boolean} renderizar Executar {@link atualizarAmbiente} logo após a inserção? Padrão: true.
- * @see {@link comp/iperoxo.html}
+ * @see {@link html-dep/iperoxo-componentes.html}
+ * @see {@link html/componentes.html}
  * @see configuracao.componentes
  * @see elementoHTML
  */
@@ -1777,342 +2016,35 @@ function setCompVisivel( comp, visivel ) {
 //--------------------------------------------------------------------------
 
 /**
- * Ação executada antes da implantação de um componente "ipe-data".
+ * Obtém o valor de uma propriedade de um componente visual Ipê-roxo.
+ * A propriedade pode ter sido definida, inicialmente, através de atributo de tag HTML do componente.
+ * @param comp Componente a ser manipulado (jQuery ou elemento HTML).
+ * @param nome Nome da propriedade.
+ * @returns undefined, se propriedade indefinida.
+ * @see getComp
  */
-function comp_ipe_data_pre_implantacao( comp, atributos ) {
-    
-    var obj = comp.find(".datetimepicker:first");
-    
-    var opcoes = jsExec( obj.attr("opcoes") );
-    if( opcoes === undefined ) opcoes = {};
-
-    var formato = obj.attr("formato");
-    opcoes["format"] = formato !== undefined ? formato : "L LT";
-
-    if( opcoes["locale"]           === undefined ) opcoes["locale"]           = lid;
-    if( opcoes["showTodayButton"]  === undefined ) opcoes["showTodayButton"]  = true;
-    if( opcoes["showClear"]        === undefined ) opcoes["showClear"]        = true;
-    if( opcoes["allowInputToggle"] === undefined ) opcoes["allowInputToggle"] = false;
-    if( opcoes["useCurrent"]       === undefined ) opcoes["useCurrent"]       = false;
-
-    var inputTimestamp = obj.parent().find("input[type='hidden']");
-    var ao_mudar = atributos["ao-mudar"];
-
-    obj.datetimepicker(opcoes).on("dp.change", function( evt ){
-        inputTimestamp.val( evt.date ? evt.date.valueOf() : "" );
-        js.call(comp, ao_mudar);
-    });
-
-    html_documento.on( "iperoxo.lid", function(){
-        obj.data("DateTimePicker").locale(lid);
-    });
-
+function getCompProp( comp, nome ) {
+    comp = jQueryObj(comp);
+    var tipo  = comp.attr("componente-tipo");
+    var chave = configuracao.componentes[tipo].chave;
+    return jsExec( chave + "_get_" + normalizarID(nome), comp );
 }
 
 //--------------------------------------------------------------------------
 
 /**
- * Obtém o valor de data/hora definido através de um componente do tipo "ipe-data".
- * Aconselha-se não utilizar este método de forma direta.
- * @param comp Objeto jQuery do componente.
- * @returns valor numérico no formato Unix Timestamp (milissegundos desde 01/jan/1970 00:00 UTC).
- * @see getCompValor
+ * Define o valor de uma propriedade de um componente visual Ipê-roxo.
+ * A propriedade pode ter sido definida, inicialmente, através de atributo de tag HTML do componente.
+ * @param comp Componente a ser manipulado (jQuery ou elemento HTML).
+ * @param nome Nome da propriedade.
+ * @param valor Novo valor da propriedade.
+ * @see getComp
  */
-function comp_ipe_data_get_valor( comp ) {
-    var valor = comp.find(".ipe-data-valor:first").val();
-    return valor !== undefined && valor !== "" ? parseInt(valor) : null;
-}
-
-//--------------------------------------------------------------------------
-
-/**
- * Define o valor de data/hora de um componente do tipo "ipe-data".
- * Aconselha-se não utilizar este método de forma direta.
- * @param comp Objeto jQuery do componente.
- * @param valor Unix Timestamp, Date ou outro valor conforme https://eonasdan.github.io/bootstrap-datetimepicker/Options/#date
- * @see setCompValor
- */
-function comp_ipe_data_set_valor( comp, valor ) {
-    if( typeof(valor) === "number" ) valor = new Date(valor);
-    return comp.find(".datetimepicker:first").data("DateTimePicker").date(valor);
-}
-
-//--------------------------------------------------------------------------
-
-/**
- * Verifica se um componente "ipe-data" está em estado
- * que permita a alteração de valor através da interface gráfica.
- */
-function comp_ipe_data_get_editavel( comp ) {
-    var elemt = comp.find("input[type='text']:first");
-    return elemt.attr("readonly") === undefined;
-}
-
-//--------------------------------------------------------------------------
-
-/**
- * Determina se um componente "ipe-data" deve ou não permitir
- * a alteração de valor através da interface gráfica.
- */
-function comp_ipe_data_set_editavel( comp, editavel ) {
-    var elemt = comp.find("input[type='text']:first");
-    if( ! editavel ) elemt.attr("readonly", "readonly");
-    else elemt.removeAttr("readonly");
-}
-
-//--------------------------------------------------------------------------
-
-/**
- * Obtém os nomes dos arquivos selecionados através de um componente do tipo "ipe-arquivo".
- * Aconselha-se não utilizar este método de forma direta.
- * @param comp Objeto jQuery do componente.
- * @returns array com os nomes dos arquivos selecionados.
- * @see getCompValor
- * @see obterNomesArquivos
- */
-function comp_ipe_arquivo_get_valor( comp ) {
-    var campo = comp.find("input[type='file']:first");
-    return obterNomesArquivos(campo);
-}
-
-//--------------------------------------------------------------------------
-
-/**
- * Aciona a tela de seleção de arquivos de um componente do tipo "ipe-arquivo".
- * Aconselha-se não utilizar este método de forma direta.
- * @param comp Objeto jQuery do componente.
- * @param valor null == limpar seleção atual; qualquer outro valor == acionar tela de seleção.
- * @see setCompValor
- */
-function comp_ipe_arquivo_set_valor( comp, valor ) {
-    if( valor === null ){
-        return comp.find("[data-dismiss='fileinput']:first").click();
-    }else{
-        return comp.find("[data-trigger='fileinput']:first").click();
-    }
-}
-
-//--------------------------------------------------------------------------
-
-/**
- * Ação executada quando um componente "ipe-arquivo" é alterado.
- */
-function comp_ipe_arquivo_onchange( comp ) {
-    var nomes = comp.find(".ipe-arquivo-nomes:first");
-    var campo = comp.find("input[type='file']:first");
-    nomes.val( obterNomesArquivos(campo).join(", ") );
-}
-
-//--------------------------------------------------------------------------
-
-/**
- * Obtém os valores marcados através de um componente do tipo "ipe-marcacao-grupo".
- * Aconselha-se não utilizar este método de forma direta.
- * @param comp Objeto jQuery do componente.
- * @returns Array com os valores marcados.
- * @see getCompValor
- */
-function comp_ipe_marcacao_grupo_get_valor( comp ) {
-    var subcomps = comp.find("input[type='checkbox']:checked");
-    var valores = [];
-    for( var i = 0; i < subcomps.length; i++ ){
-        valores.push( subcomps[i].value );
-    }
-    return valores;
-}
-
-//--------------------------------------------------------------------------
-
-/**
- * Define quais os valores devem estar marcados num componente do tipo "ipe-marcacao-grupo".
- * Aconselha-se não utilizar este método de forma direta.
- * @param comp Objeto jQuery do componente.
- * @param valor Array com os valores que devem ficar marcados.
- * @see setCompValor
- */
-function comp_ipe_marcacao_grupo_set_valor( comp, valor ) {
-    var subcomps = comp.find("input[type='checkbox']");
-    for( var i = 0; i < subcomps.length; i++ ){
-        var cb = subcomps[i];
-        var novacond = valor.includes(cb.value);
-        if( cb.checked !== novacond ){
-            cb.checked = novacond;
-            $(cb).trigger("change");
-        }
-    }
-}
-
-//--------------------------------------------------------------------------
-
-/**
- * Obtém o estado de marcação de um componente "ipe-marcacao".
- * Aconselha-se não utilizar este método de forma direta.
- * @param comp Objeto jQuery do componente.
- * @returns boolean (true/false).
- * @see getCompValor
- */
-function comp_ipe_marcacao_get_valor( comp ) {
-    return comp.find("input[type='checkbox']:first")[0].checked;
-}
-
-//--------------------------------------------------------------------------
-
-/**
- * Define o estado de marcação de um componente "ipe-marcacao".
- * Aconselha-se não utilizar este método de forma direta.
- * @param comp Objeto jQuery do componente.
- * @param valor Valor direto ou conversível para boolean (true/false).
- * @see setCompValor
- */
-function comp_ipe_marcacao_set_valor( comp, valor ) {
-    if( typeof(valor) !== "boolean" ) valor = valor == "true";
-    var cbj = comp.find("input[type='checkbox']:first");
-    var cb  = cbj[0];
-    if( cb.checked !== valor ){
-        cb.checked = valor;
-        cbj.trigger("change");
-    }
-}
-
-//--------------------------------------------------------------------------
-
-/**
- * Ação executada após a implantação de um componente "ipe-texto".
- */
-function comp_ipe_texto_pos_implantacao( comp, atributos ) {
-    $.applyDataMask();
-}
-
-//--------------------------------------------------------------------------
-
-/**
- * Verifica se um componente "ipe-texto" está em estado
- * que permita a alteração de valor através da interface gráfica.
- */
-function comp_ipe_texto_get_editavel( comp ) {
-    var elemt = comp.find("input:first");
-    return elemt.attr("readonly") === undefined;
-}
-
-//--------------------------------------------------------------------------
-
-/**
- * Determina se um componente "ipe-texto" deve ou não permitir
- * a alteração de valor através da interface gráfica.
- */
-function comp_ipe_texto_set_editavel( comp, editavel ) {
-    var elemt = comp.find("input:first");
-    if( ! editavel ) elemt.attr("readonly", "readonly");
-    else elemt.removeAttr("readonly");
-}
-
-//--------------------------------------------------------------------------
-
-/**
- * Ação executada após a implantação de um componente "ipe-texto-acao".
- */
-function comp_ipe_texto_acao_pos_implantacao( comp, atributos ) {
-    var controles = comp.parent();
-    if( ! controles.hasClass("input-group") ) controles.addClass("input-group");
-}
-
-//--------------------------------------------------------------------------
-
-/**
- * Ação executada para um componente "ipe-selecao" após a implantação total.
- */
-function comp_ipe_selecao_pos_implantacao_total( comp, atributos ) {
-    comp.find(".ipe-selecao-selectpicker").selectpicker();
-}
-
-//--------------------------------------------------------------------------
-
-/**
- * Atualiza a composição visual de um componente "ipe-selecao".
- */
-function comp_ipe_selecao_atualizar( comp ) {
-    comp.find(".ipe-selecao-selectpicker").selectpicker("refresh");
-}
-
-//--------------------------------------------------------------------------
-
-/**
- * Atualiza a composição visual de um componente "ipe-navegacao".
- */
-function comp_ipe_navegacao_atualizar( comp ) {
-    
-    var navegacao = comp.find(".ipe-navegacao-abas:first");
-
-    // Removendo abas desnecessárias
-    navegacao.children("li").each(function(){
-        var tab_li = $(this);
-        var tid = tab_li.attr("tid");
-        if( telas[tid] === undefined ) tab_li.remove();
-    });
-
-    // Atualizando as abas das telas
-    $(".tela").each(function(i){
-
-        var tela  = $(this);
-        var tid   = tela.attr("id");
-        var ativa = ! tela.hasClass("hidden");
-
-        // Título da tela na aba
-        var titulo = tela.children(".tela-titulo").text();
-        if( titulo.length === 0 ){
-            titulo = "Tela " + ( i + 1 );
-        }
-        if( titulo.length > 20 ){
-            titulo = titulo.substring(0, 17) + "...";
-        }
-
-        // Aba da tela
-        var tab_li = $( "#tab_li_" + tid );
-        if( tab_li.length > 0 ){
-            tab_li.removeClass();
-            tab_li.addClass( ativa ? "active" : "" );
-            tab_li.find("a").html(titulo);
-        }else{
-            inserirComponente(
-                navegacao,
-                "ipe-navegacao-aba",
-                { "tid": tid, "ativa": ( ativa ? "sim" : "nao" ), "titulo": titulo }
-            );
-        }
-
-    });
-
-}
-
-//--------------------------------------------------------------------------
-
-/**
- * Obtém o valor de um componente do tipo "ipe-tela-titulo".
- * Aconselha-se não utilizar este método de forma direta.
- * @param comp Objeto jQuery do componente.
- * @returns texto bruto ou chave do dicionário.
- * @see getCompValor
- */
-function comp_ipe_tela_titulo_get_valor( comp ) {
-    return comp.hasClass("textod") ? comp.attr("chave") : comp.text();
-}
-
-//--------------------------------------------------------------------------
-
-/**
- * Define o valor de um componente do tipo "ipe-tela-titulo".
- * Aconselha-se não utilizar este método de forma direta.
- * @param comp Objeto jQuery do componente.
- * @param valor Texto bruto ou chave do dicionário.
- * @see setCompValor
- */
-function comp_ipe_tela_titulo_set_valor( comp, valor ) {
-    if( comp.hasClass("textod") ){
-        setTexto(comp, valor);
-    }else{
-        comp.text(valor);
-    }
-    atualizarAmbiente();
+function setCompProp( comp, nome, valor ) {
+    comp = jQueryObj(comp);
+    var tipo  = comp.attr("componente-tipo");
+    var chave = configuracao.componentes[tipo].chave;
+    return jsExec( chave + "_set_" + normalizarID(nome), comp, valor );
 }
 
 //--------------------------------------------------------------------------
@@ -2121,12 +2053,19 @@ function comp_ipe_tela_titulo_set_valor( comp, valor ) {
  * Retorna o componente que contém a parte passada por parâmetro.
  * @param parte Elemento HTML ou objeto jQuery contido no componente desejado, podendo ser a raiz do próprio.
  * @param superior Desconsiderar o próprio componente e buscar o superior hierarquicamente?
- * @returns Objeto jQuery do componente encontrado.
+ * @returns Objeto jQuery do componente encontrado, ou jQuery vazio.
  */
 function esteComp( parte, superior ) {
     var jobj = jQueryObj(parte);
-    if( jobj.hasClass("componente") && superior !== true ) return jobj;
-    return jobj.parents(".componente:first");
+    if( superior ){
+        return jobj.hasClass("componente") ?
+               jobj.parents(".componente:first") :
+               jobj.parents(".componente:first").parents(".componente:first");
+    }else{
+        return jobj.hasClass("componente") ?
+               jobj :
+               jobj.parents(".componente:first");
+    }
 }
 
 //--------------------------------------------------------------------------
@@ -2363,7 +2302,7 @@ function cordovaApagar( nome, funcExito, funcErro ) {
 
 //--------------------------------------------------------------------------
 
-inicio(function(){
+pronto(function(){
 
     //-----------------------------------
     if( configuracao.recurso_geral ){
@@ -2436,7 +2375,6 @@ inicio(function(){
             telaObj.elementoAtivo = elemento;
         }
     }, 1000);
-    
 
     //-----------------------------------
     // Inicialização dos componentes visuais e da aplicação
@@ -2472,13 +2410,21 @@ inicio(function(){
                 comp.removeAttr("componente-chave");
                 comp.removeAttr("componente-valor-auto");
 
-                configuracao.componentes[tipo] = {
+                var conf = {
                     "tipo"       : tipo,
                     "chave"      : chave,
                     "valor-auto" : vauto,
                     "html"       : comp.wrap("<div></div>").parent().html()
                 };
 
+                configuracao.componentes[tipo] = conf;
+
+                try{
+                    jsExec(chave + "_inicializar", conf);
+                }catch(e){
+                    console.error(e);
+                }
+                
             });
 
             repositorio.remove();
@@ -2488,10 +2434,10 @@ inicio(function(){
         }
 
         function _carregar_repositorio() {
-            var nome = repositorios.shift();
-            if( nome !== undefined ){
+            var endereco = repositorios.shift();
+            if( endereco !== undefined ){
                 html_corpo.append("<div id=\"componentes\" class=\"hidden\"></div>");
-                $("#componentes").load("comp/" + nome + " .tela", _carregar_componentes);
+                $("#componentes").load(endereco + " .tela", _carregar_componentes);
                 return true;
             }else{
                 return false;

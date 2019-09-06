@@ -12,8 +12,7 @@ This file is part of Ipê-roxo - <http://joseflavio.com/iperoxo/>.
 <link href="../css-dep/bootstrap-theme.min.css" rel="stylesheet" />
 <link href="../css-dep/bootstrap-select.min.css" rel="stylesheet">
 <link href="../css-dep/jasny-bootstrap.min.css" rel="stylesheet" />
-<link href="../css-dep/bootstrap-datetimepicker.min.css" rel="stylesheet" />
-<link href="../css/iperoxo.css" rel="stylesheet" />
+<link href="../css-dep/iperoxo.css" rel="stylesheet" />
 <link href="../css/estilo.css" rel="stylesheet" />
 </head>
 
@@ -38,7 +37,7 @@ This file is part of Ipê-roxo - <http://joseflavio.com/iperoxo/>.
       classe-extra-dica="{dica, select, undefined{} other{dica}}"
       chave="{rotulo}"
       dica="{dica, select, undefined{remover-atributo} other{{dica}}}"
-      origem="{rotulo-origem, select, undefined{remover-atributo} other{{rotulo-origem}}}"></span>:
+      origem="{rotulo_origem, select, undefined{remover-atributo} other{{rotulo_origem}}}"></span>:
   </div>
   <div class="ipe-texto-controles">
     <input
@@ -46,17 +45,16 @@ This file is part of Ipê-roxo - <http://joseflavio.com/iperoxo/>.
       inputmode="{modo, select, undefined{remover-atributo} literal{verbatim} numerico{numeric} nome{latin-name} prosa{latin-prose} other{{modo}}}"
       name="{nome, select, undefined{remover-atributo} other{{nome}}}"
       value="{valor, select, undefined{} other{{valor}}}"
-      data-mask="{mascara, select, undefined{remover-atributo} other{{mascara}}}"
-      data-mask-reverse="{mascara-reversa, select, undefined{remover-atributo} other{{mascara-reversa}}}"
       autocomplete="{sugestao, select, sim{on} nao{off} other{remover-atributo}}"
       class="componente-ajustar form-control focavel textod"
       classe-extra-dica="{dica, select, undefined{} other{dica}}"
       dica="{dica, select, undefined{remover-atributo} other{{dica}}}"
-      chaveph="{rotulo-interno, select, undefined{remover-atributo} other{{rotulo-interno}}}"
-      origem="{rotulo-interno-origem, select, undefined{remover-atributo} other{{rotulo-interno-origem}}}"
+      chaveph="{rotulo_interno, select, undefined{remover-atributo} other{{rotulo_interno}}}"
+      origem="{rotulo_interno_origem, select, undefined{remover-atributo} other{{rotulo_interno_origem}}}"
       readonly="{editavel, select, nao{readonly} other{remover-atributo}}"
-      onkeydown="{ao-pressionar-tecla, select, undefined{remover-atributo} other{{ao-pressionar-tecla}}}"
-      onkeyup="{ao-soltar-tecla, select, undefined{remover-atributo} other{{ao-soltar-tecla}}}" />
+      onchange="{ao_mudar, select, undefined{remover-atributo} other{{ao_mudar}}}"
+      onkeydown="{ao_pressionar_tecla, select, undefined{remover-atributo} other{{ao_pressionar_tecla}}}"
+      onkeyup="{ao_soltar_tecla, select, undefined{remover-atributo} other{{ao_soltar_tecla}}}" />
   </div>
   <ipe-componente tipo="ipe-texto-acao" destino=".ipe-texto-controles:first" />
 </div>
@@ -68,7 +66,7 @@ This file is part of Ipê-roxo - <http://joseflavio.com/iperoxo/>.
   componente-chave="comp_ipe_texto_acao"
   componente-ref="{referencia, select, undefined{remover-atributo} other{{referencia}}}"
   class="componente componente-ajustar input-group-addon btn btn-default"
-  onclick="{ao-clicar}"
+  onclick="{ao_clicar}"
   classe-extra-hidden="{oculto, select, sim{hidden} other{}}"
   classe-extra-outras="{class, select, undefined{} other{{class}}}">
   <span class="componente-ajustar glyphicon glyphicon-{icone}" icone="{icone, select, undefined{remover-elemento} other{{icone}}}" aria-hidden="true"></span>
@@ -81,6 +79,7 @@ This file is part of Ipê-roxo - <http://joseflavio.com/iperoxo/>.
   componente-tipo="ipe-data"
   componente-chave="comp_ipe_data"
   componente-ref="{referencia, select, undefined{{nome}} other{{referencia}}}"
+  componente-valor-auto=".ipe-data-controles > input:first"
   class="componente form-group"
   classe-extra-hidden="{oculto, select, sim{hidden} other{}}"
   classe-extra-outras="{class, select, undefined{} other{{class}}}">
@@ -95,26 +94,25 @@ This file is part of Ipê-roxo - <http://joseflavio.com/iperoxo/>.
       classe-extra-dica="{dica, select, undefined{} other{dica}}"
       chave="{rotulo}"
       dica="{dica, select, undefined{remover-atributo} other{{dica}}}"
-      origem="{rotulo-origem, select, undefined{remover-atributo} other{{rotulo-origem}}}"></span>:
+      origem="{rotulo_origem, select, undefined{remover-atributo} other{{rotulo_origem}}}"></span>:
   </div>
-  <div
-    class="componente-ajustar input-group date datetimepicker"
-    formato="{formato, select, undefined{remover-atributo} other{{formato}}}"
-    opcoes="{opcoes, select, undefined{remover-atributo} other{{opcoes}}}">
+  <div class="ipe-data-controles">
     <input
       type="text"
       name="{nome, select, undefined{remover-atributo} other{{nome}Texto}}"
+      value="{valor, select, undefined{} other{{valor}}}"
+      autocomplete="{sugestao, select, sim{on} nao{off} other{remover-atributo}}"
       class="componente-ajustar form-control focavel textod"
       classe-extra-dica="{dica, select, undefined{} other{dica}}"
       dica="{dica, select, undefined{remover-atributo} other{{dica}}}"
-      chaveph="{rotulo-interno, select, undefined{remover-atributo} other{{rotulo-interno}}}"
-      origem="{rotulo-interno-origem, select, undefined{remover-atributo} other{{rotulo-interno-origem}}}"
-      autocomplete="{sugestao, select, sim{on} nao{off} other{remover-atributo}}"
-      readonly="{editavel, select, nao{readonly} other{remover-atributo}}" />
-    <span class="input-group-addon">
-      <span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>
-    </span>
+      chaveph="{rotulo_interno, select, undefined{remover-atributo} other{{rotulo_interno}}}"
+      origem="{rotulo_interno_origem, select, undefined{remover-atributo} other{{rotulo_interno_origem}}}"
+      readonly="{editavel, select, nao{readonly} other{remover-atributo}}"
+      onchange="{ao_mudar, select, undefined{remover-atributo} other{{ao_mudar}}}"
+      onkeydown="{ao_pressionar_tecla, select, undefined{remover-atributo} other{{ao_pressionar_tecla}}}"
+      onkeyup="{ao_soltar_tecla, select, undefined{remover-atributo} other{{ao_soltar_tecla}}}" />
   </div>
+  <ipe-componente tipo="ipe-texto-acao" destino=".ipe-data-controles:first" />
 </div>
 
 <!-- ========================================== -->
@@ -132,7 +130,7 @@ This file is part of Ipê-roxo - <http://joseflavio.com/iperoxo/>.
       classe-extra-dica="{dica, select, undefined{} other{dica}}"
       chave="{rotulo}"
       dica="{dica, select, undefined{remover-atributo} other{{dica}}}"
-      origem="{rotulo-origem, select, undefined{remover-atributo} other{{rotulo-origem}}}"></span>:
+      origem="{rotulo_origem, select, undefined{remover-atributo} other{{rotulo_origem}}}"></span>:
   </div>
   <div
     class="fileinput fileinput-new input-group"
@@ -142,8 +140,8 @@ This file is part of Ipê-roxo - <http://joseflavio.com/iperoxo/>.
       class="componente-ajustar form-control textod ipe-arquivo-nomes ipe-arquivo-editavel"
       classe-extra-dica="{dica, select, undefined{} other{dica}}"
       dica="{dica, select, undefined{remover-atributo} other{{dica}}}"
-      chaveph="{rotulo-interno, select, undefined{remover-atributo} other{{rotulo-interno}}}"
-      origem="{rotulo-interno-origem, select, undefined{remover-atributo} other{{rotulo-interno-origem}}}"
+      chaveph="{rotulo_interno, select, undefined{remover-atributo} other{{rotulo_interno}}}"
+      origem="{rotulo_interno_origem, select, undefined{remover-atributo} other{{rotulo_interno_origem}}}"
       readonly="readonly" />
     <span class="input-group-addon btn btn-default btn-file">
       <span class="fileinput-new"><span class="glyphicon glyphicon-file" aria-hidden="true"></span></span>
@@ -178,13 +176,13 @@ This file is part of Ipê-roxo - <http://joseflavio.com/iperoxo/>.
       classe-extra-dica="{dica, select, undefined{} other{dica}}"
       chave="{rotulo}"
       dica="{dica, select, undefined{remover-atributo} other{{dica}}}"
-      origem="{rotulo-origem, select, undefined{remover-atributo} other{{rotulo-origem}}}"></span>:
+      origem="{rotulo_origem, select, undefined{remover-atributo} other{{rotulo_origem}}}"></span>:
   </div>
   <select
     name="{nome, select, undefined{remover-atributo} other{{nome}}}"
     class="componente-ajustar custom-select form-control focavel ipe-selecao-selectpicker"
     data-live-search="{busca, select, sim{true} nao{false} other{remover-atributo}}"
-    onchange="{ao-mudar, select, undefined{remover-atributo} other{{ao-mudar}}}" />
+    onchange="{ao_mudar, select, undefined{remover-atributo} other{{ao_mudar}}}" />
   <ipe-componente tipo="ipe-opcao" destino="select:first" />
 </div>
 
@@ -216,7 +214,7 @@ This file is part of Ipê-roxo - <http://joseflavio.com/iperoxo/>.
       classe-extra-dica="{dica, select, undefined{} other{dica}}"
       chave="{rotulo}"
       dica="{dica, select, undefined{remover-atributo} other{{dica}}}"
-      origem="{rotulo-origem, select, undefined{remover-atributo} other{{rotulo-origem}}}"></span>:
+      origem="{rotulo_origem, select, undefined{remover-atributo} other{{rotulo_origem}}}"></span>:
   </div>
   <div class="ipe-marcacoes">
     <div
@@ -233,14 +231,14 @@ This file is part of Ipê-roxo - <http://joseflavio.com/iperoxo/>.
           value="{valor, select, undefined{} other{{valor}}}"
           atributo-boolean-1="{estado, select, marcado{checked} other{}}"
           class="componente-ajustar focavel"
-          onchange="{ao-mudar, select, undefined{remover-atributo} other{{ao-mudar}}}" />
+          onchange="{ao_mudar, select, undefined{remover-atributo} other{{ao_mudar}}}" />
         <span
           class="componente-ajustar"
           classe-extra-textod="{rotulo, select, undefined{} other{textod}}"
           classe-extra-dica="{dica, select, undefined{} other{dica}}"
           chave="{rotulo, select, undefined{remover-atributo} other{{rotulo}}}"
           dica="{dica, select, undefined{remover-atributo} other{{dica}}}"
-          origem="{rotulo-origem, select, undefined{remover-atributo} other{{rotulo-origem}}}">{conteudo, select, undefined{} other{{conteudo}}}</span>
+          origem="{rotulo_origem, select, undefined{remover-atributo} other{{rotulo_origem}}}">{conteudo, select, undefined{} other{{conteudo}}}</span>
       </label>
     </div>
   </div>
@@ -260,9 +258,9 @@ This file is part of Ipê-roxo - <http://joseflavio.com/iperoxo/>.
   type="{submeter, select, undefined{button} sim{submit} other{button}}"
   name="{nome, select, undefined{remover-atributo} other{{nome}}}"
   value="{valor, select, undefined{remover-atributo} other{{valor}}}"
-  onclick="{ao-clicar, select, undefined{remover-atributo} other{{ao-clicar}}}">
+  onclick="{ao_clicar, select, undefined{remover-atributo} other{{ao_clicar}}}">
   <span class="componente-ajustar glyphicon glyphicon-{icone}" icone="{icone, select, undefined{remover-elemento} other{{icone}}}" aria-hidden="true"></span>
-  <span class="componente-ajustar textod" chave="{rotulo, select, undefined{remover-elemento} other{{rotulo}}}" origem="{rotulo-origem, select, undefined{remover-atributo} other{{rotulo-origem}}}"></span>
+  <span class="componente-ajustar textod" chave="{rotulo, select, undefined{remover-elemento} other{{rotulo}}}" origem="{rotulo_origem, select, undefined{remover-atributo} other{{rotulo_origem}}}"></span>
   {rotulo, select, undefined{{conteudo, select, undefined{} other{{conteudo}}}} other{}}
 </button>
 
@@ -290,19 +288,19 @@ This file is part of Ipê-roxo - <http://joseflavio.com/iperoxo/>.
   classe-extra-outras="{class, select, undefined{} other{{class}}}">
 <div
   class="componente-ajustar media-left"
-  classe-extra-media="{imagem-v, select, undefined{media-top} cima{media-top} meio{media-middle} baixo{media-bottom} other{media-top}}"
+  classe-extra-media="{imagem_v, select, undefined{media-top} cima{media-top} meio{media-middle} baixo{media-bottom} other{media-top}}"
   remover="{imagem, select, undefined{remover-elemento} other{remover-atributo}}">
 <img
   class="componente-ajustar media-object ipe-midia-imagem"
-  classe-extra-cursor="{ao-clicar, select, undefined{} other{cursor-pointer}}"
+  classe-extra-cursor="{ao_clicar, select, undefined{} other{cursor-pointer}}"
   src="{imagem}"
-  onclick="{ao-clicar, select, undefined{remover-atributo} other{{ao-clicar}}}"
-  style="{imagem-l, select, undefined{remover-atributo} other{width:{imagem-l};}}" />
+  onclick="{ao_clicar, select, undefined{remover-atributo} other{{ao_clicar}}}"
+  style="{imagem_l, select, undefined{remover-atributo} other{width:{imagem_l};}}" />
 </div>
 <div
   class="componente-ajustar media-body"
-  classe-extra-media="{conteudo-v, select, undefined{media-top} cima{media-top} meio{media-middle} baixo{media-bottom} other{media-top}}">
-<a class="componente-ajustar" href="javascript:void(0)" onclick="{ao-clicar, select, undefined{remover-elemento-apenas} other{{ao-clicar}}}">
+  classe-extra-media="{conteudo_v, select, undefined{media-top} cima{media-top} meio{media-middle} baixo{media-bottom} other{media-top}}">
+<a class="componente-ajustar" href="javascript:void(0)" onclick="{ao_clicar, select, undefined{remover-elemento-apenas} other{{ao_clicar}}}">
 <h4
   componente-tipo="ipe-midia-titulo"
   componente-chave="comp_ipe_midia_titulo"

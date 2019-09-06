@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
          version="3.1">
 
-    <display-name>Ipê-roxo 1.0-A19</display-name>
+    <display-name>Ipê-roxo 1.0-A20</display-name>
 
     <filter>
         <filter-name>HttpHeaderSecurityFilter</filter-name>
@@ -30,10 +30,15 @@
             <param-value>true</param-value>
         </init-param>
     </filter>
-    
+
     <filter-mapping>
         <filter-name>HttpHeaderSecurityFilter</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>
+
+    <mime-mapping>
+        <extension>properties</extension>
+        <mime-type>text/plain</mime-type>
+    </mime-mapping>
     
 </web-app>

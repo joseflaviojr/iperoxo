@@ -1,0 +1,12 @@
+
+[Exemplo 1]
+SELECT *
+FROM tabela t
+WHERE t.x > {0}
+ORDER BY t.{1} ASC
+
+[Exemplo 2]
+<div class="pessoa">
+    <div class="nome">{0}</div>
+    <div class="idade">{1}</div>
+</div>

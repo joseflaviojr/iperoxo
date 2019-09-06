@@ -5,25 +5,20 @@
  * @see configuracao.funcao_inicial
  */
 function aplicacao() {
+
+    setLinguagem( valorNaoVazio( url_args.lid, getCookie( "lid" ), navigator.language               ), function(){
+    setZonaTempo( valorNaoVazio( url_args.zid, getCookie( "zid" ), - new Date().getTimezoneOffset() ), function(){
+    setSID      ( valorNaoVazio( url_args.sid, getCookie( "sid" ), gerarID                          ), function(){
+
+        setCookie( "cookieTeste", "Ipê-roxo ~ Teste de Cookie!" );
     
-    // lid
-    lid = url_args.lid;
-    if( lid === undefined || lid === "" ) lid = getCookie( "lid" );
-    if( lid === undefined || lid === "" ) lid = navigator.language;
-    setLinguagem( lid );
+        abrirTela( "html/tela.html" );
+    
+        abrirMensagemAmpla(formatador.compile(dicionario.bem_vindo)({
+            nome: dicionario.aplicacao_titulo + " " + configuracao.iperoxo_versao
+        }));
 
-    // sid
-    sid = url_args.sid;
-    if( sid === undefined || sid === "" ) sid = getCookie( "sid" );
-	if( sid === undefined || sid === "" ) sid = gerarID();
-	setSID( sid );
-
-    // Código de Exemplo
-    setCookie( "cookieTeste", "Ipê-roxo ~ Teste de Cookie!" );
-    abrirTela( "html/tela.html" );
-    abrirMensagemAmpla(formatador.compile(dicionario.bem_vindo)({
-        nome: dicionario.aplicacao_titulo + " " + configuracao.iperoxo_versao
-    }));
+    });});});
 
 }
 

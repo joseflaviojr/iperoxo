@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # SASS - Conversor de SCSS para CSS
-sass --watch sass:css &
+sass --watch sass:css sass-dep:css-dep &
 PIDS[0]=$!
 
 # Servidor Web - http://localhost:8000/

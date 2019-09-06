@@ -2,8 +2,6 @@
 
 Modelo de aplicação Web para execução em navegador ou [Cordova](https://cordova.apache.org/), baseado em HTML5, CSS3 e JavaScript, compondo parte do [Ipê-roxo](https://github.com/joseflaviojr/iperoxo).
 
-**ATENÇÃO!!!** Parte do modelo Web está sendo remodelada para receber novos recursos que proporcionarão uma maior integração entre Java e JavaScript, a fim de reduzir diferenças de codificação entre as camadas servidor/cliente. Para mais informações, entrar em contato através de *email@joseflavio.com*.
-
 ## Descrição
 
 A aplicação Web do Ipê-roxo é responsável por manter a interface de comunicação do usuário com o sistema. No esquema geral do Ipê-roxo (figura abaixo), o módulo "Navegador Web" contém a aplicação Web aqui especificada.
@@ -12,7 +10,7 @@ A aplicação Web do Ipê-roxo é responsável por manter a interface de comunic
 
 ## Versão Atual
 
-1.0-A19
+1.0-A20 (Fase de Nascimento)
 
 Padrão de versionamento: [JFV](http://joseflavio.com/jfv)
 
@@ -24,25 +22,30 @@ Esta aplicação Ipê-roxo pode ser instalada diretamente em qualquer servidor W
 
 A aplicação Web Ipê-roxo possui uma estrutura simples de arquivos, a qual é explicada a seguir.
 
-- **comp** : diretório que contém o código fonte dos componentes visuais.
-- **css** : diretório que centraliza os arquivos de estilo CSS especificados para esta aplicação, normalmente gerados automaticamente a partir de arquivos SCSS.
-- **css-dep** : diretório que centraliza os arquivos de estilo CSS das bibliotecas que o Ipê-roxo é dependente.
-- **fonts** : diretório que centraliza os arquivos de fontes tipográficas, tais como TTF, EOT e WOFF.
-- **html** : diretório que centraliza os arquivos HTML, com exceção do **index.html**, que reside no diretório raiz. A maioria dos arquivos HTML é especificada com o intuido de compor parte da página Web, como uma tela, por exemplo, sendo carregada através da função [http://api.jquery.com/load/](http://api.jquery.com/load/).
+- **css** : estilos CSS específicos da aplicação, normalmente gerados automaticamente a partir de arquivos SASS/SCSS.
+- **css-dep** : estilos CSS do núcleo do Ipê-roxo e das bibliotecas de dependência.
+- **etc** : arquivos de bases de dados e de finalidade geral.
+  - **Mensagens_en.properties** : dicionário em inglês das palavras e frases que são apresentadas na aplicação, aos moldes de [messageformat](https://messageformat.github.io/), sendo parte do recurso de internacionalização.
+  - **Mensagens_pt.properties** : equivalente em português do arquivo *Mensagens_en.properties*.
+- **fonts** : fontes tipográficas, tais como TTF, EOT e WOFF.
+- **html** : arquivos HTML específicos da aplicação, com exceção do **index.html**, que reside no diretório raiz. A maioria dos arquivos HTML é especificada com o intuido de compor parte da página Web, como uma tela, por exemplo, sendo carregada através da função [http://api.jquery.com/load/](http://api.jquery.com/load/).
+  - **componentes.html** : definição de componentes visuais específicos para a aplicação.
   - **tela.html** : modelo de tela que contém formulário para envio de dados para processamento através de [Uxi-amarelo](http://joseflavio.com/uxiamarelo).
-- **img** : diretório que centraliza os arquivos de imagem, tais como PNG, JPG e GIF.
-- **index.html** : principal arquivo HTML (página inicial), o qual está preparado para aplicações *single page*.
-- **js** : diretório que centraliza os arquivos JavaScript.
+- **html-dep** : arquivos HTML do núcleo do Ipê-roxo e das bibliotecas de dependência.
+- **img** : arquivos de imagem, tais como PNG, JPG e GIF.
+- **js** : arquivos JavaScript específicos da aplicação.
   - **aplicacao.js** : script que inicializa e controla o ciclo de vida da aplicação.
   - **configuracao.js** : configurações gerais da aplicação.
-  - **dicionario_en.js** : dicionário em inglês das palavras e frases que são apresentadas na aplicação, aos moldes de [messageformat](https://messageformat.github.io/), sendo parte do recurso de internacionalização.
-  - **dicionario_es.js** : equivalente em espanhol do arquivo *dicionario_en.js*.
-  - **dicionario_pt.js** : equivalente em português do arquivo *dicionario_en.js*.
-  - **iperoxo.js** : biblioteca base de objetos e funções JavaScript para o pleno funcionamento das aplicações Ipê-roxo. Aconselha-se não modificar este arquivo.
-- **js-dep** : diretório que centraliza os arquivos JavaScript das bibliotecas que o Ipê-roxo é dependente.
-- **sass** : diretório que centraliza os arquivos de estilo [Sass](https://sass-lang.com/), os quais são automaticamente convertidos para CSS através do script *servidor.sh*.
-- **servidor.sh** : script que inicializa o processo de conversão Sass/CSS e o [servidor Web simples](https://docs.python.org/2/library/simplehttpserver.html#module-SimpleHTTPServer) da Python na porta 8000.
+- **js-dep** : arquivos JavaScript do núcleo do Ipê-roxo e das bibliotecas de dependência.
+  - **iperoxo-componentes.js** : comportamento dos componentes visuais padrões.
+  - **iperoxo-dicionario-en.js** : dicionário dinâmico que incorpora as mensagens definidas em */etc/Mensagens_en.properties*.
+  - **iperoxo-dicionario-pt.js** : equivalente em português de *iperoxo-dicionario-en.js*.
+  - **iperoxo.js** : biblioteca base de objetos e funções JavaScript para o pleno funcionamento das aplicações Ipê-roxo.
+- **sass** : arquivos de estilo [Sass](https://sass-lang.com/) específicos da aplicação, os quais são automaticamente convertidos para CSS através do script *servidor.sh*.
+- **sass-dep** : arquivos de estilo [Sass](https://sass-lang.com/) do núcleo do Ipê-roxo e das bibliotecas de dependência.
 - **WEB-INF** : diretório necessário apenas para servidores Web JavaEE.
+- **servidor.sh** : script bash que inicializa o processo de conversão Sass/CSS e o [servidor Web simples](https://docs.python.org/2/library/simplehttpserver.html#module-SimpleHTTPServer) da Python na porta 8000.
+- **index.html** : principal arquivo HTML (página inicial), o qual está preparado para aplicações *single page*.
 
 ## Licença
 

@@ -85,8 +85,10 @@ public abstract class BasicoServico <T extends Serializable> extends Servico<T> 
 		
 		try{
 			
-			if( lid == null ) lid = IpeRoxo.getLinguagemPadrao();
+			if( lid == null ) lid = IpeRoxo.getLinguagem();
 			$ResourceBundle = IpeRoxo.getResourceBundle( lid );
+
+			if( zid == null ) zid = IpeRoxo.getZonaTempo();
 			
 			if( is$BancoDeDados() && IpeRoxo.getEntityManagerFactory() != null ){
 				$BancoDeDados = new BancoDeDados( get$Transacoes() );
