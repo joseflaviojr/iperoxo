@@ -31,11 +31,22 @@ gradle cleanIdea idea
 
 ## Execução Local
 
-Compilação e execução da aplicação durante o processo de desenvolvimento:
+Compilação da aplicação durante o processo de desenvolvimento:
 
 ```sh
 ./local.compilar.sh
+```
+
+Execução local:
+
+```sh
 ./local.executar.sh
+```
+
+Compilação e execução local:
+
+```sh
+./local.sh
 ```
 
 ## Instalação

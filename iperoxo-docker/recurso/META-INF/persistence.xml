@@ -11,13 +11,13 @@
 		
 		<non-jta-data-source>FONTE</non-jta-data-source>
 
-		<!--<class>pacote.Classe</class>-->
+		<!-- <class>pacote.Classe</class> -->
 
 		<properties>
 			<property name="eclipselink.target-database" value="PostgreSQL"/>
-			<!--<property name="eclipselink.logging.level" value="FINE"/>-->
-			<!--<property name="javax.persistence.schema-generation.database.action" value="drop-and-create" />-->
-			<!--<property name="javax.persistence.schema-generation.database.action" value="create" />-->
+			<!-- <property name="eclipselink.logging.level" value="FINE"/> -->
+			<!-- <property name="javax.persistence.schema-generation.database.action" value="drop-and-create" /> -->
+			<!-- <property name="javax.persistence.schema-generation.database.action" value="create" /> -->
 		</properties>
 
 	</persistence-unit>
