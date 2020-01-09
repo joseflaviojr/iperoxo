@@ -173,6 +173,7 @@ var HTML_ENTIDADE = {
 var tmp_tela_ativa;
 var tmp_tela_ativa_id;
 var tmp_elemento_ativo;
+var tmp_elemento_ativo_ciclo;
 
 //--------------------------------------------------------------------------
 
@@ -919,7 +920,7 @@ function mensagemClassificada( classe, texto, regiao ) {
         textoHTML(texto) +
         "</div>"
     );
-    destino[0].scrollIntoView(true);
+    html_documento.scrollTop(0);
 }
 
 //--------------------------------------------------------------------------
@@ -2365,15 +2366,45 @@ pronto(function(){
     //-----------------------------------
     // Controle de foco
     setInterval(function(){
-        var elemento = document.activeElement;
+        
+        var elemento  = document.activeElement;
+        if( elemento === undefined ) return;
+        
+        var atualizar = true;
+
         if( elemento !== tmp_elemento_ativo ){
+            
             tmp_elemento_ativo = elemento;
+            tmp_elemento_ativo_ciclo = 1;
+
             var rotulo = elementoRotulo(elemento);
-            if( rotulo === "a" || rotulo === "button" ) return;
+            if(
+                rotulo === "body"    ||
+                rotulo === "a"       ||
+                rotulo === "button"  ||
+                ! elemento.classList.contains("focavel")
+            ){
+                atualizar = false;
+            }
+
+        }else{
+
+            tmp_elemento_ativo_ciclo++;
+
+            if( tmp_elemento_ativo_ciclo >= 6 ){
+                tmp_elemento_ativo_ciclo = 1;
+            }else{
+                atualizar = false;
+            }
+
+        }
+
+        if( atualizar ){
             var telaObj = telas[getTelaAtivaId()];
             if( telaObj === undefined ) return;
             telaObj.elementoAtivo = elemento;
         }
+
     }, 1000);
 
     //-----------------------------------

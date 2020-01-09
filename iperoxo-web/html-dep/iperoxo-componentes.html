@@ -137,7 +137,7 @@ This file is part of Ipê-roxo - <http://joseflavio.com/iperoxo/>.
     data-provides="fileinput">
     <input
       type="text"
-      class="componente-ajustar form-control textod ipe-arquivo-nomes ipe-arquivo-editavel"
+      class="componente-ajustar form-control focavel textod ipe-arquivo-nomes ipe-arquivo-editavel"
       classe-extra-dica="{dica, select, undefined{} other{dica}}"
       dica="{dica, select, undefined{remover-atributo} other{{dica}}}"
       chaveph="{rotulo_interno, select, undefined{remover-atributo} other{{rotulo_interno}}}"
@@ -346,7 +346,7 @@ This file is part of Ipê-roxo - <http://joseflavio.com/iperoxo/>.
   componente-tipo="ipe-navegacao"
   componente-chave="comp_ipe_navegacao"
   componente-ref="{referencia, select, undefined{remover-atributo} other{{referencia}}}"
-  class="componente componente-ajustar navbar navbar-default"
+  class="componente componente-ajustar navbar navbar-default navbar-fixed-top"
   classe-extra-hidden="{oculto, select, sim{hidden} other{}}"
   classe-extra-outras="{class, select, undefined{} other{{class}}}">
   <div class="container-fluid">
@@ -368,7 +368,7 @@ This file is part of Ipê-roxo - <http://joseflavio.com/iperoxo/>.
           tid="{tid}"
           class="componente"
           classe-extra-active="{ativa, select, sim{active} other{}}">
-          <a href="javascript:void(0)" id="tab_a_{tid}" onclick="ativarTela(''{tid}'');">{titulo}</a>
+          <a href="javascript:void(0)" id="tab_a_{tid}" onclick="ativarTela(''{tid}''); $(this).parents(''.collapse:first'').collapse(''hide'');">{titulo}</a>
           <!-- TODO <a href="javascript:void(0)" class="close" aria-label="fechar">&times;</a> -->
         </li>
       </ul>

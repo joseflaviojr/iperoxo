@@ -76,6 +76,7 @@ a {
 #telas {
     position: relative;
     width: 100%;
+    top: 50px;
 }
 
 .tela {
@@ -126,6 +127,15 @@ a {
     margin-top: 0;
 }
 
+.tela-comandos {
+    position: sticky;
+    width: 100%;
+    bottom: 15px;
+    z-index: 999997;
+    text-align: right;
+    background-color: rgba(255, 255, 255, 0.8);
+}
+
 .rotulo {
     display: inline-block;
     max-width: 100%;
@@ -156,6 +166,21 @@ a {
     &:hover {
         width: 32px;
         padding-top: 8px;
+    }
+
+}
+
+.navbar-default .navbar-toggle {
+    
+    border: none;
+
+    .icon-bar {
+        background-color: #e3dddd;
+    }
+
+    &:hover,
+    &:focus {
+        background-color: white;
     }
 
 }
