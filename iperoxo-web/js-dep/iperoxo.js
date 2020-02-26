@@ -120,6 +120,7 @@ var dicionario = dicionario_en_US;
  * @see decrementarEspera
  */
 var animacao_espera_total = 0;
+var animacao_espera;
 
 /**
  * Objetos com informações sobre as telas abertas.
@@ -145,13 +146,10 @@ var id_geracao_sequencia = 0;
  */
 var formatador;
 
-/**
- * Elemento do qual a dica está sendo mostrada.
- */
-var dica_mostrando = null;
+var informacao_situacional;
+var informacao_situacional_texto = "";
 
 var mensagem_ampla;
-var mensagem_ampla_fechar;
 var mensagem_ampla_texto;
 
 /**
@@ -615,7 +613,7 @@ function isCordovaNativa() {
  */
 function incrementarEspera() {
     animacao_espera_total++;
-    document.getElementById("animacao-espera").style.display = "block";
+    animacao_espera.style.display = "block";
 }
 
 //--------------------------------------------------------------------------
@@ -628,7 +626,7 @@ function decrementarEspera() {
     animacao_espera_total--;
     if( animacao_espera_total <= 0 ){
         animacao_espera_total = 0;
-        document.getElementById("animacao-espera").style.display = "none";
+        animacao_espera.style.display = "none";
     }
 }
 
@@ -905,56 +903,51 @@ function setTexto( elemento, conteudo, carregar ) {
 //--------------------------------------------------------------------------
 
 /**
- * Acrescenta uma mensagem estilizada numa região do HTML, no formato Bootstrap (alerts).
+ * Acrescenta uma "ipe-mensagem" numa região do HTML.
  * A mensagem será inserida no primeiro descendente que contém a classe "mensagens".
  * Se região == null, será utilizado o elemento global que possui id = "mensagens".
- * @param {string} classe Classe CSS da biblioteca Bootstrap. Ex.: "alert-success"
+ * @param {string} estilo Estilo visual da mensagem: "padrao", "primario", "secundario", "sucesso", "informacao", "atencao", "perigo", "claro" ou "escuro".
  * @param {string} texto Texto da mensagem, o qual será normalizado com {@link textoHTML}.
  * @param {string} regiao Objeto jQuery.
  */
-function mensagemClassificada( classe, texto, regiao ) {
+function mensagemClassificada( estilo, texto, regiao ) {
     var destino = regiao == null ? $("#mensagens") : regiao.find(".mensagens:first");
-    destino.append(
-        "<div class=\"alert " + classe + "\">" +
-        "<a href=\"#\" class=\"close\" data-dismiss=\"alert\" aria-label=\"fechar\">&times;</a>" +
-        textoHTML(texto) +
-        "</div>"
-    );
+    inserirComponente( destino, "ipe-mensagem", { "estilo": estilo }, textoHTML(texto), "fim" );
     html_documento.scrollTop(0);
 }
 
 //--------------------------------------------------------------------------
 
 /**
- * {@link mensagemClassificada} como "alert-success".
+ * {@link mensagemClassificada} como "sucesso".
  * @see mensagemClassificada
  */
 function mensagemExito( texto, regiao ) {
-    mensagemClassificada( "alert-success", texto, regiao );
+    mensagemClassificada( "sucesso", texto, regiao );
 }
 
 /**
- * {@link mensagemClassificada} como "alert-info".
+ * {@link mensagemClassificada} como "informacao".
  * @see mensagemClassificada
  */
 function mensagemInformacao( texto, regiao ) {
-    mensagemClassificada( "alert-info", texto, regiao );
+    mensagemClassificada( "informacao", texto, regiao );
 }
 
 /**
- * {@link mensagemClassificada} como "alert-warning".
+ * {@link mensagemClassificada} como "atencao".
  * @see mensagemClassificada
  */
 function mensagemAtencao( texto, regiao ) {
-    mensagemClassificada( "alert-warning", texto, regiao );
+    mensagemClassificada( "atencao", texto, regiao );
 }
 
 /**
- * {@link mensagemClassificada} como "alert-danger".
+ * {@link mensagemClassificada} como "perigo".
  * @see mensagemClassificada
  */
 function mensagemErro( texto, regiao ) {
-    mensagemClassificada( "alert-danger", texto, regiao );
+    mensagemClassificada( "perigo", texto, regiao );
 }
 
 //--------------------------------------------------------------------------
@@ -1115,6 +1108,40 @@ function fecharMensagemAmpla() {
 //--------------------------------------------------------------------------
 
 /**
+ * Atualiza a informação situacional.
+ * @param {string} texto Texto que descreve a situação atual. Ele será normalizado com {@link textoHTML}.
+ */
+function setInformacaoSituacional( texto ) {
+    if( texto == null ) texto = "";
+    informacao_situacional_texto = textoHTML(texto);
+    informacao_situacional.html(informacao_situacional_texto);
+}
+
+//--------------------------------------------------------------------------
+
+/**
+ * Atualiza a informação situacional e garante sua visibilidade.
+ * @param {string} texto Texto que descreve a situação atual. Ele será normalizado com {@link textoHTML}.
+ */
+function mostrarInformacaoSituacional( texto ) {
+    setInformacaoSituacional(texto);
+    informacao_situacional.tempo = Instant.now();
+    informacao_situacional.fadeIn();
+}
+
+//--------------------------------------------------------------------------
+
+/**
+ * Oculta a informação situacional.
+ */
+function ocultarInformacaoSituacional() {
+    informacao_situacional.tempo = undefined;
+    informacao_situacional.fadeOut();
+}
+
+//--------------------------------------------------------------------------
+
+/**
  * Executa AJAX do tipo POST para um serviço {@link http://joseflavio.com/uxiamarelo Uxi-amarelo}.
  * @param url URL para Uxi-amarelo.
  * @param json JSON a ser enviado através de POST.
@@ -1211,63 +1238,49 @@ function uxiamareloPreparar( formulario, enviarAgora, funcExito, funcErro, funcP
  */
 function atualizarAmbiente() {
 
-    if( configuracao.recurso_componente ){
-        implantarComponentes();
+    implantarComponentes();
+    implantarDicas();
+    carregarTextoDinamico();
+
+    // Removendo objetos desnecessários
+    for( var t in telas ){
+        if( $("#"+t).length === 0 ){
+            delete telas[t];
+        }
     }
 
-    if( configuracao.recurso_dica ){
-        implantarDicas();
-    }
+    // Atualizando telas
+    $(".tela").each(function(){
 
-    if( configuracao.recurso_linguagem ){
-        carregarTextoDinamico();
-    }
+        var tela = $(this);
 
-    if( configuracao.recurso_tela ){
-
-        // Removendo objetos desnecessários
-        for( var t in telas ){
-            if( $("#"+t).length === 0 ){
-                delete telas[t];
-            }
+        // ID da tela
+        var tid = tela.attr("id");
+        if( tid === undefined || tid.length === 0 ){
+            tid = gerarID();
+            tela.attr( "id", tid );
         }
 
-        // Atualizando telas
-        $(".tela").each(function(){
+        // Objeto associado à tela
+        if( telas[tid] === undefined ){
+            telas[tid] = {
+                "tid"   : tid,
+                "args"  : {},
+                "passo" : navegacao_passo
+            };
+        }
 
-            var tela = $(this);
+        // Campos padrões
+        tela.find(".sid:first").val(sid);
+        tela.find(".lid:first").val(lid);
+        tela.find(".zid:first").val(zid);
+        tela.find(".tid:first").val(tid);
 
-            // ID da tela
-            var tid = tela.attr("id");
-            if( tid === undefined || tid.length === 0 ){
-                tid = gerarID();
-                tela.attr( "id", tid );
-            }
+    });
 
-            // Objeto associado à tela
-            if( telas[tid] === undefined ){
-                telas[tid] = {
-                    "tid"   : tid,
-                    "args"  : {},
-                    "passo" : navegacao_passo
-                };
-            }
-
-            // Campos padrões
-            tela.find(".sid:first").val(sid);
-            tela.find(".lid:first").val(lid);
-            tela.find(".zid:first").val(zid);
-            tela.find(".tid:first").val(tid);
-
-        });
-
-    }
-
-    if( configuracao.recurso_componente ){
-        $(".componente").each(function(){
-            atualizarComponente(this);
-        });
-    }
+    $(".componente").each(function(){
+        atualizarComponente(this);
+    });
 
     //TODO Remover por desuso
     if( js("telasAtualizadas") !== undefined ){
@@ -1305,7 +1318,7 @@ function abrirTela( pagina, autoAtivar, paginaArg, funcExito, funcExitoArg ) {
     if( autoAtivar === undefined ) autoAtivar = true;
 
     var divID  = gerarID();
-    var divHTML = "<div id=\"" + divID + "\" class=\"hidden\"></div>";
+    var divHTML = "<div id=\"" + divID + "\" class=\"d-none\"></div>";
     var telaAtiva = getTelaAtiva();
 
     if( telaAtiva !== undefined ) telaAtiva.parent().after(divHTML);
@@ -1339,8 +1352,14 @@ function abrirTela( pagina, autoAtivar, paginaArg, funcExito, funcExitoArg ) {
                 "passo" : navegacao_passo
             };
 
-            tela.addClass("hidden");
-            removerClasse(div, "hidden");
+            tela.click(function(evento){
+                if( evento.target.id === tid ){
+                    setInformacaoSituacional();
+                }
+            });
+
+            tela.addClass("d-none");
+            removerClasse(div, "d-none");
             atualizarAmbiente();
 
             tela.find(".uxiamarelo_form").each(function(){
@@ -1392,7 +1411,7 @@ function ativarTela( tela ) {
     var tid = tela.attr("id");
     var telaObj = telas[tid];
 
-    $( ".tela" ).addClass("hidden");
+    $( ".tela" ).addClass("d-none");
 
     telaObj.passo = ++navegacao_passo;
 
@@ -1400,7 +1419,7 @@ function ativarTela( tela ) {
 
         var elemAtivo = telaObj.elementoAtivo;
 
-        tela.removeClass("hidden");
+        tela.removeClass("d-none");
 
         atualizarAmbiente();
     
@@ -1447,7 +1466,7 @@ function isTelaAtiva( tela ) {
     if( typeof(tela) === "string" ) tela = $( "#" + tela );
     else tela = jQueryObj(tela);
 
-    return ! tela.hasClass("hidden");
+    return ! tela.hasClass("d-none");
 
 }
 
@@ -1457,8 +1476,8 @@ function isTelaAtiva( tela ) {
  * Tela atualmente ativa.
  */
 function getTelaAtiva() {
-    if( telas[tmp_tela_ativa_id] === undefined || tmp_tela_ativa.hasClass("hidden") ){
-        tmp_tela_ativa = $(".tela").not(".hidden");
+    if( telas[tmp_tela_ativa_id] === undefined || tmp_tela_ativa.hasClass("d-none") ){
+        tmp_tela_ativa = $(".tela").not(".d-none");
         tmp_tela_ativa_id = tmp_tela_ativa.attr("id");
     }
     return tmp_tela_ativa.length > 0 ? tmp_tela_ativa : undefined;
@@ -1470,8 +1489,8 @@ function getTelaAtiva() {
  * Identificação da tela atualmente ativa.
  */
 function getTelaAtivaId() {
-    if( telas[tmp_tela_ativa_id] === undefined || tmp_tela_ativa.hasClass("hidden") ){
-        tmp_tela_ativa = $(".tela").not(".hidden");
+    if( telas[tmp_tela_ativa_id] === undefined || tmp_tela_ativa.hasClass("d-none") ){
+        tmp_tela_ativa = $(".tela").not(".d-none");
         tmp_tela_ativa_id = tmp_tela_ativa.attr("id");
     }
     return tmp_tela_ativa.length > 0 ? tmp_tela_ativa_id : undefined;
@@ -1492,7 +1511,7 @@ function fecharTela( tela ) {
 
     var remocaoEfetiva = function() {
 
-        var oculta = tela.hasClass("hidden");
+        var oculta = tela.hasClass("d-none");
         tela.parent().remove();
         delete telas[tid];
     
@@ -1516,6 +1535,10 @@ function fecharTela( tela ) {
         }
     
         atualizarAmbiente();
+
+        if( Object.keys(telas).length === 0 ){
+            jsExec( configuracao.funcao_tela_ausente );
+        }
 
     };
 
@@ -1630,38 +1653,38 @@ function ajustarRolagem() {
  * Este método é chamado automaticamente por {@link atualizarAmbiente}.
  */
 function implantarDicas() {
+
     $(".dica").each(function(){
-        var elemento = $(this);
-        var dica = elemento.attr("dica");
-        var modelo = '<div class="tooltip" role="tooltip"><div class="tooltip-inner textod" chave="{dica}"></div></div>';
-        elemento.tooltip({
-            "title"    : function(){ return dicionario[dica]; },
-            "html"     : true,
-            "placement": "auto top",
-            "container": "body",
-            "trigger"  : "manual",
-            "template" : formatador.compile(modelo)({ "dica": dica })
-        });
-        elemento.removeClass("dica");
-        elemento.addClass("dica-implantada");
-        elemento.on( "click focusin focusout", function( evento ){
-            if( ! configuracao.recurso_dica ) return;
-            var dica_atual = evento.target;
-            if( dica_atual === dica_mostrando ){
-                if( evento.type === "focusout" ){
-                    elemento.tooltip("hide");
-                    dica_mostrando = null;
-                }else{
-                    var visivel = elemento.attr("aria-describedby") !== undefined;
-                    if( ! visivel ) elemento.tooltip("show");
-                }
-            }else{
-                if( dica_mostrando !== null ) $(dica_mostrando).tooltip("hide");
-                elemento.tooltip("show");
-                dica_mostrando = dica_atual;
-            }
-        });
+
+        var elem = $(this);
+        var dica = elem.attr("dica");
+
+        elem.removeClass("dica");
+        elem.addClass("dica-implantada");
+
+        var funcEntrada = function(evento){
+            mostrarInformacaoSituacional(dicionario[dica]);
+        };
+
+        var funcSaida = function(evento){
+            setInformacaoSituacional();
+        };
+
+        if( elem.hasClass("focavel") ){
+            elem.focusin(function(evento){
+                informacao_situacional.fixa = true;
+                funcEntrada(evento);
+            });
+            elem.focusout(function(evento){
+                informacao_situacional.fixa = false;
+                funcSaida(evento);
+            });
+        }else{
+            elem.click(funcEntrada);
+        }
+
     });
+
 }
 
 //--------------------------------------------------------------------------
@@ -1791,7 +1814,9 @@ function inserirComponente( destino, tipo, atributos, conteudo, posicao, renderi
             if( endereco !== undefined && endereco !== "" ){
                 raiz = local.parent(".componente:first");
                 if( raiz.length === 0 ) raiz = $("html");
-                raiz.find(endereco).append(comp);
+                var local_apontado = raiz.find(endereco);
+                if( local_apontado.length > 0 ) local_apontado.append(comp);
+                else local.before(comp);
             }else{
                 local.before(comp);
             }
@@ -1922,8 +1947,13 @@ function getCompEditavel( comp ) {
     var tipo  = comp.attr("componente-tipo");
     var chave = configuracao.componentes[tipo].chave;
     var fonte = js( chave + "_get_editavel" );
-    if( fonte === undefined ) return true;
-    return jsExec(fonte, comp);
+    if( fonte !== undefined ){
+        return jsExec(fonte, comp);    
+    }else{
+        fonte = configuracao.componentes[tipo]["valor-auto"];
+        fonte = fonte === undefined || fonte === "" ? comp : comp.find(fonte);
+        return fonte.attr("readonly") === undefined;
+    }
 }
 
 //--------------------------------------------------------------------------
@@ -1939,7 +1969,15 @@ function setCompEditavel( comp, editavel ) {
     comp = jQueryObj(comp);
     var tipo  = comp.attr("componente-tipo");
     var chave = configuracao.componentes[tipo].chave;
-    jsExec( chave + "_set_editavel", comp, editavel !== false );
+    var fonte = js( chave + "_set_editavel" );
+    if( fonte !== undefined ){
+        jsExec(fonte, comp, editavel);
+    }else{
+        fonte = configuracao.componentes[tipo]["valor-auto"];
+        fonte = fonte === undefined || fonte === "" ? comp : comp.find(fonte);
+        if( editavel !== false ) fonte.removeAttr("readonly");
+        else fonte.attr("readonly", "readonly");
+    }
 }
 
 //--------------------------------------------------------------------------
@@ -1996,7 +2034,7 @@ function setCompHabilitado( comp, habilitado ) {
  * @see getComp
  */
 function getCompVisivel( comp ) {
-    return ! jQueryObj(comp).hasClass("hidden");
+    return ! jQueryObj(comp).hasClass("d-none");
 }
 
 //--------------------------------------------------------------------------
@@ -2010,8 +2048,8 @@ function getCompVisivel( comp ) {
  */
 function setCompVisivel( comp, visivel ) {
     comp = jQueryObj(comp);
-    if( visivel !== false ) comp.removeClass("hidden");
-    else comp.addClass("hidden");
+    if( visivel !== false ) comp.removeClass("d-none");
+    else comp.addClass("d-none");
 }
 
 //--------------------------------------------------------------------------
@@ -2303,51 +2341,56 @@ function cordovaApagar( nome, funcExito, funcErro ) {
 
 //--------------------------------------------------------------------------
 
+/**
+ * Reinicia a aplicação Ipê-roxo.
+ * @see configuracao.funcao_inicial
+ */
+function reiniciarAplicacao() {
+    location.reload(true);
+}
+
+//--------------------------------------------------------------------------
+
 pronto(function(){
 
     //-----------------------------------
-    if( configuracao.recurso_geral ){
-        // Definição de "url_args"
-        copiarQueryParaJSON( window.location.search, url_args );
-    }
+    // Definição de "url_args"
+    copiarQueryParaJSON( window.location.search, url_args );
 
     //-----------------------------------
-    if( configuracao.recurso_mensagem ){
+    // Informação situacional
+    informacao_situacional = $("#informacao-situacional");
+    informacao_situacional.click(ocultarInformacaoSituacional);
 
-        mensagem_ampla        = document.getElementById("mensagem-ampla");
-        mensagem_ampla_fechar = document.getElementsByClassName("mensagem-ampla-fechar")[0];
-        mensagem_ampla_texto  = document.getElementById("mensagem-ampla-texto");
-    
-        mensagem_ampla_fechar.onclick = function() {
-            fecharMensagemAmpla();
+    setInterval(function(){
+        if( informacao_situacional.fixa || ! informacao_situacional.tempo ) return;
+        var tempo_decorrido = Instant.now()._seconds - informacao_situacional.tempo._seconds;
+        if( tempo_decorrido >= 10 || informacao_situacional_texto.length === 0 ){
+            ocultarInformacaoSituacional();
         }
-    
-        window.addEventListener("click", function(e){
-            if( e.target == mensagem_ampla ){
-                fecharMensagemAmpla();
-            }
-        });
+    }, 1000);
 
+    //-----------------------------------
+    // Animação de espera
+    animacao_espera = document.getElementById("animacao-espera");
+
+    //-----------------------------------
+    // Mensagem ampla
+    mensagem_ampla        = $("#mensagem-ampla")[0];
+    mensagem_ampla_texto  = $("#mensagem-ampla div")[0];
+
+    mensagem_ampla.onclick = function(){
+        fecharMensagemAmpla();
     }
 
     //-----------------------------------
-    if( configuracao.recurso_persistencia && configuracao.cordova_repositorio == null && isCordovaNativa() ){
+    if( configuracao.cordova_repositorio == null && isCordovaNativa() ){
         configuracao.cordova_repositorio =
             device.platform === "iOS" ?
             cordova.file.syncedDataDirectory :
             cordova.file.dataDirectory;
     }
     
-    //-----------------------------------
-    html_corpo.click(function( evento ){
-        if( configuracao.recurso_dica && dica_mostrando !== null ){
-            if( evento.target !== dica_mostrando ){
-                $(dica_mostrando).tooltip("hide");
-                dica_mostrando = null;
-            }
-        }
-    });
-
     //-----------------------------------
     // Registro da rolagem da tela ativa
     var rolagem = function( evento ){
@@ -2409,77 +2452,71 @@ pronto(function(){
 
     //-----------------------------------
     // Inicialização dos componentes visuais e da aplicação
-    if( configuracao.recurso_componente ){
+    var repositorios = configuracao.componentes_arquivos.slice(0);
+    
+    function _carregar_componentes() {
 
-        var repositorios = configuracao.componentes_arquivos.slice(0);
-        
-        function _carregar_componentes() {
+        var repositorio = $(this);
 
-            var repositorio = $(this);
+        repositorio.find(".componente").each(function(){
 
-            repositorio.find(".componente").each(function(){
+            var comp = $(this).clone();
 
-                var comp = $(this).clone();
+            var tipo = comp.attr("componente-tipo").toLowerCase();
+            if( tipo === undefined || tipo === "" ){
+                console.error( "componente-tipo ausente: %o", comp );
+                return true;
+            }
 
-                var tipo = comp.attr("componente-tipo").toLowerCase();
-                if( tipo === undefined || tipo === "" ){
-                    console.error( "componente-tipo ausente: %o", comp );
-                    return true;
+            comp.find(".componente").each(function(){
+                var subcomp = $(this);
+                var subtipo = subcomp.attr("componente-tipo");
+                if( subtipo !== undefined && subtipo !== "" ){
+                    subcomp.replaceWith( "<ipe-componente tipo=\"" + subtipo + "\" />" );
                 }
-
-                comp.find(".componente").each(function(){
-                    var subcomp = $(this);
-                    var subtipo = subcomp.attr("componente-tipo");
-                    if( subtipo !== undefined && subtipo !== "" ){
-                        subcomp.replaceWith( "<ipe-componente tipo=\"" + subtipo + "\" />" );
-                    }
-                });
-
-                var chave = comp.attr("componente-chave");
-                var vauto = comp.attr("componente-valor-auto");
-
-                comp.removeAttr("componente-chave");
-                comp.removeAttr("componente-valor-auto");
-
-                var conf = {
-                    "tipo"       : tipo,
-                    "chave"      : chave,
-                    "valor-auto" : vauto,
-                    "html"       : comp.wrap("<div></div>").parent().html()
-                };
-
-                configuracao.componentes[tipo] = conf;
-
-                try{
-                    jsExec(chave + "_inicializar", conf);
-                }catch(e){
-                    console.error(e);
-                }
-                
             });
 
-            repositorio.remove();
-            
-            if( ! _carregar_repositorio() ) jsExec( configuracao.funcao_inicial );
+            var chave = comp.attr("componente-chave");
+            var vauto = comp.attr("componente-valor-auto");
 
-        }
+            comp.removeAttr("componente-chave");
+            comp.removeAttr("componente-valor-auto");
 
-        function _carregar_repositorio() {
-            var endereco = repositorios.shift();
-            if( endereco !== undefined ){
-                html_corpo.append("<div id=\"componentes\" class=\"hidden\"></div>");
-                $("#componentes").load(endereco + " .tela", _carregar_componentes);
-                return true;
-            }else{
-                return false;
+            var conf = {
+                "tipo"       : tipo,
+                "chave"      : chave,
+                "valor-auto" : vauto,
+                "html"       : comp.wrap("<div></div>").parent().html()
+            };
+
+            configuracao.componentes[tipo] = conf;
+
+            try{
+                jsExec(chave + "_inicializar", conf);
+            }catch(e){
+                console.error(e);
             }
-        }
+            
+        });
 
-        _carregar_repositorio();
+        repositorio.remove();
+        
+        if( ! _carregar_repositorio() ) jsExec( configuracao.funcao_inicial );
 
-    }else{
-        jsExec( configuracao.funcao_inicial );
     }
+
+    function _carregar_repositorio() {
+        var endereco = repositorios.shift();
+        if( endereco !== undefined ){
+            html_corpo.append("<div id=\"componentes\" class=\"d-none\"></div>");
+            $("#componentes").load(endereco + " .tela", _carregar_componentes);
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    _carregar_repositorio();
 
 });
 

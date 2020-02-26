@@ -8,9 +8,9 @@ This file is part of Ipê-roxo - <http://joseflavio.com/iperoxo/>.
 <head>
 <meta charset="utf-8" />
 <title>Ipê-roxo</title>
+<link href="../css-dep/fontawesome-all.css" rel="stylesheet" />
 <link href="../css-dep/bootstrap.min.css" rel="stylesheet" />
-<link href="../css-dep/bootstrap-theme.min.css" rel="stylesheet" />
-<link href="../css-dep/bootstrap-select.min.css" rel="stylesheet">
+<link href="../css-dep/bootstrap-select.min.css" rel="stylesheet" />
 <link href="../css-dep/jasny-bootstrap.min.css" rel="stylesheet" />
 <link href="../css-dep/iperoxo.css" rel="stylesheet" />
 <link href="../css/estilo.css" rel="stylesheet" />
@@ -22,6 +22,21 @@ This file is part of Ipê-roxo - <http://joseflavio.com/iperoxo/>.
 <div class="tela tela-flexivel">
 
 <!-- ========================================== -->
+<!-- Mensagem -->
+<div
+  componente-tipo="ipe-mensagem"
+  componente-chave="comp_ipe_mensagem"
+  componente-ref="{referencia, select, undefined{remover-atributo} other{{referencia}}}"
+  componente-valor-auto="span:first"
+  class="componente componente-ajustar alert alert-dismissible fade show" role="alert"
+  classe-extra-estilo="{estilo, select, undefined{alert-dark} padrao{alert-dark} primario{alert-primary} secundario{alert-secondary} sucesso{alert-success} informacao{alert-info} atencao{alert-warning} perigo{alert-danger} claro{alert-light} escuro{alert-dark} other{{estilo}}}">
+  <span>{conteudo}</span>
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+
+<!-- ========================================== -->
 <!-- Texto -->
 <div
   componente-tipo="ipe-texto"
@@ -29,9 +44,9 @@ This file is part of Ipê-roxo - <http://joseflavio.com/iperoxo/>.
   componente-ref="{referencia, select, undefined{{nome}} other{{referencia}}}"
   componente-valor-auto=".ipe-texto-controles > input:first"
   class="componente form-group"
-  classe-extra-hidden="{oculto, select, sim{hidden} other{}}"
+  classe-extra-d-none="{oculto, select, sim{d-none} other{}}"
   classe-extra-outras="{class, select, undefined{} other{{class}}}">
-  <div class="componente-ajustar rotulo" classe-extra-hidden="{rotulo, select, undefined{hidden} other{}}">
+  <div class="componente-ajustar rotulo" classe-extra-d-none="{rotulo, select, undefined{d-none} other{}}">
     <span
       class="componente-ajustar textod"
       classe-extra-dica="{dica, select, undefined{} other{dica}}"
@@ -39,7 +54,7 @@ This file is part of Ipê-roxo - <http://joseflavio.com/iperoxo/>.
       dica="{dica, select, undefined{remover-atributo} other{{dica}}}"
       origem="{rotulo_origem, select, undefined{remover-atributo} other{{rotulo_origem}}}"></span>:
   </div>
-  <div class="ipe-texto-controles">
+  <div class="ipe-texto-controles input-group mb-3">
     <input
       type="{tipo, select, undefined{text} texto{text} senha{password} numero{number} telefone{tel} email{email} url{url} other{{tipo}}}"
       inputmode="{modo, select, undefined{remover-atributo} literal{verbatim} numerico{numeric} nome{latin-name} prosa{latin-prose} other{{modo}}}"
@@ -55,23 +70,25 @@ This file is part of Ipê-roxo - <http://joseflavio.com/iperoxo/>.
       onchange="{ao_mudar, select, undefined{remover-atributo} other{{ao_mudar}}}"
       onkeydown="{ao_pressionar_tecla, select, undefined{remover-atributo} other{{ao_pressionar_tecla}}}"
       onkeyup="{ao_soltar_tecla, select, undefined{remover-atributo} other{{ao_soltar_tecla}}}" />
+    <div class="input-group-append">
+    </div>
   </div>
-  <ipe-componente tipo="ipe-texto-acao" destino=".ipe-texto-controles:first" />
+  <ipe-componente tipo="ipe-texto-acao" destino=".input-group-append:first" />
 </div>
 
 <!-- ========================================== -->
 <!-- Botão de ação de Texto -->
-<div
+<span
   componente-tipo="ipe-texto-acao"
   componente-chave="comp_ipe_texto_acao"
   componente-ref="{referencia, select, undefined{remover-atributo} other{{referencia}}}"
-  class="componente componente-ajustar input-group-addon btn btn-default"
-  onclick="{ao_clicar}"
-  classe-extra-hidden="{oculto, select, sim{hidden} other{}}"
-  classe-extra-outras="{class, select, undefined{} other{{class}}}">
-  <span class="componente-ajustar glyphicon glyphicon-{icone}" icone="{icone, select, undefined{remover-elemento} other{{icone}}}" aria-hidden="true"></span>
-  <span class="componente-ajustar textod" chave="{rotulo, select, undefined{remover-elemento} other{{rotulo}}}"></span>
-</div>
+  class="componente componente-ajustar input-group-text"
+  classe-extra-d-none="{oculto, select, sim{d-none} other{}}"
+  classe-extra-outras="{class, select, undefined{} other{{class}}}"
+  onclick="{ao_clicar}">
+  <span class="componente-ajustar align-middle {icone}" icone="{icone, select, undefined{remover-elemento} other{remover-atributo}}"></span>
+  <span class="componente-ajustar align-middle textod" chave="{rotulo, select, undefined{remover-elemento} other{{rotulo}}}"></span>
+</span>
 
 <!-- ========================================== -->
 <!-- Data -->
@@ -81,14 +98,14 @@ This file is part of Ipê-roxo - <http://joseflavio.com/iperoxo/>.
   componente-ref="{referencia, select, undefined{{nome}} other{{referencia}}}"
   componente-valor-auto=".ipe-data-controles > input:first"
   class="componente form-group"
-  classe-extra-hidden="{oculto, select, sim{hidden} other{}}"
+  classe-extra-d-none="{oculto, select, sim{d-none} other{}}"
   classe-extra-outras="{class, select, undefined{} other{{class}}}">
   <input
     class="componente-ajustar ipe-data-valor"
     type="hidden"
     name="{nome, select, undefined{remover-atributo} other{{nome}}}"
     value="" />
-  <div class="componente-ajustar rotulo" classe-extra-hidden="{rotulo, select, undefined{hidden} other{}}">
+  <div class="componente-ajustar rotulo" classe-extra-d-none="{rotulo, select, undefined{d-none} other{}}">
     <span
       class="componente-ajustar textod"
       classe-extra-dica="{dica, select, undefined{} other{dica}}"
@@ -96,7 +113,7 @@ This file is part of Ipê-roxo - <http://joseflavio.com/iperoxo/>.
       dica="{dica, select, undefined{remover-atributo} other{{dica}}}"
       origem="{rotulo_origem, select, undefined{remover-atributo} other{{rotulo_origem}}}"></span>:
   </div>
-  <div class="ipe-data-controles">
+  <div class="ipe-data-controles input-group mb-3">
     <input
       type="text"
       name="{nome, select, undefined{remover-atributo} other{{nome}Texto}}"
@@ -111,8 +128,10 @@ This file is part of Ipê-roxo - <http://joseflavio.com/iperoxo/>.
       onchange="{ao_mudar, select, undefined{remover-atributo} other{{ao_mudar}}}"
       onkeydown="{ao_pressionar_tecla, select, undefined{remover-atributo} other{{ao_pressionar_tecla}}}"
       onkeyup="{ao_soltar_tecla, select, undefined{remover-atributo} other{{ao_soltar_tecla}}}" />
+    <div class="input-group-append">
+    </div>
   </div>
-  <ipe-componente tipo="ipe-texto-acao" destino=".ipe-data-controles:first" />
+  <ipe-componente tipo="ipe-texto-acao" destino=".input-group-append:first" />
 </div>
 
 <!-- ========================================== -->
@@ -122,9 +141,9 @@ This file is part of Ipê-roxo - <http://joseflavio.com/iperoxo/>.
   componente-chave="comp_ipe_arquivo"
   componente-ref="{referencia, select, undefined{{nome}} other{{referencia}}}"
   class="componente form-group"
-  classe-extra-hidden="{oculto, select, sim{hidden} other{}}"
+  classe-extra-d-none="{oculto, select, sim{d-none} other{}}"
   classe-extra-outras="{class, select, undefined{} other{{class}}}">
-  <div class="componente-ajustar rotulo" classe-extra-hidden="{rotulo, select, undefined{hidden} other{}}">
+  <div class="componente-ajustar rotulo" classe-extra-d-none="{rotulo, select, undefined{d-none} other{}}">
     <span
       class="componente-ajustar textod"
       classe-extra-dica="{dica, select, undefined{} other{dica}}"
@@ -132,9 +151,7 @@ This file is part of Ipê-roxo - <http://joseflavio.com/iperoxo/>.
       dica="{dica, select, undefined{remover-atributo} other{{dica}}}"
       origem="{rotulo_origem, select, undefined{remover-atributo} other{{rotulo_origem}}}"></span>:
   </div>
-  <div
-    class="fileinput fileinput-new input-group"
-    data-provides="fileinput">
+  <div class="fileinput fileinput-new input-group" data-provides="fileinput">
     <input
       type="text"
       class="componente-ajustar form-control focavel textod ipe-arquivo-nomes ipe-arquivo-editavel"
@@ -143,20 +160,22 @@ This file is part of Ipê-roxo - <http://joseflavio.com/iperoxo/>.
       chaveph="{rotulo_interno, select, undefined{remover-atributo} other{{rotulo_interno}}}"
       origem="{rotulo_interno_origem, select, undefined{remover-atributo} other{{rotulo_interno_origem}}}"
       readonly="readonly" />
-    <span class="input-group-addon btn btn-default btn-file">
-      <span class="fileinput-new"><span class="glyphicon glyphicon-file" aria-hidden="true"></span></span>
-      <span class="fileinput-exists"><span class="glyphicon glyphicon-file" aria-hidden="true"></span></span>
-      <input
-        type="file"
-        name="{nome, select, undefined{remover-atributo} other{{nome}}}"
-        class="componente-ajustar"
-        atributo-boolean-1="{modo, select, multiplo{multiple} other{}}"
-        accept="{aceitar, select, undefined{remover-atributo} other{{aceitar}}}"
-        onchange="comp_ipe_arquivo_onchange(esteComp(this));" />
-    </span>
-    <a href="javascript:void(0)" class="input-group-addon btn btn-default fileinput-exists" data-dismiss="fileinput">
-      <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
-    </a>
+    <div class="input-group-append">
+      <span class="input-group-text fileinput-exists" data-dismiss="fileinput">
+        <span class="fas fa-times" aria-hidden="true"></span>
+      </span>
+      <span class="input-group-text btn-file">
+        <span class="fileinput-new"><span class="far fa-file" aria-hidden="true"></span></span>
+        <span class="fileinput-exists"><span class="far fa-file-alt" aria-hidden="true"></span></span>
+        <input
+          type="file"
+          name="{nome, select, undefined{remover-atributo} other{{nome}}}"
+          class="componente-ajustar"
+          atributo-boolean-1="{modo, select, multiplo{multiple} other{}}"
+          accept="{aceitar, select, undefined{remover-atributo} other{{aceitar}}}"
+          onchange="comp_ipe_arquivo_onchange(esteComp(this));" />
+      </span>
+    </div>
   </div>
 </div>
 
@@ -168,9 +187,9 @@ This file is part of Ipê-roxo - <http://joseflavio.com/iperoxo/>.
   componente-ref="{referencia, select, undefined{{nome}} other{{referencia}}}"
   componente-valor-auto="select:first"
   class="componente form-group"
-  classe-extra-hidden="{oculto, select, sim{hidden} other{}}"
+  classe-extra-d-none="{oculto, select, sim{d-none} other{}}"
   classe-extra-outras="{class, select, undefined{} other{{class}}}">
-  <div class="componente-ajustar rotulo" classe-extra-hidden="{rotulo, select, undefined{hidden} other{}}">
+  <div class="componente-ajustar rotulo" classe-extra-d-none="{rotulo, select, undefined{d-none} other{}}">
     <span
       class="componente-ajustar textod"
       classe-extra-dica="{dica, select, undefined{} other{dica}}"
@@ -206,9 +225,9 @@ This file is part of Ipê-roxo - <http://joseflavio.com/iperoxo/>.
   componente-chave="comp_ipe_marcacao_grupo"
   componente-ref="{referencia, select, undefined{remover-atributo} other{{referencia}}}"
   class="componente componente-ajustar form-group"
-  classe-extra-hidden="{oculto, select, sim{hidden} other{}}"
+  classe-extra-d-none="{oculto, select, sim{d-none} other{}}"
   classe-extra-outras="{class, select, undefined{} other{{class}}}">
-  <div class="componente-ajustar rotulo" classe-extra-hidden="{rotulo, select, undefined{hidden} other{}}">
+  <div class="componente-ajustar rotulo" classe-extra-d-none="{rotulo, select, undefined{d-none} other{}}">
     <span
       class="componente-ajustar textod"
       classe-extra-dica="{dica, select, undefined{} other{dica}}"
@@ -222,7 +241,7 @@ This file is part of Ipê-roxo - <http://joseflavio.com/iperoxo/>.
       componente-chave="comp_ipe_marcacao"
       componente-ref="{referencia, select, undefined{{nome}} other{{referencia}}}"
       class="componente marcacao checkbox"
-      classe-extra-hidden="{oculto, select, sim{hidden} other{}}"
+      classe-extra-d-none="{oculto, select, sim{d-none} other{}}"
       classe-extra-outras="{class, select, undefined{} other{{class}}}">
       <label>
         <input
@@ -230,7 +249,7 @@ This file is part of Ipê-roxo - <http://joseflavio.com/iperoxo/>.
           name="{nome, select, undefined{remover-atributo} other{{nome}}}"
           value="{valor, select, undefined{} other{{valor}}}"
           atributo-boolean-1="{estado, select, marcado{checked} other{}}"
-          class="componente-ajustar focavel"
+          class="componente-ajustar focavel align-middle"
           onchange="{ao_mudar, select, undefined{remover-atributo} other{{ao_mudar}}}" />
         <span
           class="componente-ajustar"
@@ -252,15 +271,15 @@ This file is part of Ipê-roxo - <http://joseflavio.com/iperoxo/>.
   componente-ref="{referencia, select, undefined{{nome, select, undefined{remover-atributo} other{{nome}}}} other{{referencia}}}"
   componente-valor-auto=""
   class="componente componente-ajustar btn"
-  classe-extra-btn="{estilo, select, undefined{btn-default} padrao{btn-default} primario{btn-primary} sucesso{btn-success} informacao{btn-info} atencao{btn-warning} perigo{btn-danger} link{btn-link} other{btn-default}}"
-  classe-extra-hidden="{oculto, select, sim{hidden} other{}}"
+  classe-extra-btn="{estilo, select, undefined{btn-dark} padrao{btn-dark} primario{btn-primary} secundario{btn-secondary} sucesso{btn-success} informacao{btn-info} atencao{btn-warning} perigo{btn-danger} link{btn-link} claro{btn-light} escuro{btn-dark} primario2{btn-outline-primary} secundario2{btn-outline-secondary} sucesso2{btn-outline-success} informacao2{btn-outline-info} atencao2{btn-outline-warning} perigo2{btn-outline-danger} claro2{btn-outline-light} escuro2{btn-outline-dark} other{{estilo}}}"
+  classe-extra-d-none="{oculto, select, sim{d-none} other{}}"
   classe-extra-outras="{class, select, undefined{} other{{class}}}"
   type="{submeter, select, undefined{button} sim{submit} other{button}}"
   name="{nome, select, undefined{remover-atributo} other{{nome}}}"
   value="{valor, select, undefined{remover-atributo} other{{valor}}}"
   onclick="{ao_clicar, select, undefined{remover-atributo} other{{ao_clicar}}}">
-  <span class="componente-ajustar glyphicon glyphicon-{icone}" icone="{icone, select, undefined{remover-elemento} other{{icone}}}" aria-hidden="true"></span>
-  <span class="componente-ajustar textod" chave="{rotulo, select, undefined{remover-elemento} other{{rotulo}}}" origem="{rotulo_origem, select, undefined{remover-atributo} other{{rotulo_origem}}}"></span>
+  <span class="componente-ajustar align-middle {icone}" icone="{icone, select, undefined{remover-elemento} other{remover-atributo}}" aria-hidden="true"></span>
+  <span class="componente-ajustar align-middle textod" chave="{rotulo, select, undefined{remover-elemento} other{{rotulo}}}" origem="{rotulo_origem, select, undefined{remover-atributo} other{{rotulo_origem}}}"></span>
   {rotulo, select, undefined{{conteudo, select, undefined{} other{{conteudo}}}} other{}}
 </button>
 
@@ -283,38 +302,32 @@ This file is part of Ipê-roxo - <http://joseflavio.com/iperoxo/>.
   componente-tipo="ipe-midia"
   componente-chave="comp_ipe_midia"
   componente-ref="{referencia, select, undefined{remover-atributo} other{{referencia}}}"
-  class="componente componente-ajustar media ipe-midia"
-  classe-extra-hidden="{oculto, select, sim{hidden} other{}}"
+  class="componente componente-ajustar media"
+  classe-extra-d-none="{oculto, select, sim{d-none} other{}}"
   classe-extra-outras="{class, select, undefined{} other{{class}}}">
-<div
-  class="componente-ajustar media-left"
-  classe-extra-media="{imagem_v, select, undefined{media-top} cima{media-top} meio{media-middle} baixo{media-bottom} other{media-top}}"
-  remover="{imagem, select, undefined{remover-elemento} other{remover-atributo}}">
 <img
-  class="componente-ajustar media-object ipe-midia-imagem"
+  class="componente-ajustar mr-3"
+  classe-extra-align="{imagem_v, select, undefined{align-self-start} cima{align-self-start} meio{align-self-center} baixo{align-self-end} other{align-self-start}}"
   classe-extra-cursor="{ao_clicar, select, undefined{} other{cursor-pointer}}"
-  src="{imagem}"
+  src="{imagem, select, undefined{remover-elemento} other{{imagem}}}"
   onclick="{ao_clicar, select, undefined{remover-atributo} other{{ao_clicar}}}"
   style="{imagem_l, select, undefined{remover-atributo} other{width:{imagem_l};}}" />
-</div>
-<div
-  class="componente-ajustar media-body"
-  classe-extra-media="{conteudo_v, select, undefined{media-top} cima{media-top} meio{media-middle} baixo{media-bottom} other{media-top}}">
+<div class="componente-ajustar media-body">
 <a class="componente-ajustar" href="javascript:void(0)" onclick="{ao_clicar, select, undefined{remover-elemento-apenas} other{{ao_clicar}}}">
-<h4
+<h5
   componente-tipo="ipe-midia-titulo"
   componente-chave="comp_ipe_midia_titulo"
-  class="componente componente-ajustar media-heading ipe-midia-titulo"
+  class="componente componente-ajustar mt-0"
   classe-extra-textod="{chave, select, undefined{} other{textod}}"
-  classe-extra-hidden="{oculto, select, sim{hidden} other{}}"
+  classe-extra-d-none="{oculto, select, sim{d-none} other{}}"
   classe-extra-outras="{class, select, undefined{} other{{class}}}"
-  chave="{chave, select, undefined{remover-atributo} other{{chave}}}">{conteudo, select, undefined{} other{{conteudo}}}</h4>
+  chave="{chave, select, undefined{remover-atributo} other{{chave}}}">{conteudo, select, undefined{} other{{conteudo}}}</h5>
 </a>
 <div
   componente-tipo="ipe-midia-conteudo"
   componente-chave="comp_ipe_midia_conteudo"
-  class="componente componente-ajustar ipe-midia-conteudo"
-  classe-extra-hidden="{oculto, select, sim{hidden} other{}}"
+  class="componente componente-ajustar"
+  classe-extra-d-none="{oculto, select, sim{d-none} other{}}"
   classe-extra-outras="{class, select, undefined{} other{{class}}}">{conteudo, select, undefined{} other{{conteudo}}}</div>
 </div>
 </div>
@@ -325,17 +338,17 @@ This file is part of Ipê-roxo - <http://joseflavio.com/iperoxo/>.
   componente-tipo="ipe-painel"
   componente-chave="comp_ipe_painel"
   componente-ref="{referencia, select, undefined{remover-atributo} other{{referencia}}}"
-  class="componente componente-ajustar panel"
-  classe-extra-panel="{estilo, select, undefined{panel-default} padrao{panel-default} primario{panel-primary} sucesso{panel-success} informacao{panel-info} atencao{panel-warning} perigo{panel-danger} other{panel-default}}"
-  classe-extra-hidden="{oculto, select, sim{hidden} other{}}"
+  class="componente componente-ajustar card mb-3"
+  classe-extra-d-none="{oculto, select, sim{d-none} other{}}"
   classe-extra-outras="{class, select, undefined{} other{{class}}}">
 <div
-  class="componente-ajustar panel-heading"
+  class="componente-ajustar card-header text-center"
+  classe-extra-bg="{estilo, select, undefined{bg-light} padrao{bg-light} primario{bg-primary text-white} secundario{bg-secondary text-white} sucesso{bg-success text-white} informacao{bg-info text-white} atencao{bg-warning text-white} perigo{bg-danger text-white} claro{bg-light} escuro{bg-dark text-white} other{bg-light}}"
   classe-extra-textod="{rotulo, select, undefined{} other{textod}}"
   classe-extra-dica="{dica, select, undefined{} other{dica}}"
   chave="{rotulo, select, undefined{remover-elemento} other{{rotulo}}}"
   dica="{dica, select, undefined{remover-atributo} other{{dica}}}"></div>
-<div class="panel-body">
+<div class="card-body">
 {conteudo}
 </div>
 </div>
@@ -346,57 +359,59 @@ This file is part of Ipê-roxo - <http://joseflavio.com/iperoxo/>.
   componente-tipo="ipe-navegacao"
   componente-chave="comp_ipe_navegacao"
   componente-ref="{referencia, select, undefined{remover-atributo} other{{referencia}}}"
-  class="componente componente-ajustar navbar navbar-default navbar-fixed-top"
-  classe-extra-hidden="{oculto, select, sim{hidden} other{}}"
+  class="componente componente-ajustar navbar navbar-expand-sm navbar-light bg-light fixed-top"
+  classe-extra-d-none="{oculto, select, sim{d-none} other{}}"
   classe-extra-outras="{class, select, undefined{} other{{class}}}">
-  <div class="container-fluid">
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <a class="navbar-brand" href="#"><img class="ipe-navegacao-logotipo" src="{logotipo}"></a>
-      <a class="navbar-brand textod" chave="{titulo}" href="#"></a>
-    </div>
-    <div class="collapse navbar-collapse">
-      <ul class="nav navbar-nav ipe-navegacao-abas">
-        <li
-          componente-tipo="ipe-navegacao-aba"
-          componente-chave="comp_ipe_navegacao_aba"
-          id="tab_li_{tid}"
-          tid="{tid}"
-          class="componente"
-          classe-extra-active="{ativa, select, sim{active} other{}}">
-          <a href="javascript:void(0)" id="tab_a_{tid}" onclick="ativarTela(''{tid}''); $(this).parents(''.collapse:first'').collapse(''hide'');">{titulo}</a>
-          <!-- TODO <a href="javascript:void(0)" class="close" aria-label="fechar">&times;</a> -->
-        </li>
-      </ul>
-      <ul class="nav navbar-nav navbar-right">
-        <li
-          componente-tipo="ipe-navegacao-adicional"
-          componente-chave="comp_ipe_navegacao_adicional"
-          componente-ref="{referencia, select, undefined{remover-atributo} other{{referencia}}}"
-          class="componente componente-ajustar"
-          classe-extra-hidden="{oculto, select, sim{hidden} other{}}"
-          classe-extra-outras="{class, select, undefined{} other{{class}}}">{conteudo}</li>
-      </ul>
+  <a class="navbar-brand" href="#"><img class="ipe-navegacao-logotipo" src="{logotipo}"></a>
+  <a class="navbar-brand textod" chave="{titulo}" href="#"></a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ipe_nav_corpo_{referencia, select, undefined{} other{{referencia}}}" aria-controls="ipe_nav_corpo_{referencia, select, undefined{} other{{referencia}}}" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="ipe_nav_corpo_{referencia, select, undefined{} other{{referencia}}}">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item dropdown active">
+        <a class="nav-link dropdown-toggle ipe-navegacao-tela-atual" href="#" id="ipe_nav_telas_{referencia, select, undefined{} other{{referencia}}}" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Tela
+        </a>
+        <div class="dropdown-menu ipe-navegacao-telas" aria-labelledby="ipe_nav_telas_{referencia, select, undefined{} other{{referencia}}}">
+          <a
+            componente-tipo="ipe-navegacao-tela"
+            componente-chave="comp_ipe_navegacao_tela"
+            id="ipe_nav_tela_{tid}_{navegacao_ref}"
+            tid="{tid}"
+            class="componente dropdown-item"
+            classe-extra-active="{ativa, select, sim{active} other{}}"
+            href="javascript:void(0);"
+            onclick="ativarTela(''{tid}''); $(this).parents(''.collapse:first'').collapse(''hide'');">
+            {titulo}
+          </a>
+        </div>
+      </li>
+    </ul>
+    <div class="form-inline">
+      <div
+        componente-tipo="ipe-navegacao-adicional"
+        componente-chave="comp_ipe_navegacao_adicional"
+        componente-ref="{referencia, select, undefined{remover-atributo} other{{referencia}}}"
+        class="componente componente-ajustar"
+        classe-extra-d-none="{oculto, select, sim{d-none} other{}}"
+        classe-extra-outras="{class, select, undefined{} other{{class}}}">{conteudo}</div>
     </div>
   </div>
 </nav>
 
 <!-- ========================================== -->
 <!-- Título de tela -->
-<h3
+<h4
   componente-tipo="ipe-tela-titulo"
   componente-chave="comp_ipe_tela_titulo"
   componente-ref="{referencia, select, undefined{remover-atributo} other{{referencia}}}"
   componente-valor-auto=""
   class="componente componente-ajustar tela-titulo"
-  classe-extra-hidden="{oculto, select, sim{hidden} other{}}"
+  classe-extra-d-none="{oculto, select, sim{d-none} other{}}"
   classe-extra-outras="{class, select, undefined{} other{{class}}}"
   classe-extra-textod="{titulo, select, undefined{} other{textod}}"
-  chave="{titulo, select, undefined{remover-atributo} other{{titulo}}}">{titulo, select, undefined{{conteudo}} other{}}</h3>
+  chave="{titulo, select, undefined{remover-atributo} other{{titulo}}}">{titulo, select, undefined{{conteudo}} other{}}</h4>
 
 <!-- ========================================== -->
 <!-- Copaíba -->

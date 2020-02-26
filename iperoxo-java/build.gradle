@@ -13,7 +13,7 @@ String descricao = "Ipê-roxo: Modelo de software multicamada."
 
 group = "com.joseflavio"
 archivesBaseName = "iperoxo"
-version = "1.0-A20"
+version = "1.0-A21"
 
 //------------------------------------------------------
 

@@ -1,16 +1,12 @@
-<!--
-Copyright (C) 2016-2019 José Flávio de Souza Dias Júnior
-This file is part of Ipê-roxo - <http://joseflavio.com/iperoxo/>.
- -->
 <!DOCTYPE html>
 <html>
 
   <head>
     <meta charset="utf-8" />
     <title>Ipê-roxo</title>
+    <link href="../css-dep/fontawesome-all.css" rel="stylesheet" />
     <link href="../css-dep/bootstrap.min.css" rel="stylesheet" />
-    <link href="../css-dep/bootstrap-theme.min.css" rel="stylesheet" />
-    <link href="../css-dep/bootstrap-select.min.css" rel="stylesheet">
+    <link href="../css-dep/bootstrap-select.min.css" rel="stylesheet" />
     <link href="../css-dep/jasny-bootstrap.min.css" rel="stylesheet" />
     <link href="../css-dep/iperoxo.css" rel="stylesheet" />
     <link href="../css/estilo.css" rel="stylesheet" />
@@ -18,7 +14,7 @@ This file is part of Ipê-roxo - <http://joseflavio.com/iperoxo/>.
 
   <body>
 
-    <!-- Tela a ser importada pelo Ipê-roxo, no processo de abertura. -->
+    <!-- Tela -->
     <div
       class="tela tela-flexivel"
       nome="tela"
@@ -31,7 +27,7 @@ This file is part of Ipê-roxo - <http://joseflavio.com/iperoxo/>.
       <!-- Título da tela -->
       <ipe-tela-titulo referencia="titulo" titulo="tela_exemplo_titulo" />
 
-      <!-- Formulário para encaminhamento através de Uxi-amarelo. -->
+      <!-- Formulário Uxi-amarelo -->
       <form
         class="uxiamarelo_form"
         action="/uxiamarelo/servlet/solicitar"
@@ -46,69 +42,85 @@ This file is part of Ipê-roxo - <http://joseflavio.com/iperoxo/>.
         <div class="mensagens">
         </div>
 
-        <!-- Especificação da Copaíba, classe e método a ser executado remotamente. -->
+        <!-- Copaíba, classe e método a ser executado remotamente -->
         <ipe-copaiba copaiba="copaiba" classe="com.joseflavio.iperoxo.docker.Exemplo" metodo="executar" />
 
-        <!-- Identificador da sessão. -->
+        <!-- Identificador da sessão -->
         <ipe-oculto class="sid" nome="sid" />
         
-        <!-- Linguagem do usuário no formato IETF BCP 47. -->
+        <!-- Linguagem do usuário no formato IETF BCP 47 -->
         <!-- https://docs.oracle.com/javase/8/docs/api/java/util/Locale.html#forLanguageTag-java.lang.String- -->
         <ipe-oculto class="lid" nome="lid" />
         
-        <!-- Zona de tempo do usuário. -->
+        <!-- Zona de tempo do usuário -->
         <!-- https://docs.oracle.com/javase/8/docs/api/java/time/ZoneId.html#of-java.lang.String- -->
         <ipe-oculto class="zid" nome="zid" />
         
-        <!-- Identificador da tela corrente. -->
+        <!-- Identificador da tela corrente -->
         <ipe-oculto class="tid" nome="tid" />
 
-        <ipe-painel rotulo="texto" dica="texto" estilo="informacao">
+        <ipe-painel rotulo="texto" dica="texto" estilo="padrao">
 
-        <!-- Exemplo de campo para entrada de texto -->
+        <!-- Entrada de texto -->
         <ipe-texto nome="texto" rotulo="texto" rotulo-interno="texto" dica="texto" tipo="texto" valor="" sugestao="sim" />
 
-        <!-- Exemplo de campo para entrada de texto mais complexo -->
+        <!-- Entrada de texto mais complexo -->
         <ipe-texto nome="texto-complexo" rotulo="texto" rotulo-interno="texto" valor="" mascara="(00) 0000[0]-`0000" sugestao="nao" rotulo-origem="/uxiamarelo/rest/copaiba/solicitar/com.joseflavio.iperoxo.docker.Exemplo/toString">
-          <ipe-texto-acao icone="remove" ao-clicar="var comp = esteComp(this, true); if(getCompEditavel(comp)) setCompValor(comp, '');" />
+          <ipe-texto-acao icone="fas fa-times" ao-clicar="var comp = esteComp(this, true); if(getCompEditavel(comp)) setCompValor(comp, '');" />
         </ipe-texto>
 
         </ipe-painel>
 
-        <!-- Exemplo de campo para entrada de data/hora -->
-        <ipe-data nome="data" rotulo="data" rotulo-interno="data" data="sim" hora="sim" sugestao="nao" />
+        <!-- Entrada de data/hora -->
+        <ipe-data nome="data" rotulo="data" rotulo-interno="data" dica="data" data="sim" hora="sim" sugestao="nao" />
 
-        <!-- Exemplo de campo para entrada de arquivo(s) -->
-        <ipe-arquivo nome="arquivo" rotulo="arquivo" rotulo-interno="arquivo" modo="multiplo" aceitar=".txt, .png" />
+        <!-- Entrada de arquivos -->
+        <ipe-arquivo nome="arquivo" rotulo="arquivo" rotulo-interno="arquivo" dica="arquivo" modo="multiplo" aceitar=".txt, .png" />
         
-        <!-- Exemplo de campo de seleção de valor -->
-        <ipe-selecao nome="selecao" rotulo="linguagem" busca="sim" ao-mudar="setLinguagem(this.value)">
+        <!-- Seleção de valor -->
+        <ipe-selecao nome="selecao" rotulo="linguagem" dica="linguagem" busca="nao" ao-mudar="setLinguagem(this.value)">
           <ipe-opcao valor="" rotulo="selecionar" estado="selecionado" />
           <ipe-opcao valor="en-US">English</ipe-opcao>
           <ipe-opcao valor="es-ES">Español</ipe-opcao>
           <ipe-opcao valor="pt-BR">Português</ipe-opcao>
         </ipe-selecao>
 
-        <!-- Exemplo de grupo de marcação -->
-        <ipe-marcacao-grupo referencia="marcacao-grupo" rotulo="selecionar">
-          <ipe-marcacao nome="marcacao01" valor="01" rotulo="aplicacao_titulo" estado="marcado" />
+        <!-- Grupo de marcação -->
+        <ipe-marcacao-grupo referencia="marcacao-grupo" rotulo="selecionar" dica="selecionar">
+          <ipe-marcacao nome="marcacao01" valor="01" rotulo="aplicacao_titulo" dica="aplicacao_titulo" estado="marcado" />
           <ipe-marcacao nome="marcacao02" valor="02">Ipê-roxo :-)</ipe-marcacao>
           <ipe-marcacao nome="marcacao03" valor="03" estado="marcado">Ipê-roxo :-P</ipe-marcacao>
         </ipe-marcacao-grupo>
 
-        <!-- Teste de encapsulamento -->
+        <!-- Mídia -->
+        <ipe-midia imagem="img/icone.jpg" imagem-l="60px" imagem-v="cima" ao-clicar="abrirTela('html/tela.html');">
+          <ipe-midia-titulo chave="aplicacao_titulo" />
+          <ipe-midia-conteudo>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+            Maecenas aliquam lectus lectus, eget euismod odio efficitur id.
+            In porta mollis nulla ac dictum. Vivamus ut lacus velit.
+            Sed nibh magna, facilisis et sapien et, pulvinar finibus sem.
+            Integer ut lacus et magna bibendum tincidunt.
+          </ipe-midia-conteudo>
+        </ipe-midia>
+
+        <!-- Encapsulamento de primeiro nível -->
         <ipe-oculto nome="classe__valor" valor="Nível 1!" />
 
-        <!-- Teste de encapsulamento -->
+        <!-- Encapsulamento de segundo nível -->
         <ipe-oculto nome="classe__classe__valor" valor="Nível 2!" />
 
-        <div class="tela-comandos">
+        <div class="tela-rodape">
 
-          <!-- Botão de submissão -->
-          <ipe-botao rotulo="enviar" estilo="primario" submeter="sim" nome="botao" valor="21" />
+          <div class="tela-comandos">
 
-          <!-- Botão com ação -->
-          <ipe-botao rotulo="aplicacao_titulo" estilo="padrao" ao-clicar="acaoTela(this, 'exemploEventoTela');" />
+            <!-- Botão de submissão -->
+            <ipe-botao rotulo="enviar" estilo="primario" submeter="sim" nome="botao" valor="21" />
+  
+            <!-- Botão com ação -->
+            <ipe-botao icone="fas fa-info" estilo="primario2" ao-clicar="acaoTela(this, 'exemploEventoTela');" />
+            
+          </div>
 
         </div>
 

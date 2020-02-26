@@ -1,8 +1,4 @@
 <!DOCTYPE html>
-<!-- 
-Copyright (C) 2016-2019 José Flávio de Souza Dias Júnior
-This file is part of Ipê-roxo - <http://joseflavio.com/iperoxo/>.
- -->
 <html>
 
   <head>
@@ -20,7 +16,7 @@ This file is part of Ipê-roxo - <http://joseflavio.com/iperoxo/>.
 
     <!-- ========================================== -->
     <!-- Configurações de segurança -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' data: gap: cdvfile: http://joseflavio.com https://*.panoramio.com">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' data: gap: cdvfile: http://joseflavio.com https://joseflavio.com">
 
     <!-- ========================================== -->
     <!-- Open Graph protocol -->
@@ -32,20 +28,20 @@ This file is part of Ipê-roxo - <http://joseflavio.com/iperoxo/>.
     <meta property="og:locale:alternate" content="en_US" />
     <meta property="og:locale:alternate" content="es_ES" />
     <meta property="og:url" content="http://joseflavio.com/iperoxo/" />
-    <meta property="og:image" content="http://static.panoramio.com/photos/large/25186294.jpg" />
-    <meta property="og:image:secure_url" content="https://static.panoramio.com/photos/large/25186294.jpg" />
+    <meta property="og:image" content="http://joseflavio.com/iperoxo/001.jpg" />
+    <meta property="og:image:secure_url" content="https://joseflavio.com/iperoxo/001.jpg" />
 
     <title>Ipê-roxo</title>
     
     <!-- ========================================== -->
     <!-- Estilo gráfico -->
-    <link type="image/x-icon" href="img/icone.ico" rel="shortcut icon">
-    <link href="css-dep/bootstrap.min.css" rel="stylesheet">
-    <link href="css-dep/bootstrap-theme.min.css" rel="stylesheet">
-    <link href="css-dep/bootstrap-select.min.css" rel="stylesheet">
-    <link href="css-dep/jasny-bootstrap.min.css" rel="stylesheet">
-    <link href="css-dep/iperoxo.css" rel="stylesheet">
-    <link href="css/estilo.css" rel="stylesheet">
+    <link type="image/x-icon" href="img/icone.ico" rel="shortcut icon" />
+    <link href="css-dep/fontawesome-all.css" rel="stylesheet" />
+    <link href="css-dep/bootstrap.min.css" rel="stylesheet" />
+    <link href="css-dep/bootstrap-select.min.css" rel="stylesheet" />
+    <link href="css-dep/jasny-bootstrap.min.css" rel="stylesheet" />
+    <link href="css-dep/iperoxo.css" rel="stylesheet" />
+    <link href="css/estilo.css" rel="stylesheet" />
 
   </head>
 
@@ -62,7 +58,7 @@ This file is part of Ipê-roxo - <http://joseflavio.com/iperoxo/>.
         <img class="bandeira-linguagem" src="img/bandeira/US.png" onclick="setLinguagem('en-US')">
       </ipe-navegacao-adicional>
       <ipe-navegacao-adicional>
-        <a href="#"><span class="glyphicon glyphicon-off"></span></a>
+        <a href="javascript:void(0);" onclick="fecharTelaAtiva()"><i class="fas fa-times align-middle"></i></a>
       </ipe-navegacao-adicional>
     </ipe-navegacao>
 
@@ -75,16 +71,16 @@ This file is part of Ipê-roxo - <http://joseflavio.com/iperoxo/>.
     <!-- ========================================== -->
     <!-- Animação de espera -->
 
-    <img id="animacao-espera" class="animacao-espera" src="img/espera.gif" alt="..." onclick="abrirMensagemAmpla(dicionario.animacao_espera_msg + ': ' + animacao_espera_total);" />
+    <img id="animacao-espera"
+         src="img/espera.gif"
+         alt="..."
+         onclick="abrirMensagemAmpla(dicionario.animacao_espera_msg + ': ' + animacao_espera_total);" />
 
     <!-- ========================================== -->
     <!-- Mensagem ampla -->
 
-    <div id="mensagem-ampla" class="mensagem-ampla">
-      <div class="mensagem-ampla-conteudo">
-        <span class="mensagem-ampla-fechar">&times;</span>
-        <p id="mensagem-ampla-texto">Mensagem ampla...</p>
-      </div>
+    <div id="mensagem-ampla">
+      <div>Mensagem ampla...</div>
     </div>
 
     <!-- ========================================== -->
@@ -94,11 +90,17 @@ This file is part of Ipê-roxo - <http://joseflavio.com/iperoxo/>.
     </div>
 
     <!-- ========================================== -->
+    <!-- Informação situacional -->
+
+    <div id="informacao-situacional" class="text-dark bg-light shadow">
+    </div>
+
+    <!-- ========================================== -->
     <!-- Scripts -->
 
     <script src="js-dep/jquery.min.js"></script>
     <script src="js-dep/jquery.form.min.js"></script>
-    <script src="js-dep/bootstrap.min.js"></script>
+    <script src="js-dep/bootstrap.bundle.min.js"></script>
     <script src="js-dep/bootstrap-select.min.js"></script>
     <script src="js-dep/bootstrap-select-i18n.js"></script>
     <script src="js-dep/jasny-bootstrap.min.js"></script>
@@ -107,9 +109,6 @@ This file is part of Ipê-roxo - <http://joseflavio.com/iperoxo/>.
     <script src="js-dep/dot-properties.min.js"></script>
     <script src="js-dep/messageformat.min.js"></script>
     <script src="js-dep/imask.min.js"></script>
-    <script src="js-dep/hammer.min.js"></script>
-    <script src="js-dep/hammer-time.min.js"></script>
-    <script src="js-dep/velocity.min.js"></script>
     <!-- <script src="cordova.js"></script> -->
     <script src="js/configuracao.js"></script>
     <script src="js-dep/iperoxo-dicionario-pt.js"></script>

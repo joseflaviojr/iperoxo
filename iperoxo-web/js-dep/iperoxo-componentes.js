@@ -182,10 +182,10 @@ function comp_ipe_data_set_valor( comp, valor, atualizarTexto ) {
 
     if( numero || valor === "" ){
         $$.saida.val(valor);
-        comp.removeClass("has-error");
+        $$.entrada.removeClass("is-invalid");
     }else{
         $$.saida.val("");
-        comp.addClass("has-error");
+        $$.entrada.addClass("is-invalid");
     }
 
     if( atualizarTexto !== false ){
@@ -202,23 +202,10 @@ function comp_ipe_data_set_valor( comp, valor, atualizarTexto ) {
 
 //--------------------------------------------------------------------------
 
-/**
- * Verifica se um componente "ipe-data" está em estado
- * que permita a alteração de valor através da interface gráfica.
- */
-function comp_ipe_data_get_editavel( comp ) {
-    return comp[0].entrada.attr("readonly") === undefined;
-}
-
-//--------------------------------------------------------------------------
-
-/**
- * Determina se um componente "ipe-data" deve ou não permitir
- * a alteração de valor através da interface gráfica.
- */
-function comp_ipe_data_set_editavel( comp, editavel ) {
-    if( ! editavel ) comp[0].entrada.attr("readonly", "readonly");
-    else comp[0].entrada.removeAttr("readonly");
+function comp_ipe_data_set_habilitado( comp, habilitado ) {
+    var eles = comp.find("input");
+    if( habilitado !== false ) eles.removeAttr("disabled");
+    else eles.attr("disabled", "disabled");
 }
 
 //--------------------------------------------------------------------------
@@ -229,12 +216,27 @@ function comp_ipe_data_set_editavel( comp, editavel ) {
  * @see atualizarAmbiente()
  */
 function comp_ipe_data_atualizar( comp ) {
+
+    // Localidade
+    
     var $$ = comp[0];
+    
     if( $$.zona !== zona_tempo || $$.dicionario !== dicionario ){
         $$.zona       = zona_tempo;
         $$.dicionario = dicionario;
         comp_ipe_data_ajustar(comp);
     }
+    
+    // Visual
+
+    var adicional = comp.find(".input-group-append:first");
+
+    if( adicional.children().length === 0 ){
+        adicional.parent().removeClass("input-group");
+    }else{
+        adicional.parent().addClass("input-group");
+    }
+
 }
 
 //--------------------------------------------------------------------------
@@ -385,6 +387,25 @@ function comp_ipe_texto_pos_implantacao( comp, atributos ) {
 //--------------------------------------------------------------------------
 
 /**
+ * Atualiza a composição visual de um componente "ipe-texto".
+ * @param comp Objeto jQuery do componente.
+ * @see atualizarAmbiente()
+ */
+function comp_ipe_texto_atualizar( comp ) {
+    
+    var adicional = comp.find(".input-group-append:first");
+
+    if( adicional.children().length === 0 ){
+        adicional.parent().removeClass("input-group");
+    }else{
+        adicional.parent().addClass("input-group");
+    }
+
+}
+
+//--------------------------------------------------------------------------
+
+/**
  * Define o valor textual de um componente do tipo "ipe-texto".
  * Aconselha-se não utilizar este método de forma direta.
  * @param comp Objeto jQuery do componente.
@@ -397,29 +418,6 @@ function comp_ipe_texto_set_valor( comp, valor ) {
     }else{
         comp.find(configuracao.componentes["ipe-texto"]["valor-auto"]).val(valor);
     }
-}
-
-//--------------------------------------------------------------------------
-
-/**
- * Verifica se um componente "ipe-texto" está em estado
- * que permita a alteração de valor através da interface gráfica.
- */
-function comp_ipe_texto_get_editavel( comp ) {
-    var elemt = comp.find(configuracao.componentes["ipe-texto"]["valor-auto"]);
-    return elemt.attr("readonly") === undefined;
-}
-
-//--------------------------------------------------------------------------
-
-/**
- * Determina se um componente "ipe-texto" deve ou não permitir
- * a alteração de valor através da interface gráfica.
- */
-function comp_ipe_texto_set_editavel( comp, editavel ) {
-    var elemt = comp.find(configuracao.componentes["ipe-texto"]["valor-auto"]);
-    if( ! editavel ) elemt.attr("readonly", "readonly");
-    else elemt.removeAttr("readonly");
 }
 
 //--------------------------------------------------------------------------
@@ -465,16 +463,6 @@ function comp_ipe_texto_set_mascara( comp, valor ) {
 //--------------------------------------------------------------------------
 
 /**
- * Ação executada após a implantação de um componente "ipe-texto-acao".
- */
-function comp_ipe_texto_acao_pos_implantacao( comp, atributos ) {
-    var controles = comp.parent();
-    if( ! controles.hasClass("input-group") ) controles.addClass("input-group");
-}
-
-//--------------------------------------------------------------------------
-
-/**
  * Ação executada para um componente "ipe-selecao" após a implantação total.
  */
 function comp_ipe_selecao_pos_implantacao_total( comp, atributos ) {
@@ -496,43 +484,62 @@ function comp_ipe_selecao_atualizar( comp ) {
  * Atualiza a composição visual de um componente "ipe-navegacao".
  */
 function comp_ipe_navegacao_atualizar( comp ) {
-    
-    var navegacao = comp.find(".ipe-navegacao-abas:first");
 
-    // Removendo abas desnecessárias
-    navegacao.children("li").each(function(){
-        var tab_li = $(this);
-        var tid = tab_li.attr("tid");
-        if( telas[tid] === undefined ) tab_li.remove();
+    var nav_ref   = comp.attr("componente-ref");
+    var nav_telas = comp.find(".ipe-navegacao-telas:first");
+
+    if( nav_ref == null ) nav_ref = "";
+
+    // Removendo itens desnecessários
+    nav_telas.children("a").each(function(){
+        var nav_tela = $(this);
+        var tid = nav_tela.attr("tid");
+        if( telas[tid] === undefined ) nav_tela.remove();
     });
 
-    // Atualizando as abas das telas
+    var barra_titulo = comp.find(".ipe-navegacao-tela-atual:first");
+    
+    if( ! getTelaAtiva() ){
+        barra_titulo.html("");
+    }
+
+    // Atualizando os itens de navegação
     $(".tela").each(function(i){
 
         var tela  = $(this);
         var tid   = tela.attr("id");
-        var ativa = ! tela.hasClass("hidden");
+        var ativa = ! tela.hasClass("d-none");
 
-        // Título da tela na aba
+        // Título da tela
         var titulo = tela.children(".tela-titulo").text();
         if( titulo.length === 0 ){
             titulo = "Tela " + ( i + 1 );
         }
-        if( titulo.length > 20 ){
-            titulo = titulo.substring(0, 17) + "...";
+        var titulo_reduzido = titulo;
+        if( titulo_reduzido.length > 20 ){
+            titulo_reduzido = titulo_reduzido.substring(0, 17) + "...";
         }
 
-        // Aba da tela
-        var tab_li = $( "#tab_li_" + tid );
-        if( tab_li.length > 0 ){
-            tab_li.removeClass();
-            tab_li.addClass( ativa ? "active" : "" );
-            tab_li.find("a").html(titulo);
+        if( ativa ){
+            barra_titulo.html(titulo_reduzido);
+        }
+
+        // Item de navegação
+        var nav_tela = $( "#ipe_nav_tela_" + tid + "_" + nav_ref );
+        if( nav_tela.length > 0 ){
+            nav_tela.removeClass("active");
+            nav_tela.addClass( ativa ? "active" : "" );
+            nav_tela.html(titulo);
         }else{
             inserirComponente(
-                navegacao,
-                "ipe-navegacao-aba",
-                { "tid": tid, "ativa": ( ativa ? "sim" : "nao" ), "titulo": titulo }
+                nav_telas,
+                "ipe-navegacao-tela",
+                {
+                    "navegacao_ref": nav_ref,
+                    "tid"          : tid,
+                    "ativa"        : ( ativa ? "sim" : "nao" ),
+                    "titulo"       : titulo
+                }
             );
         }
 

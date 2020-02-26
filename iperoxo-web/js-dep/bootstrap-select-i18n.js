@@ -1,5 +1,5 @@
-//! Bootstrap-select 1.13.9 (https://developer.snapappointments.com/bootstrap-select)
-//! Versão adaptada de defaults-pt_BR.js
+/*! Bootstrap-select 1.13.9 (https://developer.snapappointments.com/bootstrap-select) */
+/*! Versão adaptada de defaults-pt_BR.js                                              */
 (function (root, factory) {
   if (root === undefined && window !== undefined) root = window;
   if (typeof define === 'function' && define.amd) {

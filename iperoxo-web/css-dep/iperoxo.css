@@ -67,7 +67,7 @@ a:hover, a:focus {
 #telas {
   position: relative;
   width: 100%;
-  top: 50px;
+  top: 60px;
 }
 
 .tela {
@@ -82,22 +82,34 @@ a:hover, a:focus {
   margin-right: auto;
   margin-left: auto;
 }
-@media (min-width: 0px) and (max-width: 767px) {
+@media (max-width: 575.98px) {
   .tela-flexivel, .tamanho_flexivel {
     padding-right: 15px;
     padding-left: 15px;
   }
 }
-@media (min-width: 768px) and (max-width: 1024px) {
+@media (min-width: 576px) and (max-width: 767.98px) {
   .tela-flexivel, .tamanho_flexivel {
     padding-right: 15vw;
     padding-left: 15vw;
   }
 }
-@media (min-width: 1025px) {
+@media (min-width: 768px) and (max-width: 991.98px) {
+  .tela-flexivel, .tamanho_flexivel {
+    padding-right: 20vw;
+    padding-left: 20vw;
+  }
+}
+@media (min-width: 992px) and (max-width: 1199.98px) {
   .tela-flexivel, .tamanho_flexivel {
     padding-right: 25vw;
     padding-left: 25vw;
+  }
+}
+@media (min-width: 1200px) {
+  .tela-flexivel, .tamanho_flexivel {
+    padding-right: 28vw;
+    padding-left: 28vw;
   }
 }
 
@@ -115,13 +127,22 @@ a:hover, a:focus {
   margin-top: 0;
 }
 
-.tela-comandos {
+.tela-rodape {
   position: sticky;
   width: 100%;
-  bottom: 15px;
-  z-index: 999997;
+  bottom: 0;
+  z-index: 1020;
   text-align: right;
-  background-color: rgba(255, 255, 255, 0.8);
+  pointer-events: none;
+}
+.tela-rodape .tela-comandos {
+  display: inline-block;
+  background-color: white;
+  border-radius: 0.25rem;
+  pointer-events: none;
+}
+.tela-rodape .tela-comandos * {
+  pointer-events: all;
 }
 
 .rotulo {
@@ -133,43 +154,51 @@ a:hover, a:focus {
 
 /* ---------------------------------------------- */
 /* Barra de navegação */
-.navbar {
-  margin-bottom: 0;
+nav.navbar {
+  min-height: 60px;
 }
 
 .ipe-navegacao-logotipo {
-  width: 32px;
-  height: 32px;
-  margin-top: -7px;
+  width: 34px;
+  height: 34px;
 }
 
-.nav > li > img.bandeira-linguagem {
+img.bandeira-linguagem {
   width: 24px;
-  padding-top: 12px;
-  margin-left: 15px;
+  margin-right: 5px;
 }
-.nav > li > img.bandeira-linguagem:hover {
-  width: 32px;
-  padding-top: 8px;
+img.bandeira-linguagem:hover {
+  cursor: pointer;
+  opacity: 0.7;
 }
 
-.navbar-default .navbar-toggle {
+.navbar-toggler {
   border: none;
+  opacity: 0.3;
 }
-.navbar-default .navbar-toggle .icon-bar {
-  background-color: #e3dddd;
+.navbar-toggler:hover {
+  opacity: 1;
 }
-.navbar-default .navbar-toggle:hover, .navbar-default .navbar-toggle:focus {
-  background-color: white;
+.navbar-toggler:focus {
+  outline: none;
 }
 
 /* ---------------------------------------------- */
-/* Outros componentes Ipê-roxo */
+/* Componentes Ipê-roxo */
 .ver-pronto {
   display: none;
 }
 
 .cursor-pointer {
+  cursor: pointer;
+}
+
+.input-group > .input-group-append > .input-group-text {
+  color: #495057;
+  background-color: #e9ecef;
+}
+.input-group > .input-group-append > .input-group-text:hover {
+  background: #d9dcdf;
   cursor: pointer;
 }
 
@@ -181,8 +210,18 @@ a:hover, a:focus {
   background-color: #fff !important;
 }
 
-.ipe-midia-imagem {
+.bootstrap-select > button {
+  color: #495057;
+  background-color: white;
+  border-color: #ced4da;
+}
+
+.media > img {
   width: 64px;
+}
+
+.media-body {
+  text-align: justify;
 }
 
 .alert {
@@ -192,83 +231,86 @@ a:hover, a:focus {
 
 /* ---------------------------------------------- */
 /* Mensagem ampla */
-.mensagem-ampla {
+#mensagem-ampla {
   display: none;
+  box-sizing: border-box;
   position: fixed;
-  z-index: 999998;
   left: 0;
   top: 0;
   width: 100%;
   height: 100%;
-  box-sizing: border-box;
+  padding-top: 10%;
   overflow: auto;
+  z-index: 1080;
   background-color: rgba(0, 0, 0, 0.85);
 }
-@media (min-width: 0px) and (max-width: 767px) {
-  .mensagem-ampla {
-    padding-top: 15%;
-  }
-}
-@media (min-width: 768px) and (max-width: 1024px) {
-  .mensagem-ampla {
-    padding-top: 15%;
-  }
-}
-@media (min-width: 1025px) {
-  .mensagem-ampla {
-    padding-top: 10%;
-  }
-}
 
-.mensagem-ampla-conteudo {
-  background-color: #fefefe;
-  box-sizing: content-box;
-  margin: auto;
+#mensagem-ampla div {
+  box-sizing: border-box;
   border-radius: 10px;
+  margin: auto;
+  padding: 0.8em;
   font-size: 14pt;
   word-wrap: break-word;
+  background-color: #fefefe;
 }
-@media (min-width: 0px) and (max-width: 767px) {
-  .mensagem-ampla-conteudo {
-    width: 88%;
-    padding: 4%;
+@media (max-width: 575.98px) {
+  #mensagem-ampla div {
+    width: 90%;
   }
 }
-@media (min-width: 768px) and (max-width: 1024px) {
-  .mensagem-ampla-conteudo {
+@media (min-width: 576px) and (max-width: 767.98px) {
+  #mensagem-ampla div {
+    width: 85%;
+  }
+}
+@media (min-width: 768px) and (max-width: 991.98px) {
+  #mensagem-ampla div {
     width: 70%;
-    padding: 16px;
   }
 }
-@media (min-width: 1025px) {
-  .mensagem-ampla-conteudo {
+@media (min-width: 992px) and (max-width: 1199.98px) {
+  #mensagem-ampla div {
+    width: 55%;
+  }
+}
+@media (min-width: 1200px) {
+  #mensagem-ampla div {
     width: 40%;
-    padding: 20px;
   }
-}
-
-.mensagem-ampla-fechar {
-  color: #aaaaaa;
-  float: right;
-  font-size: 28px;
-  font-weight: bold;
-}
-.mensagem-ampla-fechar:hover, .mensagem-ampla-fechar:focus {
-  color: #000;
-  text-decoration: none;
-  cursor: pointer;
 }
 
 /* ---------------------------------------------- */
 /* Animação de espera */
-.animacao-espera {
+#animacao-espera {
   display: none;
+  position: fixed;
   width: 4em;
   height: auto;
-  position: fixed;
-  right: 0;
   bottom: 0;
-  z-index: 999999;
+  left: 0;
+  z-index: 1031;
+}
+
+/* ---------------------------------------------- */
+/* Informação situacional */
+#informacao-situacional {
+  display: none;
+  box-sizing: border-box;
+  height: auto;
+  min-height: 2em;
+  padding: 4px 4px 4px 4px;
+  margin: 6px 6px 6px 6px;
+  border-radius: 4px;
+  position: fixed;
+  top: 43px;
+  right: 0;
+  left: 0;
+  z-index: 1030;
+  font-size: 0.9rem;
+  font-style: italic;
+  text-align: center;
+  word-wrap: break-word;
 }
 
 /* ---------------------------------------------- */

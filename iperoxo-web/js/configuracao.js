@@ -8,22 +8,17 @@ var configuracao = {
     /**
      * Versão do Ipê-roxo.
      */
-    iperoxo_versao                   : "1.0-A20",
+    iperoxo_versao                   : "1.0-A21",
 
     /**
-     * Nome da função que inicializa a aplicação.
+     * Função que inicia a aplicação.
      */
     funcao_inicial                   : "aplicacao",
 
-    recurso_geral                    : true,
-    recurso_sessao                   : true,
-    recurso_linguagem                : true,
-    recurso_mensagem                 : true,
-    recurso_uxiamarelo               : true,
-    recurso_tela                     : true,
-    recurso_persistencia             : true,
-    recurso_componente               : true,
-    recurso_dica                     : true,
+    /**
+     * Função a ser chamada se a aplicação estiver com ausência de telas.
+     */
+    funcao_tela_ausente              : "reiniciarAplicacao",
 
     /**
      * Repositório padrão da API Apache Cordova para armazenamento de arquivos.

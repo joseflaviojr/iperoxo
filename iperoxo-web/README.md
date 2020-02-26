@@ -14,6 +14,8 @@ A aplicação Web do Ipê-roxo é responsável por manter a interface de comunic
 
 Padrão de versionamento: [JFV](http://joseflavio.com/jfv)
 
+> A versão em desenvolvimento (1.0-A21) é compatível com [Bootstrap v4](https://getbootstrap.com/).
+
 ## Instalação
 
 Esta aplicação Ipê-roxo pode ser instalada diretamente em qualquer servidor Web, podendo ser alterada *in loco*.

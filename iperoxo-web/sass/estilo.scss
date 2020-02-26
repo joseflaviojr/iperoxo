@@ -1,8 +1,12 @@
 /* ---------------------------------------------- */
 
-$tela_p: "(min-width:    0px) and (max-width:  767px)";
-$tela_m: "(min-width:  768px) and (max-width: 1024px)";
-$tela_g: "(min-width: 1025px)";
+/* Tamanhos de telas de dispositivos */
+
+$tela_pp: "(max-width: 575.98px)";
+$tela_p : "(min-width: 576px) and (max-width: 767.98px)";
+$tela_m : "(min-width: 768px) and (max-width: 991.98px)";
+$tela_g : "(min-width: 992px) and (max-width: 1199.98px)";
+$tela_gg: "(min-width: 1200px)";
 
 /* ---------------------------------------------- */
 

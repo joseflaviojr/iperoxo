@@ -7,9 +7,11 @@
 
 /* Tamanhos de telas de dispositivos */
 
-$tela_p: "(min-width:    0px) and (max-width:  767px)";
-$tela_m: "(min-width:  768px) and (max-width: 1024px)";
-$tela_g: "(min-width: 1025px)";
+$tela_pp: "(max-width: 575.98px)";
+$tela_p : "(min-width: 576px) and (max-width: 767.98px)";
+$tela_m : "(min-width: 768px) and (max-width: 991.98px)";
+$tela_g : "(min-width: 992px) and (max-width: 1199.98px)";
+$tela_gg: "(min-width: 1200px)";
 
 /* ---------------------------------------------- */
 
@@ -76,7 +78,7 @@ a {
 #telas {
     position: relative;
     width: 100%;
-    top: 50px;
+    top: 60px; //Altura da barra de navegação
 }
 
 .tela {
@@ -92,19 +94,29 @@ a {
     margin-right: auto;
     margin-left: auto;
 
-    @media #{$tela_p} {
+    @media #{$tela_pp} {
         padding-right: 15px;
         padding-left: 15px;
     }
 
-    @media #{$tela_m} {
+    @media #{$tela_p} {
         padding-right: 15vw;
         padding-left: 15vw;
+    }
+
+    @media #{$tela_m} {
+        padding-right: 20vw;
+        padding-left: 20vw;
     }
 
     @media #{$tela_g} {
         padding-right: 25vw;
         padding-left: 25vw;
+    }
+
+    @media #{$tela_gg} {
+        padding-right: 28vw;
+        padding-left: 28vw;
     }
 
 }
@@ -127,13 +139,28 @@ a {
     margin-top: 0;
 }
 
-.tela-comandos {
+.tela-rodape {
+    
     position: sticky;
     width: 100%;
-    bottom: 15px;
-    z-index: 999997;
+    bottom: 0;
+    z-index: 1020;
     text-align: right;
-    background-color: rgba(255, 255, 255, 0.8);
+    pointer-events: none;
+
+    .tela-comandos {
+        
+        display: inline-block;
+        background-color:white;
+        border-radius: .25rem;
+        pointer-events: none;
+        
+        * {
+            pointer-events: all;
+        }
+
+    }
+
 }
 
 .rotulo {
@@ -147,47 +174,45 @@ a {
 
 /* Barra de navegação */
 
-.navbar {
-    margin-bottom: 0;
+nav.navbar {
+    min-height: 60px;
 }
 
 .ipe-navegacao-logotipo {
-    width: 32px;
-    height: 32px;
-    margin-top: -7px;
+    width: 34px;
+    height: 34px;
 }
 
-.nav > li > img.bandeira-linguagem {
+img.bandeira-linguagem {
 
     width: 24px;
-    padding-top: 12px;
-    margin-left: 15px;
+    margin-right: 5px;
 
     &:hover {
-        width: 32px;
-        padding-top: 8px;
+        cursor: pointer;
+        opacity: 0.7;
     }
 
 }
 
-.navbar-default .navbar-toggle {
+.navbar-toggler {
     
     border: none;
+    opacity: 0.3;
 
-    .icon-bar {
-        background-color: #e3dddd;
+    &:hover {
+        opacity: 1;
     }
 
-    &:hover,
     &:focus {
-        background-color: white;
+        outline: none;
     }
 
 }
 
 /* ---------------------------------------------- */
 
-/* Outros componentes Ipê-roxo */
+/* Componentes Ipê-roxo */
 
 .ver-pronto {
     display: none;
@@ -195,6 +220,15 @@ a {
 
 .cursor-pointer {
     cursor: pointer;
+}
+
+.input-group > .input-group-append > .input-group-text {
+    color: #495057;
+    background-color: #e9ecef;
+    &:hover {
+        background: #d9dcdf;
+        cursor: pointer;
+    }
 }
 
 .marcacao {
@@ -205,8 +239,18 @@ a {
     background-color: #fff !important;
 }
 
-.ipe-midia-imagem {
+.bootstrap-select > button {
+    color: #495057;
+    background-color: white;
+    border-color: rgb(206, 212, 218);
+}
+
+.media > img {
     width: 64px;
+}
+
+.media-body {
+    text-align: justify;
 }
 
 .alert {
@@ -218,71 +262,48 @@ a {
 
 /* Mensagem ampla */
 
-.mensagem-ampla {
-
+#mensagem-ampla {
     display: none;
+    box-sizing: border-box;
     position: fixed;
-    z-index: 999998;
     left: 0;
     top: 0;
     width: 100%;
     height: 100%;
-    box-sizing: border-box;
+    padding-top: 10%;
     overflow: auto;
+    z-index: 1080;
     background-color: rgba(0,0,0,0.85);
-
-    @media #{$tela_p} {
-        padding-top: 15%;
-    }
-
-    @media #{$tela_m} {
-        padding-top: 15%;
-    }
-
-    @media #{$tela_g} {
-        padding-top: 10%;
-    }
-
 }
 
-.mensagem-ampla-conteudo {
+#mensagem-ampla div {
 
-    background-color: #fefefe;
-    box-sizing: content-box;
-    margin: auto;
+    box-sizing: border-box;
     border-radius: 10px;
+    margin: auto;
+    padding: 0.8em;
     font-size: 14pt;
     word-wrap: break-word;
+    background-color: #fefefe;
+
+    @media #{$tela_pp} {
+        width: 90%;
+    }
 
     @media #{$tela_p} {
-        width: 88%;
-        padding: 4%;
+        width: 85%;
     }
 
     @media #{$tela_m} {
         width: 70%;
-        padding: 16px;
     }
 
     @media #{$tela_g} {
-        width: 40%;
-        padding: 20px;
+        width: 55%;
     }
 
-}
-
-.mensagem-ampla-fechar {
-
-    color: #aaaaaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
-
-    &:hover,
-    &:focus {
-        color: #000;
-        text-decoration: none;
-        cursor: pointer;
+    @media #{$tela_gg} {
+        width: 40%;
     }
 
 }
@@ -291,14 +312,37 @@ a {
 
 /* Animação de espera */
 
-.animacao-espera {
+#animacao-espera {
     display: none;
+    position: fixed;
     width: 4em;
     height: auto;
-    position: fixed;
-    right: 0;
     bottom: 0;
-    z-index: 999999;
+    left: 0;
+    z-index: 1031;
+}
+
+/* ---------------------------------------------- */
+
+/* Informação situacional */
+
+#informacao-situacional {
+    display: none;
+    box-sizing: border-box;
+    height: auto;
+    min-height: 2em;
+    padding: 4px 4px 4px 4px;
+    margin: 6px 6px 6px 6px;
+    border-radius: 4px;
+    position: fixed;
+    top: 43px;
+    right: 0;
+    left: 0;
+    z-index: 1030;
+    font-size: 0.9rem;
+    font-style: italic;
+    text-align: center;
+    word-wrap: break-word;
 }
 
 /* ---------------------------------------------- */
