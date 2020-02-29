@@ -10,11 +10,9 @@ A aplicação Web do Ipê-roxo é responsável por manter a interface de comunic
 
 ## Versão Atual
 
-1.0-A20 (Fase de Nascimento)
+1.0-A21 (Fase de Nascimento)
 
 Padrão de versionamento: [JFV](http://joseflavio.com/jfv)
-
-> A versão em desenvolvimento (1.0-A21) é compatível com [Bootstrap v4](https://getbootstrap.com/).
 
 ## Instalação
 
@@ -53,7 +51,7 @@ A aplicação Web Ipê-roxo possui uma estrutura simples de arquivos, a qual é 
 
 ### Português
 
-Direitos Autorais Reservados &copy; 2016-2019 [José Flávio de Souza Dias Júnior](http://joseflavio.com)
+Direitos Autorais Reservados &copy; 2016-2020 [José Flávio de Souza Dias Júnior](http://joseflavio.com)
 
 Este arquivo é parte de Ipê-roxo - [http://joseflavio.com/iperoxo](http://joseflavio.com/iperoxo).
 
@@ -72,7 +70,7 @@ junto com Ipê-roxo. Se não, veja [https://www.gnu.org/licenses/lgpl.html](http
 
 ### English
 
-Copyright &copy; 2016-2019 [José Flávio de Souza Dias Júnior](http://joseflavio.com)
+Copyright &copy; 2016-2020 [José Flávio de Souza Dias Júnior](http://joseflavio.com)
 
 This file is part of Ipê-roxo - [http://joseflavio.com/iperoxo](http://joseflavio.com/iperoxo).
 

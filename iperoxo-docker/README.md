@@ -10,7 +10,7 @@ A aplicação Docker do Ipê-roxo é responsável por manter as regras, os proce
 
 ## Versão Atual
 
-1.0-A20 (Fase de Nascimento)
+1.0-A21 (Fase de Nascimento)
 
 Padrão de versionamento: [JFV](http://joseflavio.com/jfv)
 
@@ -62,7 +62,7 @@ gradle clean build
 Criar imagem:
 
 ```sh
-docker build --force-rm -t joseflavio/iperoxo:1.0-A20 .
+docker build --force-rm -t joseflavio/iperoxo:1.0-A21 .
 ```
 
 Criar volume de dados:
@@ -74,7 +74,7 @@ docker volume create --name iperoxo
 Executar pela primeira vez:
 
 ```sh
-docker run --name="iperoxo" -d -p 8884:8884 -e TZ=America/Belem -v iperoxo:/volume --ip=x.x.x.x --net xxxxxx --restart=unless-stopped joseflavio/iperoxo:1.0-A20
+docker run --name="iperoxo" -d -p 8884:8884 -e TZ=America/Belem -v iperoxo:/volume --ip=x.x.x.x --net xxxxxx --restart=unless-stopped joseflavio/iperoxo:1.0-A21
 ```
 
 > A aplicação Ipê-roxo será inicializada automaticamente no processo de boot, a não ser que seja voluntariamente parada: `docker stop iperoxo`.
@@ -107,14 +107,14 @@ Desinstalar a aplicação Ipê-roxo por completo:
 
 ```sh
 docker rm -f iperoxo
-docker rmi joseflavio/iperoxo:1.0-A20
+docker rmi joseflavio/iperoxo:1.0-A21
 ```
 
 ## Licença
 
 ### Português
 
-Direitos Autorais Reservados &copy; 2016-2019 [José Flávio de Souza Dias Júnior](http://joseflavio.com)
+Direitos Autorais Reservados &copy; 2016-2020 [José Flávio de Souza Dias Júnior](http://joseflavio.com)
 
 Este arquivo é parte de Ipê-roxo - [http://joseflavio.com/iperoxo](http://joseflavio.com/iperoxo).
 
@@ -133,7 +133,7 @@ junto com Ipê-roxo. Se não, veja [https://www.gnu.org/licenses/lgpl.html](http
 
 ### English
 
-Copyright &copy; 2016-2019 [José Flávio de Souza Dias Júnior](http://joseflavio.com)
+Copyright &copy; 2016-2020 [José Flávio de Souza Dias Júnior](http://joseflavio.com)
 
 This file is part of Ipê-roxo - [http://joseflavio.com/iperoxo](http://joseflavio.com/iperoxo).
 

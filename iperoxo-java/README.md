@@ -4,18 +4,18 @@ Biblioteca Java que fornece os recursos básicos para o pleno funcionamento de u
 
 ## Versão Atual
 
-1.0-A20 (Fase de Nascimento)
+1.0-A21 (Fase de Nascimento)
 
 Padrão de versionamento: [JFV](http://joseflavio.com/jfv)
 
 ## Como Usar
 
-Ipê-roxo está disponível como biblioteca Java no repositório [Maven](http://search.maven.org/#artifactdetails%7Ccom.joseflavio%7Ciperoxo%7C1.0-A20%7Cjar).
+Ipê-roxo está disponível como biblioteca Java no repositório [Maven](http://search.maven.org/#artifactdetails%7Ccom.joseflavio%7Ciperoxo%7C1.0-A21%7Cjar).
 
 Gradle:
 
 ```
-compile 'com.joseflavio:iperoxo:1.0-A20'
+compile 'com.joseflavio:iperoxo:1.0-A21'
 ```
 
 Maven:
@@ -24,7 +24,7 @@ Maven:
 <dependency>
     <groupId>com.joseflavio</groupId>
     <artifactId>iperoxo</artifactId>
-    <version>1.0-A20</version>
+    <version>1.0-A21</version>
 </dependency>
 ```
 
@@ -69,7 +69,7 @@ gradle clean build
 
 ## Publicação
 
-Para compilar e publicar os arquivos finais do projeto no repositório [Maven](http://search.maven.org/#artifactdetails%7Ccom.joseflavio%7Ciperoxo%7C1.0-A20%7Cjar), executar no terminal:
+Para compilar e publicar os arquivos finais do projeto no repositório [Maven](http://search.maven.org/#artifactdetails%7Ccom.joseflavio%7Ciperoxo%7C1.0-A21%7Cjar), executar no terminal:
 
 ```sh
 gradle clean uploadArchives
@@ -79,7 +79,7 @@ gradle clean uploadArchives
 
 ### Português
 
-Direitos Autorais Reservados &copy; 2016-2019 [José Flávio de Souza Dias Júnior](http://joseflavio.com)
+Direitos Autorais Reservados &copy; 2016-2020 [José Flávio de Souza Dias Júnior](http://joseflavio.com)
 
 Este arquivo é parte de Ipê-roxo - [http://joseflavio.com/iperoxo](http://joseflavio.com/iperoxo).
 
@@ -98,7 +98,7 @@ junto com Ipê-roxo. Se não, veja [https://www.gnu.org/licenses/lgpl.html](http
 
 ### English
 
-Copyright &copy; 2016-2019 [José Flávio de Souza Dias Júnior](http://joseflavio.com)
+Copyright &copy; 2016-2020 [José Flávio de Souza Dias Júnior](http://joseflavio.com)
 
 This file is part of Ipê-roxo - [http://joseflavio.com/iperoxo](http://joseflavio.com/iperoxo).
 
