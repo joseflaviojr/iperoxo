@@ -78,7 +78,12 @@ var html_documento = $(document);
 var html_corpo = $("body");
 
 /**
- * Argumentos da URL.
+ * URL inicial.
+ */
+var url_inicial;
+
+/**
+ * Argumentos da URL inicial.
  */
 var url_args = {};
 
@@ -139,6 +144,11 @@ var navegacao_passo = 0;
  * @see gerarID
  */
 var id_geracao_sequencia = 0;
+
+/**
+ * Sinalização de que a aplicação está sendo ou não encerrada.
+ */
+var encerrandoAplicacao = false;
 
 /**
  * {@link MessageFormat} de acordo com a {@link lid}.
@@ -1536,7 +1546,7 @@ function fecharTela( tela ) {
     
         atualizarAmbiente();
 
-        if( Object.keys(telas).length === 0 ){
+        if( Object.keys(telas).length === 0 && ! encerrandoAplicacao ){
             jsExec( configuracao.funcao_tela_ausente );
         }
 
@@ -2342,11 +2352,50 @@ function cordovaApagar( nome, funcExito, funcErro ) {
 //--------------------------------------------------------------------------
 
 /**
- * Reinicia a aplicação Ipê-roxo.
- * @see configuracao.funcao_inicial
+ * Reinicia adequadamente a aplicação Ipê-roxo.
+ * @see location.reload
  */
 function reiniciarAplicacao() {
-    location.reload(true);
+    
+    function recarregar() {
+        window.location = url_inicial;
+    }
+
+    encerrarAplicacao(recarregar, recarregar);
+
+}
+
+//--------------------------------------------------------------------------
+
+/**
+ * Encerra adequadamente a aplicação Ipê-roxo.
+ * @param funcSaida Função que efetivamente fecha a aplicação. Opcional, sendo navigator["app"].exitApp() a padrão.
+ * @param funcErro Função para tratar o erro ocorrido ao executar configuracao.funcao_final. Opcional, podendo ser a mesma funcSaida.
+ */
+function encerrarAplicacao( funcSaida, funcErro ) {
+    
+    encerrandoAplicacao = true;
+    
+    fecharTelas();
+
+    function funcSaidaPadrao() {
+        if( isCordovaNativa() ){
+            try{
+                navigator["app"].exitApp();
+            }catch( e ){
+                reiniciarAplicacao();
+            }
+        }else{
+            reiniciarAplicacao();
+        }
+    }
+
+    jsExec(
+        configuracao.funcao_final,
+        funcSaida ? funcSaida : funcSaidaPadrao,
+        funcErro  ? funcErro  : funcSaidaPadrao
+    );
+    
 }
 
 //--------------------------------------------------------------------------
@@ -2354,8 +2403,17 @@ function reiniciarAplicacao() {
 pronto(function(){
 
     //-----------------------------------
-    // Definição de "url_args"
-    copiarQueryParaJSON( window.location.search, url_args );
+    // URL inicial da aplicação
+    url_inicial = window.location;
+    copiarQueryParaJSON( url_inicial.search, url_args );
+
+    //-----------------------------------
+    // Comando de voltar
+    document.addEventListener("backbutton", function(){
+        var funcVoltar = js(configuracao.funcao_voltar);
+        if( typeof(funcVoltar) === "function" ) jsExec(funcVoltar);
+        else fecharTelaAtiva();
+    }, false);
 
     //-----------------------------------
     // Informação situacional

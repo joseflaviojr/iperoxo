@@ -11,14 +11,26 @@ var configuracao = {
     iperoxo_versao                   : "1.0-A21",
 
     /**
-     * Função que inicia a aplicação.
+     * Função que define o comportamento inicial da aplicação.
      */
     funcao_inicial                   : "aplicacao",
 
     /**
-     * Função a ser chamada se a aplicação estiver com ausência de telas.
+     * Função que define o comportamento final da aplicação.
      */
-    funcao_tela_ausente              : "reiniciarAplicacao",
+    funcao_final                     : "finalizacao",
+
+    /**
+     * Função que será chamada quando o comando de voltar for acionado.
+     * Em caso de indefinição, o comportamento padrão será de fechar a tela ativa,
+     * podendo, inclusive, encerrar a aplicação.
+     */
+    funcao_voltar                    : undefined,
+
+    /**
+     * Função que será chamada quando a aplicação estiver com ausência de telas.
+     */
+    funcao_tela_ausente              : "encerrarAplicacao",
 
     /**
      * Repositório padrão da API Apache Cordova para armazenamento de arquivos.

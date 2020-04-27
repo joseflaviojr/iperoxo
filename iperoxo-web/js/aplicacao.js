@@ -25,6 +25,16 @@ function aplicacao() {
 //--------------------------------------------------------------------------
 
 /**
+ * Comportamento final da aplicação.
+ * @see configuracao.funcao_final
+ * @see encerrarAplicacao
+ */
+function finalizacao( funcExito, funcErro ) {
+}
+
+//--------------------------------------------------------------------------
+
+/**
  * {@linkcode funcInicio} de "tela.html"
  * @see exemploEventoTela
  */
