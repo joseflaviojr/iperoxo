@@ -4,6 +4,8 @@ Modelo de software multicamada.
 
 Multilayered software model.
 
+<img width="128px" src="projeto/Logomarca/iperoxo0128.png">
+
 ## Descrição
 
 O Ipê-roxo é um modelo de software multicamada que utiliza a [Copaíba](http://joseflavio.com/copaiba) como base de comunicação.

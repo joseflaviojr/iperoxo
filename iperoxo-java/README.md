@@ -2,6 +2,8 @@
 
 Biblioteca Java que fornece os recursos básicos para o pleno funcionamento de uma aplicação [Ipê-roxo](https://github.com/joseflaviojr/iperoxo).
 
+<img width="128px" src="../projeto/Logomarca/iperoxo0128.png">
+
 ## Versão Atual
 
 1.0-A21 (Fase de Nascimento)

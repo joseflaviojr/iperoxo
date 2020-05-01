@@ -2,6 +2,8 @@
 
 Modelo de aplicação Java para execução em container Docker, compondo parte do [Ipê-roxo](https://github.com/joseflaviojr/iperoxo).
 
+<img width="128px" src="../projeto/Logomarca/iperoxo0128.png">
+
 ## Descrição
 
 A aplicação Docker do Ipê-roxo é responsável por manter as regras, os procedimentos e os dados do sistema. No esquema geral do Ipê-roxo (figura abaixo), o módulo "Aplicação Java" corresponde à aplicação Docker aqui especificada.

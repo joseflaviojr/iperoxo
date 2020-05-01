@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="210mm"
+   height="297mm"
+   viewBox="0 0 210 297"
+   version="1.1"
+   id="svg8"
+   inkscape:version="0.92.4 (5da689c313, 2019-01-14)"
+   sodipodi:docname="Ipê-roxo.svg">
+  <defs
+     id="defs2">
+    <linearGradient
+       inkscape:collect="always"
+       id="linearGradient4595">
+      <stop
+         style="stop-color:#b83b96;stop-opacity:1;"
+         offset="0"
+         id="stop4591" />
+      <stop
+         style="stop-color:#b83b96;stop-opacity:0;"
+         offset="1"
+         id="stop4593" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient4595"
+       id="linearGradient4597"
+       x1="22.98518"
+       y1="176.19417"
+       x2="-26.825903"
+       y2="53.017235"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1.0921376,0,0,1.0921376,-5.711113,-18.021851)" />
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.70710678"
+     inkscape:cx="387.06688"
+     inkscape:cy="611.86345"
+     inkscape:document-units="mm"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     showguides="true"
+     inkscape:guide-bbox="true"
+     inkscape:window-width="1366"
+     inkscape:window-height="703"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1" />
+  <metadata
+     id="metadata5">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Camada 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <rect
+       inkscape:export-ydpi="276.45001"
+       inkscape:export-xdpi="276.45001"
+       y="88.977165"
+       x="-1.8785478"
+       height="94.085838"
+       width="94.085838"
+       id="rect827"
+       style="opacity:1;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1.16416669;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:0" />
+    <rect
+       style="opacity:1;fill:url(#linearGradient4597);fill-opacity:1;stroke:none;stroke-width:1.16416669;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:0"
+       id="rect877"
+       width="94.085838"
+       height="94.085838"
+       x="-1.8785478"
+       y="88.977165"
+       inkscape:export-xdpi="276.45001"
+       inkscape:export-ydpi="276.45001" />
+    <g
+       id="g4634"
+       transform="translate(-0.9260415,-3.3849329)"
+       inkscape:export-xdpi="276.45001"
+       inkscape:export-ydpi="276.45001">
+      <g
+         transform="translate(-23.130421,4.6906477)"
+         id="g827"
+         inkscape:export-xdpi="34.130001"
+         inkscape:export-ydpi="34.130001">
+        <path
+           style="fill:none;stroke:#e1e8ee;stroke-width:2.64583325;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+           d="m 79.308383,169.89266 c -15.613587,-12.50907 -27.447575,-18.3294 0.204299,-44.4797"
+           id="path819"
+           inkscape:connector-curvature="0"
+           sodipodi:nodetypes="cc"
+           inkscape:export-xdpi="160"
+           inkscape:export-ydpi="160" />
+        <use
+           x="0"
+           y="0"
+           xlink:href="#path819"
+           id="use823"
+           width="100%"
+           height="100%"
+           transform="matrix(-1,0,0,1,159.02536,0)"
+           inkscape:export-xdpi="160"
+           inkscape:export-ydpi="160" />
+      </g>
+      <use
+         transform="rotate(-25,56.382102,176.44327)"
+         height="100%"
+         width="100%"
+         id="use4617"
+         xlink:href="#g827"
+         y="0"
+         x="0"
+         inkscape:export-xdpi="34.130001"
+         inkscape:export-ydpi="34.130001" />
+      <use
+         x="0"
+         y="0"
+         xlink:href="#g827"
+         id="use4619"
+         width="100%"
+         height="100%"
+         transform="rotate(25,56.382861,176.44584)"
+         inkscape:export-xdpi="34.130001"
+         inkscape:export-ydpi="34.130001" />
+    </g>
+  </g>
+</svg>
