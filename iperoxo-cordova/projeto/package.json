@@ -1,0 +1,15 @@
+{
+    "name": "iperoxo",
+    "displayName": "Ipê-roxo",
+    "version": "1.0-A21",
+    "description": "Modelo de aplicação que combina Cordova com Ipê-roxo Web.",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "keywords": [
+        "ecosystem:cordova"
+    ],
+    "author": "José Flávio de Souza Dias Júnior <email@joseflavio.com> (https://joseflavio.com)",
+    "license": "See license in <License GNU LGPL.txt>"
+}

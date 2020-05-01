@@ -22,11 +22,12 @@ Padrão de versionamento: [JFV](http://joseflavio.com/jfv)
 
 ## Sistema
 
-O modelo Ipê-roxo compreende três módulos sistêmicos:
+O modelo Ipê-roxo é dividido em quatro partes:
 
-* [Biblioteca Java](https://github.com/joseflaviojr/iperoxo/tree/master/iperoxo-java)
-* [Aplicação Docker](https://github.com/joseflaviojr/iperoxo/tree/master/iperoxo-docker)
-* [Aplicação Web](https://github.com/joseflaviojr/iperoxo/tree/master/iperoxo-web)
+* [Biblioteca](https://github.com/joseflaviojr/iperoxo/tree/master/iperoxo-java)
+* [Docker](https://github.com/joseflaviojr/iperoxo/tree/master/iperoxo-docker)
+* [Web](https://github.com/joseflaviojr/iperoxo/tree/master/iperoxo-web)
+* [Cordova](https://github.com/joseflaviojr/iperoxo/tree/master/iperoxo-cordova)
 
 ## Licença
 
