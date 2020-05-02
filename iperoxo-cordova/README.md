@@ -173,6 +173,8 @@ cp -R ../projeto/scripts ./
 
 A plataforma Android exige assinatura digital dos aplicativos. Siga as instruções do artigo [Assinar o app](https://developer.android.com/studio/publish/app-signing?hl=pt-br) para gerar as suas chaves. Os arquivos `../projeto/Android/cordova-debug.properties` e `../projeto/Android/cordova-release.properties` são exemplos de configuração que orientam o Cordova no processo de assinatura do aplicativo, a partir de `../projeto/scripts/android/build-extras.gradle`.
 
+Constatar se o código numérico (`config.xml :: android-versionCode`) e o nome da versão (`config.xml :: version`) do aplicativo está de acordo com as regras do artigo [Controlar versões do app](https://developer.android.com/studio/publish/versioning) e se contempla a sequência de evolução do aplicativo.
+
 Executar o comando a seguir com o objetivo de compilar para a plataforma Android.
 
 ```sh
@@ -186,6 +188,12 @@ cordova run android --device
 ```
 
 Uma forma de acompanhar as atividades correntes do dispositivo Android conectado é através do comando `adb logcat`.
+
+Para verificar informações pertinentes ao aplicativo instalado no dispositivo Android, executar o comando abaixo.
+
+```sh
+adb shell dumpsys package com.joseflavio.iperoxo
+```
 
 ### Distribuição para Android
 

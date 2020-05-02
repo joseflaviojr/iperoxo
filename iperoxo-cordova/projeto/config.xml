@@ -1,5 +1,10 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.joseflavio.iperoxo" version="1.0-A21" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget
+    id="com.joseflavio.iperoxo"
+    version="1.0-A21"
+    android-versionCode="1021"
+    xmlns="http://www.w3.org/ns/widgets"
+    xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>Ipê-roxo</name>
     <description>
         Modelo de aplicação que combina Cordova com Ipê-roxo Web.
@@ -15,13 +20,17 @@
     <allow-intent href="https://*/*" />
     <platform name="android">
         <allow-intent href="market:*" />
+        <preference name="android-minSdkVersion" value="19" />
+        <preference name="android-targetSdkVersion" value="28" />
+        <preference name="AndroidPersistentFileLocation" value="Internal" />
         <hook src="scripts/android/before_build.sh" type="before_build" />
     </platform>
     <platform name="ios">
         <allow-intent href="itms:*" />
         <allow-intent href="itms-apps:*" />
+        <preference name="iosPersistentFileLocation" value="Library" />
     </platform>
-    <preference name="AndroidPersistentFileLocation" value="Internal" />
-    <preference name="iosPersistentFileLocation" value="Library" />
+    <preference name="FullScreen" value="false" />
+    <preference name="Orientation" value="default" />
     <icon src="res/icon.png" />
 </widget>
