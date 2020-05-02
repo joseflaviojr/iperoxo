@@ -30,6 +30,7 @@ function aplicacao() {
  * @see encerrarAplicacao
  */
 function finalizacao( funcExito, funcErro ) {
+    jsExec(funcExito);
 }
 
 //--------------------------------------------------------------------------
