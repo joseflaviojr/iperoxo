@@ -47,22 +47,20 @@
 //--------------------------------------------------------------------------
 // Importação e definição de tipos
 
-$.each([ "ChronoField", "ChronoLocalDate", "ChronoLocalDateTime",
-         "ChronoUnit", "ChronoZonedDateTime", "Clock", "DateTimeException",
-         "DateTimeFormatter", "DateTimeFormatterBuilder",
-         "DateTimeParseException", "DayOfWeek", "Duration", "Instant",
-         "IsoChronology", "IsoFields", "LocalDate", "LocalDateTime",
-         "LocalTime", "Month", "MonthDay", "Period", "Temporal",
-         "TemporalAccessor", "TemporalAdjuster", "TemporalAdjusters",
-         "TemporalAmount", "TemporalField", "TemporalQueries",
-         "TemporalQuery", "TemporalUnit", "Year", "YearConstants",
-         "YearMonth", "ZonedDateTime", "ZoneId", "ZoneOffset",
-         "ZoneOffsetTransition", "ZoneRegion", "ZoneRules",
-         "ZoneRulesProvider" ],
-    function(i, classe){
-        window[classe] = JSJoda[classe];
-    }
-);
+[
+    "ChronoField", "ChronoLocalDate", "ChronoLocalDateTime",
+    "ChronoUnit", "ChronoZonedDateTime", "Clock", "DateTimeException",
+    "DateTimeFormatter", "DateTimeFormatterBuilder",
+    "DateTimeParseException", "DayOfWeek", "Duration", "Instant",
+    "IsoChronology", "IsoFields", "LocalDate", "LocalDateTime",
+    "LocalTime", "Month", "MonthDay", "Period", "Temporal",
+    "TemporalAccessor", "TemporalAdjuster", "TemporalAdjusters",
+    "TemporalAmount", "TemporalField", "TemporalQueries",
+    "TemporalQuery", "TemporalUnit", "Year", "YearConstants",
+    "YearMonth", "ZonedDateTime", "ZoneId", "ZoneOffset",
+    "ZoneOffsetTransition", "ZoneRegion", "ZoneRules",
+    "ZoneRulesProvider"
+].forEach( classe => window[classe] = JSJoda[classe] );
 
 //--------------------------------------------------------------------------
 
@@ -2566,8 +2564,7 @@ pronto(function(){
     function _carregar_repositorio() {
         var endereco = repositorios.shift();
         if( endereco !== undefined ){
-            html_corpo.append("<div id=\"componentes\" class=\"d-none\"></div>");
-            $("#componentes").load(endereco + " .tela", _carregar_componentes);
+            $("<div id=\"componentes\" class=\"d-none\"></div>").load(endereco + " .tela", _carregar_componentes);
             return true;
         }else{
             return false;
