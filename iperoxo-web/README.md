@@ -1,12 +1,12 @@
-# Ipê-roxo - Aplicação Web
+# Ipê-roxo Web (Front-End)
 
-Modelo de aplicação Web para execução em navegador ou [Cordova](https://cordova.apache.org/), baseado em HTML5, CSS3 e JavaScript, compondo parte do [Ipê-roxo](https://github.com/joseflaviojr/iperoxo).
+Modelo de aplicação Web para execução em navegador ou [Cordova](https://cordova.apache.org/), baseado em HTML, CSS e JavaScript, compondo parte do [Ipê-roxo](https://github.com/joseflaviojr/iperoxo).
 
-<img width="128px" src="../projeto/Logomarca/iperoxo0128.png">
+<img width="128px" src="../projeto/Marca/iperoxo0128.png">
 
 ## Descrição
 
-A aplicação Web do Ipê-roxo é responsável por manter a interface de comunicação do usuário com o sistema. No esquema geral do Ipê-roxo (figura abaixo), o módulo "Navegador Web" contém a aplicação Web aqui especificada.
+A aplicação Web (Front-End) do Ipê-roxo é responsável por disponibilizar e gerenciar a interface de comunicação do usuário com o sistema.
 
 <img src="../projeto/EsquemaGeral.png">
 
@@ -18,7 +18,7 @@ Padrão de versionamento: [JFV](http://joseflavio.com/jfv)
 
 ## Instalação
 
-Esta aplicação Ipê-roxo pode ser instalada diretamente em qualquer servidor Web, podendo ser alterada *in loco*.
+Esta aplicação Ipê-roxo pode ser instalada diretamente em qualquer servidor Web, sem a necessidade de compilação ou de empacotamento. Ela também pode ser incorporada num aplicativo móvel do tipo [Cordova](https://cordova.apache.org/), conforme [instruções específicas](https://github.com/joseflaviojr/iperoxo/tree/master/iperoxo-cordova).
 
 ## Estrutura
 
@@ -48,43 +48,3 @@ A aplicação Web Ipê-roxo possui uma estrutura simples de arquivos, a qual é 
 - **WEB-INF** : diretório necessário apenas para servidores Web JavaEE.
 - **servidor.sh** : script bash que inicializa o processo de conversão Sass/CSS e o [servidor Web simples](https://docs.python.org/2/library/simplehttpserver.html#module-SimpleHTTPServer) da Python na porta 8000.
 - **index.html** : principal arquivo HTML (página inicial), o qual está preparado para aplicações *single page*.
-
-## Licença
-
-### Português
-
-Direitos Autorais Reservados &copy; 2016-2020 [José Flávio de Souza Dias Júnior](http://joseflavio.com)
-
-Este arquivo é parte de Ipê-roxo - [http://joseflavio.com/iperoxo](http://joseflavio.com/iperoxo).
-
-Ipê-roxo é software livre: você pode redistribuí-lo e/ou modificá-lo
-sob os termos da [Licença Pública Menos Geral GNU](https://www.gnu.org/licenses/lgpl.html) conforme publicada pela
-Free Software Foundation, tanto a versão 3 da Licença, como
-(a seu critério) qualquer versão posterior.
-
-Ipê-roxo é distribuído na expectativa de que seja útil,
-porém, SEM NENHUMA GARANTIA; nem mesmo a garantia implícita de
-COMERCIABILIDADE ou ADEQUAÇÃO A UMA FINALIDADE ESPECÍFICA. Consulte a
-Licença Pública Menos Geral do GNU para mais detalhes.
-
-Você deve ter recebido uma cópia da Licença Pública Menos Geral do GNU
-junto com Ipê-roxo. Se não, veja [https://www.gnu.org/licenses/lgpl.html](https://www.gnu.org/licenses/lgpl.html).
-
-### English
-
-Copyright &copy; 2016-2020 [José Flávio de Souza Dias Júnior](http://joseflavio.com)
-
-This file is part of Ipê-roxo - [http://joseflavio.com/iperoxo](http://joseflavio.com/iperoxo).
-
-Ipê-roxo is free software: you can redistribute it and/or modify
-it under the terms of the [GNU Lesser General Public License](https://www.gnu.org/licenses/lgpl.html) as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-Ipê-roxo is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License
-along with Ipê-roxo. If not, see [https://www.gnu.org/licenses/lgpl.html](https://www.gnu.org/licenses/lgpl.html).

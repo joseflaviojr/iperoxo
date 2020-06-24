@@ -1,8 +1,8 @@
-# Ipê-roxo - Cordova
+# Ipê-roxo Cordova (Mobile)
 
-Modelo de aplicação que combina [Cordova](https://cordova.apache.org/) com [Ipê-roxo Web](https://github.com/joseflaviojr/iperoxo/tree/master/iperoxo-web).
+Modelo de aplicativo móvel que combina [Cordova](https://cordova.apache.org/) com [Ipê-roxo Web](https://github.com/joseflaviojr/iperoxo/tree/master/iperoxo-web).
 
-<img width="128px" src="../projeto/Logomarca/iperoxo0128.png">
+<img width="128px" src="../projeto/Marca/iperoxo0128.png">
 
 ## Versão Atual
 
@@ -15,6 +15,10 @@ Padrão de versionamento: [JFV](http://joseflavio.com/jfv)
 As instruções a seguir são necessárias para preparar, compilar e distribuir aplicações [Cordova](https://cordova.apache.org/), tendo como seu conteúdo Web uma aplicação [Ipê-roxo](https://github.com/joseflaviojr/iperoxo/tree/master/iperoxo-web).
 
 Aconselha-se realizar todas estas instruções sempre que precisar distribuir a aplicação, evitando reutilizar código Cordova.
+
+## Caso de Uso
+
+O aplicativo [Praesentia](https://play.google.com/store/apps/details?id=br.edu.ifpa.praesentia) é um exemplo de aplicativo móvel Ipê-roxo.
 
 ## Projeto Cordova
 
@@ -173,7 +177,7 @@ cp -R ../projeto/scripts ./
 
 A plataforma Android exige assinatura digital dos aplicativos. Siga as instruções do artigo [Assinar o app](https://developer.android.com/studio/publish/app-signing?hl=pt-br) para gerar as suas chaves. Os arquivos `../projeto/Android/cordova-debug.properties` e `../projeto/Android/cordova-release.properties` são exemplos de configuração que orientam o Cordova no processo de assinatura do aplicativo, a partir de `../projeto/scripts/android/build-extras.gradle`.
 
-Constatar se o código numérico (`config.xml :: android-versionCode`) e o nome da versão (`config.xml :: version`) do aplicativo está de acordo com as regras do artigo [Controlar versões do app](https://developer.android.com/studio/publish/versioning) e se contempla a sequência de evolução do aplicativo.
+Constatar se o código numérico (`config.xml :: android-versionCode`) e o nome da versão (`config.xml :: version`) do aplicativo estão de acordo com as regras do artigo [Controlar versões do app](https://developer.android.com/studio/publish/versioning) e se atende à sequência de evolução do aplicativo.
 
 Executar o comando a seguir com o objetivo de compilar para a plataforma Android.
 
@@ -213,7 +217,7 @@ cordova run --release android --device
 
 ## Limpeza
 
-Apagar diretório do projeto Cordova para refazer todas as instruções de preparação, compilação e distribuição da aplicação.
+Apagar diretório do projeto Cordova para refazer todas estas instruções de preparação, compilação e distribuição da aplicação.
 
 ```sh
 cd ..

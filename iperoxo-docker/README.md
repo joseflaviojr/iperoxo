@@ -1,12 +1,12 @@
-# Ipê-roxo - Aplicação Docker
+# Ipê-roxo Java/Docker (Back-End)
 
 Modelo de aplicação Java para execução em container Docker, compondo parte do [Ipê-roxo](https://github.com/joseflaviojr/iperoxo).
 
-<img width="128px" src="../projeto/Logomarca/iperoxo0128.png">
+<img width="128px" src="../projeto/Marca/iperoxo0128.png">
 
 ## Descrição
 
-A aplicação Docker do Ipê-roxo é responsável por manter as regras, os procedimentos e os dados do sistema. No esquema geral do Ipê-roxo (figura abaixo), o módulo "Aplicação Java" corresponde à aplicação Docker aqui especificada.
+A aplicação Java/Docker (Back-End) do Ipê-roxo é responsável por gerenciar as regras, os procedimentos e os dados do sistema.
 
 <img src="../projeto/EsquemaGeral.png">
 
@@ -111,43 +111,3 @@ Desinstalar a aplicação Ipê-roxo por completo:
 docker rm -f iperoxo
 docker rmi joseflavio/iperoxo:1.0-A21
 ```
-
-## Licença
-
-### Português
-
-Direitos Autorais Reservados &copy; 2016-2020 [José Flávio de Souza Dias Júnior](http://joseflavio.com)
-
-Este arquivo é parte de Ipê-roxo - [http://joseflavio.com/iperoxo](http://joseflavio.com/iperoxo).
-
-Ipê-roxo é software livre: você pode redistribuí-lo e/ou modificá-lo
-sob os termos da [Licença Pública Menos Geral GNU](https://www.gnu.org/licenses/lgpl.html) conforme publicada pela
-Free Software Foundation, tanto a versão 3 da Licença, como
-(a seu critério) qualquer versão posterior.
-
-Ipê-roxo é distribuído na expectativa de que seja útil,
-porém, SEM NENHUMA GARANTIA; nem mesmo a garantia implícita de
-COMERCIABILIDADE ou ADEQUAÇÃO A UMA FINALIDADE ESPECÍFICA. Consulte a
-Licença Pública Menos Geral do GNU para mais detalhes.
-
-Você deve ter recebido uma cópia da Licença Pública Menos Geral do GNU
-junto com Ipê-roxo. Se não, veja [https://www.gnu.org/licenses/lgpl.html](https://www.gnu.org/licenses/lgpl.html).
-
-### English
-
-Copyright &copy; 2016-2020 [José Flávio de Souza Dias Júnior](http://joseflavio.com)
-
-This file is part of Ipê-roxo - [http://joseflavio.com/iperoxo](http://joseflavio.com/iperoxo).
-
-Ipê-roxo is free software: you can redistribute it and/or modify
-it under the terms of the [GNU Lesser General Public License](https://www.gnu.org/licenses/lgpl.html) as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-Ipê-roxo is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License
-along with Ipê-roxo. If not, see [https://www.gnu.org/licenses/lgpl.html](https://www.gnu.org/licenses/lgpl.html).

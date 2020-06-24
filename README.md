@@ -1,16 +1,12 @@
 # Ipê-roxo
 
-Modelo de software multicamada.
+Modelo de sistema de software multicamada que contempla características de [stacks](https://en.wikipedia.org/wiki/Solution_stack) e [frameworks](https://en.wikipedia.org/wiki/Software_framework).
 
-Multilayered software model.
-
-<img width="128px" src="projeto/Logomarca/iperoxo0128.png">
+<img width="128px" src="projeto/Marca/iperoxo0128.png">
 
 ## Descrição
 
-O Ipê-roxo é um modelo de software multicamada que utiliza a [Copaíba](http://joseflavio.com/copaiba) como base de comunicação.
-
-A figura a seguir ilustra o esquema geral do Ipê-roxo:
+O Ipê-roxo é um modelo que visa tornar mais eficiente o desenvolvimento de software, com foco nas regras de negócios, mas sem interferir na liberdade do programador. As linguagens de programação são aplicadas no Ipê-roxo de modo que não percam a sua essência. Java começa com `public static void main` e HTML com `head body`, e assim deve ser.
 
 <img src="projeto/EsquemaGeral.png">
 
@@ -24,47 +20,16 @@ Padrão de versionamento: [JFV](http://joseflavio.com/jfv)
 
 O modelo Ipê-roxo é dividido em quatro partes:
 
-* [Biblioteca](https://github.com/joseflaviojr/iperoxo/tree/master/iperoxo-java)
-* [Docker](https://github.com/joseflaviojr/iperoxo/tree/master/iperoxo-docker)
-* [Web](https://github.com/joseflaviojr/iperoxo/tree/master/iperoxo-web)
-* [Cordova](https://github.com/joseflaviojr/iperoxo/tree/master/iperoxo-cordova)
+* [Web (front-end)](https://github.com/joseflaviojr/iperoxo/tree/master/iperoxo-web)
+* [Java/Docker (back-end)](https://github.com/joseflaviojr/iperoxo/tree/master/iperoxo-docker)
+* [Cordova (mobile)](https://github.com/joseflaviojr/iperoxo/tree/master/iperoxo-cordova)
+* [Biblioteca Java](https://github.com/joseflaviojr/iperoxo/tree/master/iperoxo-java)
 
-## Licença
+E depende de outras duas soluções "amazônicas":
 
-### Português
+* [Uxi-amarelo](https://github.com/joseflaviojr/uxiamarelo)
+* [Copaíba](https://github.com/joseflaviojr/copaiba)
 
-Direitos Autorais Reservados &copy; 2016-2020 [José Flávio de Souza Dias Júnior](http://joseflavio.com)
+## Caso de Uso
 
-Este arquivo é parte de Ipê-roxo - [http://joseflavio.com/iperoxo](http://joseflavio.com/iperoxo).
-
-Ipê-roxo é software livre: você pode redistribuí-lo e/ou modificá-lo
-sob os termos da [Licença Pública Menos Geral GNU](https://www.gnu.org/licenses/lgpl.html) conforme publicada pela
-Free Software Foundation, tanto a versão 3 da Licença, como
-(a seu critério) qualquer versão posterior.
-
-Ipê-roxo é distribuído na expectativa de que seja útil,
-porém, SEM NENHUMA GARANTIA; nem mesmo a garantia implícita de
-COMERCIABILIDADE ou ADEQUAÇÃO A UMA FINALIDADE ESPECÍFICA. Consulte a
-Licença Pública Menos Geral do GNU para mais detalhes.
-
-Você deve ter recebido uma cópia da Licença Pública Menos Geral do GNU
-junto com Ipê-roxo. Se não, veja [https://www.gnu.org/licenses/lgpl.html](https://www.gnu.org/licenses/lgpl.html).
-
-### English
-
-Copyright &copy; 2016-2020 [José Flávio de Souza Dias Júnior](http://joseflavio.com)
-
-This file is part of Ipê-roxo - [http://joseflavio.com/iperoxo](http://joseflavio.com/iperoxo).
-
-Ipê-roxo is free software: you can redistribute it and/or modify
-it under the terms of the [GNU Lesser General Public License](https://www.gnu.org/licenses/lgpl.html) as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-Ipê-roxo is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License
-along with Ipê-roxo. If not, see [https://www.gnu.org/licenses/lgpl.html](https://www.gnu.org/licenses/lgpl.html).
+O aplicativo [Praesentia](https://play.google.com/store/apps/details?id=br.edu.ifpa.praesentia) é um exemplo de aplicação na camada de *front-end* do Ipê-roxo, combinando HTML, CSS, JavaScript e Cordova.
