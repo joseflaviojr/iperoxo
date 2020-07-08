@@ -10,10 +10,15 @@ function aplicacao() {
     setZonaTempo( valorNaoVazio( url_args.zid, getCookie( "zid" ), - new Date().getTimezoneOffset() ), function(){
     setSID      ( valorNaoVazio( url_args.sid, getCookie( "sid" ), gerarID                          ), function(){
 
+        // O ciclo de vida da aplicação começa aqui.
+
+        // Exemplo de definição de cookie
         setCookie( "cookieTeste", "Ipê-roxo ~ Teste de Cookie!" );
     
+        // Abertura da tela principal
         abrirTela( "html/tela.html" );
     
+        // Mensagem de boas-vindas
         abrirMensagemAmpla(formatador.compile(dicionario.bem_vindo)({
             nome: dicionario.aplicacao_titulo + " " + configuracao.iperoxo_versao
         }));
@@ -43,5 +48,9 @@ function tela_funcInicio( tela, args, tid, telaObj, funcExito, funcErro ) {
     var texto = getComp("texto", tela);
     setCompValor(texto, "Ipê-roxo");
 }
+
+//--------------------------------------------------------------------------
+
+// Codifique aqui as funções da aplicação.
 
 //--------------------------------------------------------------------------

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8" />
+    <title>Ipê-roxo</title>
+    <link href="../css-dep/fontawesome-all.css" rel="stylesheet" />
+    <link href="../css-dep/bootstrap.min.css" rel="stylesheet" />
+    <link href="../css-dep/bootstrap-select.min.css" rel="stylesheet" />
+    <link href="../css-dep/jasny-bootstrap.min.css" rel="stylesheet" />
+    <link href="../css-dep/iperoxo.css" rel="stylesheet" />
+    <link href="../css/estilo.css" rel="stylesheet" />
+  </head>
+
+  <body>
+
+    <!-- Tela -->
+    <div
+      class="tela tela-flexivel"
+      nome="tela_vazia"
+      id=""
+      funcPreparacao=""
+      funcPreAtivacao=""
+      funcInicio=""
+      funcFim="">
+
+      <!-- Título da tela -->
+      <ipe-tela-titulo referencia="titulo" titulo="tela_exemplo_titulo" />
+
+      <!-- Formulário Uxi-amarelo -->
+      <form
+        class="uxiamarelo_form"
+        action="/uxiamarelo/solicitar"
+        method="post"
+        role="form"
+        funcInicio=""
+        funcPreEnvio=""
+        funcExito="mensagensCopaiba"
+        funcErro="mensagensErroHTTP">
+
+        <!-- Mensagens -->
+        <div class="mensagens">
+        </div>
+
+        <!-- Copaíba, classe e método a ser executado remotamente -->
+        <ipe-copaiba copaiba="copaiba" classe="com.joseflavio.iperoxo.docker.Exemplo" metodo="executar" />
+
+        <!-- Identificador da sessão -->
+        <ipe-oculto class="sid" nome="sid" />
+        
+        <!-- Linguagem do usuário no formato IETF BCP 47 -->
+        <!-- https://docs.oracle.com/javase/8/docs/api/java/util/Locale.html#forLanguageTag-java.lang.String- -->
+        <ipe-oculto class="lid" nome="lid" />
+        
+        <!-- Zona de tempo do usuário -->
+        <!-- https://docs.oracle.com/javase/8/docs/api/java/time/ZoneId.html#of-java.lang.String- -->
+        <ipe-oculto class="zid" nome="zid" />
+        
+        <!-- Identificador da tela corrente -->
+        <ipe-oculto class="tid" nome="tid" />
+
+        <!-- ----------------------------------- -->
+        <!-- Insira aqui os componentes da tela. -->
+        <!-- ----------------------------------- -->
+
+        <div class="tela-rodape">
+
+          <div class="tela-comandos">
+
+            <!-- Botão de voltar -->
+            <ipe-botao icone="fas fa-reply" estilo="primario2" ao-clicar="fecharTelaAtiva()" />
+            
+          </div>
+
+        </div>
+
+      </form>
+
+    </div>
+
+  </body>
+
+</html>
