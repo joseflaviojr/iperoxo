@@ -2,7 +2,9 @@
 
 Modelo de sistema de software multicamada que contempla características de [stacks](https://en.wikipedia.org/wiki/Solution_stack) e [frameworks](https://en.wikipedia.org/wiki/Software_framework).
 
-<img width="128px" src="projeto/Marca/iperoxo0128.png">
+Comunidade: [https://twitter.com/iperoxobr](https://twitter.com/iperoxobr)
+
+<img width="600px" src="https://joseflavio.com/Figura/Ipe-roxo/jeitinho-brasileiro-de-programar.png">
 
 ## Descrição
 
