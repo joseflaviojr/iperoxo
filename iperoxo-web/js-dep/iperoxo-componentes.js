@@ -1,5 +1,12 @@
 //--------------------------------------------------------------------------
 
+/**
+ * Este arquivo contém os recursos funcionais que dão suporte
+ * aos componentes visuais padrões do Ipê-roxo.
+ */
+
+//--------------------------------------------------------------------------
+
 /*
 
   Copyright (C) 2016-2020 José Flávio de Souza Dias Júnior

@@ -1,5 +1,12 @@
 //--------------------------------------------------------------------------
 
+/**
+ * Este arquivo contém os recursos básicos do Ipê-roxo,
+ * úteis para a maioria das aplicações.
+ */
+
+//--------------------------------------------------------------------------
+
 /*
 
   Copyright (C) 2016-2020 José Flávio de Souza Dias Júnior
@@ -47,6 +54,11 @@
 //--------------------------------------------------------------------------
 // Importação e definição de tipos
 
+/**
+ * Injeção no contexto global das
+ * classes relacionadas à manipulação de data e hora (biblioteca js-joda).
+ * @see https://js-joda.github.io/js-joda/
+ */
 [
     "ChronoField", "ChronoLocalDate", "ChronoLocalDateTime",
     "ChronoUnit", "ChronoZonedDateTime", "Clock", "DateTimeException",
@@ -65,34 +77,41 @@
 //--------------------------------------------------------------------------
 
 /**
+ * Referência ao objeto "document" do DOM, na forma JQuery.
  * $(document)
  * @see document
  */
 var html_documento = $(document);
 
 /**
+ * Referência ao objeto "body" do DOM, na forma JQuery.
  * $("body")
  */
 var html_corpo = $("body");
 
 /**
- * URL inicial.
+ * URL inicial da aplicação.
+ * @see window.location
  */
 var url_inicial;
 
 /**
- * Argumentos da URL inicial.
+ * Argumentos da URL inicial da aplicação.
+ * @see window.location
  */
 var url_args = {};
 
 /**
- * ID da sessão corrente.
+ * Identificador (ID) da sessão corrente,
+ * utilizado normalmente na conversação com serviços externos,
+ * como recurso base para autenticação e autorização.
  * @see setSID
  */
 var sid = "";
 
 /**
  * Linguagem em uso, no formato IETF BCP 47.
+ * Padrão: "en" (inglês).
  * @see setLinguagem
  * @see https://docs.oracle.com/javase/8/docs/api/java/util/Locale.html#forLanguageTag-java.lang.String-
  */
@@ -100,6 +119,7 @@ var lid = "en";
 
 /**
  * Identificador da zona de tempo em uso, podendo ser deslocamento fixo (offset).
+ * Padrão: "+00:00" (UTC).
  * @see setZonaTempo
  * @see https://docs.oracle.com/javase/8/docs/api/java/time/ZoneId.html#of-java.lang.String-
  */

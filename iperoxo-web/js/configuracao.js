@@ -1,7 +1,7 @@
 //--------------------------------------------------------------------------
 
 /**
- * Configuração da aplicação Ipê-roxo.
+ * Configuração básica da aplicação Ipê-roxo.
  */
 var configuracao = {
     
