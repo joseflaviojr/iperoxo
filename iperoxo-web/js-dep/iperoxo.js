@@ -126,19 +126,24 @@ var lid = "en";
 var zid = "+00:00";
 
 /**
- * Objeto {@link ZoneId} correspondente ao {@link zid}.
+ * Objeto {@link ZoneId} correspondente à zona de tempo atual - variável {@link zid}.
  * @see setZonaTempo
  */
 var zona_tempo = ZoneId.of(zid).normalized();
 
 /**
  * Dicionário corrente, conforme {@link lid}.
+ * O dicionário é um mapa de chaves/valores que contém todo o
+ * conteúdo textual da aplicação, que se apresenta na linguagem escolhida.
  * @see lid
  */
 var dicionario = dicionario_en_US;
 
 /**
- * Total de atividades em execução.
+ * Total de atividades em execução sinalizadas através do método {@link incrementarEspera}.
+ * O método {@link decrementarEspera} diminui a referida quantidade de atividades.
+ * Caso o total de atividades seja maior que zero,
+ * opcionalmente será mostrada na tela uma animação de espera.
  * @see incrementarEspera
  * @see decrementarEspera
  */
@@ -147,6 +152,9 @@ var animacao_espera;
 
 /**
  * Objetos com informações sobre as telas abertas.
+ * Cada tela existente terá um objeto correspondente, devidamente identificado,
+ * no qual se encontrarão informações importantes acerca de seu estado,
+ * como, por exemplo, os argumentos passados no momento de abertura da tela.
  * @see abrirTela
  * @see atualizarAmbiente
  */
@@ -170,13 +178,26 @@ var encerrandoAplicacao = false;
 
 /**
  * {@link MessageFormat} de acordo com a {@link lid}.
+ * Este objeto é de utilidade geral para situações simples e pontuais,
+ * portanto, é preferível a instanciação de {@link MessageFormat} em cada circunstância de uso.
+ * Esta instância é bastante utilizada no processo de implantação de componentes.
  * @see MessageFormat
+ * @see https://messageformat.github.io/messageformat/MessageFormat
  */
 var formatador;
 
+/**
+ * Objeto JQuery que corresponde ao elemento raiz do trecho HTML responsável
+ * por mostrar informações situacionais da aplicação Ipê-roxo.
+ */
 var informacao_situacional;
 var informacao_situacional_texto = "";
 
+/**
+ * Objeto JQuery que corresponde ao elemento raiz do trecho HTML responsável
+ * por mostrar mensagens amplas, ou seja, aquelas que ocupam todo o espaço físico da tela
+ * afim de chamar a atenção do usuário para a questão.
+ */
 var mensagem_ampla;
 var mensagem_ampla_texto;
 
