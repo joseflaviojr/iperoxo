@@ -760,8 +760,11 @@ function setLinguagem( nome, funcExito ) {
         lid = nome.split("_").join("-");
         dicionario = _dic;
         
-        formatador = new MessageFormat(lid);
-        formatador.currency = "BRL";
+        try{
+            formatador = new MessageFormat(lid);
+        }catch( e ){
+            formatador = new MessageFormat("en");
+        }
     
         if( typeof(linguagemAlterada) !== "undefined" ) linguagemAlterada();
         else atualizarAmbiente();
