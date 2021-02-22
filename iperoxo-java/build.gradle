@@ -1,51 +1,31 @@
 //------------------------------------------------------
 
-apply plugin: "java"
-apply plugin: "maven"
-apply plugin: "signing"
-apply plugin: "eclipse"
-apply plugin: "idea"
+plugins {
+    id 'java-library'
+    id 'maven-publish'
+    id 'signing'
+    id 'eclipse'
+    id 'idea'
+}
 
 //------------------------------------------------------
 
-String nome = "Ipe-roxo"
-String descricao = "Ipê-roxo: Modelo de software multicamada."
+String nome      = 'Ipe-roxo'
+String descricao = 'Ipê-roxo: Modelo de software multicamada.'
 
-group = "com.joseflavio"
-archivesBaseName = "iperoxo"
-version = "1.0-A21"
-
-//------------------------------------------------------
-
-[
-
-"biblioteca", // Dependências diretas: *.jar
-"fonte",      // Código fonte: *.java
-"recurso",    // Anexos que serão embutidos no ".jar"
-"projeto",    // Arquivos de projeto: doc, svg, psd, etc.
-"rascunho"    // Arquivos temporários e descartáveis
-
-].each { new File(it).mkdirs() }
+group   = 'com.joseflavio'
+version = '1.0-A21'
 
 //------------------------------------------------------
 
-float javaVersao = 1.8
-String codificacao = "UTF-8"
+float  javaVersao  = 1.8
+String codificacao = 'UTF-8'
 
 sourceCompatibility = javaVersao
+targetCompatibility = javaVersao
 
 tasks.withType(JavaCompile) {
     options.encoding = codificacao
-}
-
-tasks.withType(GroovyCompile) {
-    options.encoding = codificacao
-    groovyOptions.encoding = codificacao
-}
-
-sourceSets {
-    main.java.srcDirs = ["fonte"]
-    main.resources.srcDirs = ["recurso"]
 }
 
 //------------------------------------------------------
@@ -54,133 +34,134 @@ repositories {
     mavenCentral()
 }
 
+//------------------------------------------------------
+
 dependencies {
-    compile fileTree(dir:"biblioteca", include:["*.jar"])
-    compile "com.joseflavio:copaiba:1.0-A16"
-    compile("com.ibm.etcd:etcd-java:0.0.14"){
-        exclude group: "io.netty"
+    implementation fileTree(dir:'lib', include:['*.jar'])
+    api 'com.joseflavio:copaiba:1.0-A16'
+    implementation('com.ibm.etcd:etcd-java:0.0.14'){
+        exclude group: 'io.netty'
     }
-    compile "org.apache.tomee:javaee-api:8.0-3"
-    compile "org.apache.commons:commons-dbcp2:2.7.0"
-    compile "commons-io:commons-io:2.6"
-    compile "org.apache.commons:commons-lang3:3.9"
-    compile "org.slf4j:slf4j-api:1.7.30"
-    testCompile "junit:junit:4.13"
+    api 'org.apache.tomee:javaee-api:8.0-3'
+    implementation 'org.apache.commons:commons-dbcp2:2.7.0'
+    implementation 'commons-io:commons-io:2.6'
+    implementation 'org.apache.commons:commons-lang3:3.9'
+    implementation 'org.slf4j:slf4j-api:1.7.30'
+    testImplementation 'junit:junit:4.13'
 }
 
 //------------------------------------------------------
 
 jar {
     manifest {
-        attributes "Implementation-Title": nome,
-                   "Implementation-Version": version,
-                   "Main-Class": "com.joseflavio.iperoxo.IpeRoxo",
-                   "Class-Path": configurations.compile.collect{ it.getName() }.join(" ")
+        attributes 'Implementation-Title': nome,
+                   'Implementation-Version': archiveVersion,
+                   'Main-Class': 'com.joseflavio.iperoxo.IpeRoxo',
+                   'Class-Path': configurations.runtimeClasspath.collect{ it.getName() }.join(' ')
     }
 }
 
 //------------------------------------------------------
 
-task jarFonte(type: Jar) {
-    
-    classifier = "sources"
-    from sourceSets.main.allSource
+java {
+    withSourcesJar()
+    withJavadocJar()
+}
 
-    manifest {
-        attributes "Implementation-Title": nome + " - Codigo Fonte",
-                   "Implementation-Version": version,
-                   "Main-Class": ""
+//------------------------------------------------------
+
+javadoc {
+    if( JavaVersion.current().isJava9Compatible() ){
+        options.addBooleanOption('html5', true)
+    }
+}
+
+//------------------------------------------------------
+
+task copiarDeps(type: Copy) {
+    from configurations.runtimeClasspath
+    into "$buildDir/deps"
+}
+
+//------------------------------------------------------
+
+publishing {
+
+    repositories {
+        maven {
+
+            def releasesURL  = 'https://oss.sonatype.org/service/local/staging/deploy/maven2/'
+            def snapshotsURL = 'https://oss.sonatype.org/content/repositories/snapshots/'
+            
+            url = version.endsWith('SNAPSHOT') ? snapshotsURL : releasesURL
+
+            credentials {
+                username = 'xxxxxx'
+                password = 'xxxxxx'
+            }
+
+        }
+    }
+
+    publications {
+        mavenJava(MavenPublication) {
+
+            from components.java
+
+            versionMapping {
+                usage('java-api') {
+                    fromResolutionOf('runtimeClasspath')
+                }
+                usage('java-runtime') {
+                    fromResolutionResult()
+                }
+            }
+
+            pom {
+                
+                name        = nome
+                description = descricao
+                url         = 'http://joseflavio.com/iperoxo'
+
+                licenses {
+                    license {
+                        name = 'GNU Lesser General Public License, Version 3'
+                        url  = 'http://www.gnu.org/licenses/lgpl.txt'
+                    }
+                }
+
+                developers {
+                    developer {
+                        id    = 'joseflaviojr'
+                        name  = 'José Flávio de Souza Dias Júnior'
+                        email = 'email@joseflavio.com'
+                    }
+                }
+
+                scm {
+                    connection          = 'scm:git:ssh:git@github.com/joseflaviojr/iperoxo.git'
+                    developerConnection = 'scm:git:ssh:git@github.com/joseflaviojr/iperoxo.git'
+                    url                 = 'https://github.com/joseflaviojr/iperoxo.git'
+                }
+
+            }
+        }
+
     }
 
 }
 
 //------------------------------------------------------
-
-task jarDoc(type: Jar) {
-
-    classifier = "javadoc"
-    from javadoc
-
-    javadoc.options.encoding = codificacao
-    javadoc.failOnError = false
-    javadoc.title = nome + " " + version
-    javadoc.options.links = []
-    
-}
-
-//------------------------------------------------------
-
-task jarDep(type: Copy) {
-    into "$buildDir/dependencias"
-    from configurations.compile
-}
-
-build.dependsOn jarDep
-
-//------------------------------------------------------
-
-artifacts {
-    archives jarFonte, jarDoc
-}
 
 signing {
-    required { gradle.taskGraph.hasTask("uploadArchives") }
-    sign configurations.archives
-}
-
-uploadArchives {
-  repositories {
-    mavenDeployer {
-
-      beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
-
-      repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
-        authentication( userName: "xxxxxx", password: "xxxxxx" )
-      }
-
-      snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
-        authentication( userName: "xxxxxx", password: "xxxxxx" )
-      }
-
-      pom.project {
-
-        name nome
-        packaging "jar"
-        description descricao
-        url "http://joseflavio.com/iperoxo"
-
-        scm {
-          connection "scm:git:ssh:git@github.com/joseflaviojr/iperoxo.git"
-          developerConnection "scm:git:ssh:git@github.com/joseflaviojr/iperoxo.git"
-          url "https://github.com/joseflaviojr/iperoxo.git"
-        }
-
-        licenses {
-          license {
-            name "GNU Lesser General Public License, Version 3"
-            url "http://www.gnu.org/licenses/lgpl.txt"
-          }
-        }
-
-        developers {
-          developer {
-            id "joseflaviojr"
-            name "José Flávio de Souza Dias Júnior"
-            email "email@joseflavio.com"
-          }
-        }
-
-      }
-
-    }
-  }
+    sign publishing.publications.mavenJava
 }
 
 //------------------------------------------------------
 
 eclipse {
     project {
-        name = archivesBaseName
+        name    = rootProject.name
         comment = descricao
     }
     jdt {
@@ -191,8 +172,8 @@ eclipse {
 
 eclipseJdt {
     doLast {
-        file(".settings/org.eclipse.core.resources.prefs").text =
-            "eclipse.preferences.version=1\nencoding/<project>=" + codificacao
+        file('.settings/org.eclipse.core.resources.prefs').text =
+            'eclipse.preferences.version=1\nencoding/<project>=' + codificacao
     }
 }
 
@@ -200,18 +181,16 @@ eclipseJdt {
 
 idea {
     project {
-        vcs = "Git"
+        languageLevel = new org.gradle.plugins.ide.idea.model.IdeaLanguageLevel(javaVersao)
+        jdkName = '' + javaVersao
+        vcs = 'Git'
         ipr {
             withXml {
-                def projeto = it.asNode()
-                def encoding = projeto.component.find { it.@name == "Encoding" }
-                encoding.appendNode("file", [url: "PROJECT", charset: codificacao])
+                def projeto  = it.asNode()
+                def encoding = projeto.component.find { it.@name == 'Encoding' }
+                encoding.appendNode('file', [url: 'PROJECT', charset: codificacao])
             }
         }
-    }
-    module {
-        languageLevel = new org.gradle.plugins.ide.idea.model.IdeaLanguageLevel(javaVersao)
-        jdkName = "" + javaVersao
     }
 }
 
