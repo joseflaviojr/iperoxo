@@ -20,7 +20,7 @@
     <allow-intent href="https://*/*" />
     <platform name="android">
         <allow-intent href="market:*" />
-        <preference name="android-minSdkVersion" value="19" />
+        <preference name="android-minSdkVersion" value="22" />
         <preference name="android-targetSdkVersion" value="29" />
         <preference name="AndroidPersistentFileLocation" value="Internal" />
         <hook src="scripts/android/before_build.sh" type="before_build" />
