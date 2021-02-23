@@ -839,7 +839,7 @@ public final class IpeRoxo {
 	 * @param nome Identificação do parceiro, prefixo de suas propriedades de conexão.
 	 * @see #getParceiro()
 	 */
-	public static CopaibaConexao getParceiro( String nome ) throws CopaibaException {
+	public static CopaibaConexao getParceiro( String nome ) throws CopaibaException {//TODO default values
 		
 		String  parcEndereco = getPropriedade( nome + ".Endereco" );
 		int     parcPorta    = Integer.parseInt( getPropriedade( nome + ".Porta" ) );

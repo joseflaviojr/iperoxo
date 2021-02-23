@@ -31,7 +31,10 @@ Rascunho/
 
 # Gradle
 .gradle/
+gradle/
 build/
+gradlew
+gradlew.bat
 
 # Maven
 target/
@@ -50,6 +53,7 @@ bin/
 *.iml
 *.ipr
 *.iws
+.idea/
 out/
 
 # SASS

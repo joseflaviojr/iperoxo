@@ -16,8 +16,8 @@ Ipê-roxo está disponível como biblioteca Java no repositório [Maven](http://
 
 Gradle:
 
-```
-compile 'com.joseflavio:iperoxo:1.0-A21'
+```groovy
+implementation 'com.joseflavio:iperoxo:1.0-A21'
 ```
 
 Maven:
@@ -44,10 +44,10 @@ A documentação da biblioteca Ipê-roxo, no formato **Javadoc**, está disponí
 
 ## Desenvolvimento
 
-Configuração do projeto para Eclipse e IntelliJ IDEA:
+Configuração do projeto para Eclipse IDE e IntelliJ IDEA:
 
 ```sh
-gradle eclipse
+gradle cleanEclipse eclipse
 gradle cleanIdea idea
 ```
 
@@ -74,5 +74,5 @@ gradle clean build
 Para compilar e publicar os arquivos finais do projeto no repositório [Maven](http://search.maven.org/#artifactdetails%7Ccom.joseflavio%7Ciperoxo%7C1.0-A21%7Cjar), executar no terminal:
 
 ```sh
-gradle clean uploadArchives
+gradle clean publish
 ```
