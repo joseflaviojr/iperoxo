@@ -38,16 +38,17 @@ repositories {
 
 dependencies {
     implementation fileTree(dir:'lib', include:['*.jar'])
-    api 'com.joseflavio:copaiba:1.0-A16'
-    implementation('com.ibm.etcd:etcd-java:0.0.14'){
+    api 'com.joseflavio:copaiba:1.0-A17'
+    implementation('com.ibm.etcd:etcd-java:0.0.18'){
         exclude group: 'io.netty'
     }
-    api 'org.apache.tomee:javaee-api:8.0-3'
-    implementation 'org.apache.commons:commons-dbcp2:2.7.0'
-    implementation 'commons-io:commons-io:2.6'
-    implementation 'org.apache.commons:commons-lang3:3.9'
+    api 'org.apache.tomee:javaee-api:8.0-5'
+    implementation 'org.apache.commons:commons-dbcp2:2.8.0'
+    implementation 'commons-io:commons-io:2.8.0'
+    implementation 'org.apache.commons:commons-lang3:3.11'
     implementation 'org.slf4j:slf4j-api:1.7.30'
-    testImplementation 'junit:junit:4.13'
+    implementation 'com.ibm.icu:icu4j:68.2'
+    implementation 'junit:junit:4.13'
 }
 
 //------------------------------------------------------
