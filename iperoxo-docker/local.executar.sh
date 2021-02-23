@@ -1,4 +1,4 @@
 #!/bin/bash
 
 cd build/dist
-./iperoxo.sh ../../recurso/Configuracao.properties
+./iperoxo.sh ../../src/main/resources/Configuracao.properties
