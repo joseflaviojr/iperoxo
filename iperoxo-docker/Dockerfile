@@ -19,7 +19,7 @@ RUN mkdir -p ${IPEROXO}/bin && \
 
 ADD build/dist/*.jar ${IPEROXO}/bin/
 ADD build/dist/*.sh ${IPEROXO}/bin/
-ADD recurso/Configuracao.properties /volume/conf/
+ADD src/main/resources/Configuracao.properties /volume/conf/
 
 RUN chmod -R 755 ${IPEROXO}/bin && \
     ln -s /volume/logs ${IPEROXO}/bin/log

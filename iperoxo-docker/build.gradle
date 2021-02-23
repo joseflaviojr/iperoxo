@@ -1,50 +1,29 @@
 //------------------------------------------------------
 
-apply plugin: "java"
-apply plugin: "eclipse"
-apply plugin: "idea"
+plugins {
+    id 'java-library'
+    id 'eclipse'
+    id 'idea'
+}
 
 //------------------------------------------------------
 
-String nome = "Nome"
-String descricao = "Descrição da aplicação."
+String nome      = 'Nome'
+String descricao = 'Descrição da aplicação.'
 
-group = "br.com.grupo"
-archivesBaseName = "nome"
-version = "1.0"
-
-//------------------------------------------------------
-
-[
-
-"biblioteca", // Dependências diretas: *.jar
-"fonte",      // Código fonte: *.java
-"recurso",    // Anexos que serão embutidos no ".jar"
-"dist",       // Anexos da distribuição
-"projeto",    // Arquivos de projeto: doc, svg, psd, etc.
-"rascunho"    // Arquivos temporários e descartáveis
-
-].each { new File(it).mkdirs() }
+group   = 'br.com.grupo'
+version = '1.0'
 
 //------------------------------------------------------
 
-float javaVersao = 1.8
-String codificacao = "UTF-8"
+float  javaVersao  = 1.8
+String codificacao = 'UTF-8'
 
 sourceCompatibility = javaVersao
+targetCompatibility = javaVersao
 
 tasks.withType(JavaCompile) {
     options.encoding = codificacao
-}
-
-tasks.withType(GroovyCompile) {
-    options.encoding = codificacao
-    groovyOptions.encoding = codificacao
-}
-
-sourceSets {
-    main.java.srcDirs = ["fonte"]
-    main.resources.srcDirs = ["recurso"]
 }
 
 //------------------------------------------------------
@@ -53,34 +32,59 @@ repositories {
     mavenCentral()
 }
 
+//------------------------------------------------------
+
 dependencies {
-    compile fileTree(dir:"biblioteca", include:["*.jar"])
-    compile "org.apache.tomcat:tomcat-catalina:8.5.51"
-    compile "org.apache.geronimo.specs:geronimo-osgi-locator:1.1"
-    compile "org.eclipse.persistence:eclipselink:2.7.6"
-    compile "org.postgresql:postgresql:42.2.10"
-    compile "org.apache.logging.log4j:log4j-slf4j-impl:2.13.0"
-    compile "com.joseflavio:iperoxo:1.0-A21"
+    implementation fileTree(dir:'lib', include:['*.jar'])
+    implementation 'org.apache.tomcat:tomcat-catalina:8.5.51'
+    implementation 'org.apache.geronimo.specs:geronimo-osgi-locator:1.1'
+    implementation 'org.eclipse.persistence:eclipselink:2.7.6'
+    implementation 'org.postgresql:postgresql:42.2.10'
+    implementation 'org.apache.logging.log4j:log4j-slf4j-impl:2.13.0'
+    implementation 'com.joseflavio:iperoxo:1.0-A22'
+    testImplementation 'junit:junit:4.12'
 }
 
 //------------------------------------------------------
 
 jar {
     manifest {
-        attributes "Implementation-Title": nome,
-                   "Implementation-Version": version,
-                   "Main-Class": "com.joseflavio.iperoxo.IpeRoxo",
-                   "Class-Path": configurations.compile.collect{ it.getName() }.join(" ")
+        attributes 'Implementation-Title': nome,
+                   'Implementation-Version': archiveVersion,
+                   'Main-Class': 'com.joseflavio.iperoxo.IpeRoxo',
+                   'Class-Path': configurations.runtimeClasspath.collect{ it.getName() }.join(' ')
     }
 }
 
 //------------------------------------------------------
 
+java {
+    withSourcesJar()
+    withJavadocJar()
+}
+
+//------------------------------------------------------
+
+javadoc {
+    if( JavaVersion.current().isJava9Compatible() ){
+        options.addBooleanOption('html5', true)
+    }
+}
+
+//------------------------------------------------------
+
+task copiarDeps(type: Copy) {
+    from configurations.runtimeClasspath
+    into "$buildDir/deps"
+}
+
+//------------------------------------------------------
+
 task distDep(type: Copy, dependsOn: [jar]) {
-    into "$buildDir/dist"
+    from configurations.runtimeClasspath
     from "$projectDir/dist"
-    from "$buildDir/libs/" + archivesBaseName + "-" + version + ".jar"
-    from configurations.compile
+    from "$buildDir/libs/" + rootProject.name + "-" + version + ".jar"
+    into "$buildDir/dist"
 }
 
 task distExe {
@@ -88,7 +92,7 @@ task distExe {
         def destino = new File("build/exe")
         destino.mkdirs()
         def comando = new File("build/exe/iperoxo.sh")
-        def nomeJar = archivesBaseName + "-" + version + ".jar"
+        def nomeJar = rootProject.name + "-" + version + ".jar"
         comando << "#!/bin/sh\n\n"
         comando << "java -server -XX:+TieredCompilation -XX:+UseBiasedLocking "
         comando << "-jar $nomeJar \"\$@\"\n"
@@ -96,8 +100,8 @@ task distExe {
 }
 
 task dist(type: Copy, dependsOn: [distDep, distExe]) {
-    into "$buildDir/dist"
     from "$buildDir/exe"
+    into "$buildDir/dist"
     fileMode 0755
 }
 
@@ -107,7 +111,7 @@ build.dependsOn dist
 
 eclipse {
     project {
-        name = archivesBaseName
+        name    = rootProject.name
         comment = descricao
     }
     jdt {
@@ -118,8 +122,8 @@ eclipse {
 
 eclipseJdt {
     doLast {
-        file(".settings/org.eclipse.core.resources.prefs").text =
-            "eclipse.preferences.version=1\nencoding/<project>=" + codificacao
+        file('.settings/org.eclipse.core.resources.prefs').text =
+            'eclipse.preferences.version=1\nencoding/<project>=' + codificacao
     }
 }
 
@@ -127,18 +131,16 @@ eclipseJdt {
 
 idea {
     project {
-        vcs = "Git"
+        languageLevel = new org.gradle.plugins.ide.idea.model.IdeaLanguageLevel(javaVersao)
+        jdkName = '' + javaVersao
+        vcs = 'Git'
         ipr {
             withXml {
-                def projeto = it.asNode()
-                def encoding = projeto.component.find { it.@name == "Encoding" }
-                encoding.appendNode("file", [url: "PROJECT", charset: codificacao])
+                def projeto  = it.asNode()
+                def encoding = projeto.component.find { it.@name == 'Encoding' }
+                encoding.appendNode('file', [url: 'PROJECT', charset: codificacao])
             }
         }
-    }
-    module {
-        languageLevel = new org.gradle.plugins.ide.idea.model.IdeaLanguageLevel(javaVersao)
-        jdkName = "" + javaVersao
     }
 }
 
