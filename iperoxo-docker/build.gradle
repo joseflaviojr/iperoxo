@@ -36,11 +36,11 @@ repositories {
 
 dependencies {
     implementation fileTree(dir:'lib', include:['*.jar'])
-    implementation 'org.apache.tomcat:tomcat-catalina:8.5.51'
+    implementation 'org.apache.tomcat:tomcat-catalina:8.5.63'
     implementation 'org.apache.geronimo.specs:geronimo-osgi-locator:1.1'
-    implementation 'org.eclipse.persistence:eclipselink:2.7.6'
-    implementation 'org.postgresql:postgresql:42.2.10'
-    implementation 'org.apache.logging.log4j:log4j-slf4j-impl:2.13.0'
+    implementation 'org.eclipse.persistence:eclipselink:2.7.8'
+    implementation 'org.postgresql:postgresql:42.2.19'
+    implementation 'org.apache.logging.log4j:log4j-slf4j-impl:2.14.0'
     implementation 'com.joseflavio:iperoxo:1.0-A22'
     testImplementation 'junit:junit:4.12'
 }
