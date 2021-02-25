@@ -94,7 +94,7 @@ task distExe {
         def comando = new File("build/exe/iperoxo.sh")
         def nomeJar = rootProject.name + "-" + version + ".jar"
         comando << "#!/bin/sh\n\n"
-        comando << "java -server -XX:+TieredCompilation -XX:+UseBiasedLocking "
+        comando << "java -server -XX:+TieredCompilation "
         comando << "-jar $nomeJar \"\$@\"\n"
     }
 }
