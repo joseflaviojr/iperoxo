@@ -77,7 +77,7 @@ cordova plugin add cordova-plugin-file
 cordova plugin ls
 ```
 
-Forma detalhada de instalar plugin (exemplo):
+Forma detalhada de instalar plugin (opcional):
 
 ```sh
 plugman install --platform android --project platforms/android/ --plugin cordova-plugin-file
@@ -155,9 +155,9 @@ touch www/js/index.js
 ls -lah www/
 ```
 
-O arquivo `index.html` deve receber alguns ajustes:
-
-- Habilitar a biblioteca `<script src="cordova.js">`.
+> O arquivo `index.html` deve receber alguns ajustes:
+> 
+> - Habilitar a biblioteca `<script src="cordova.js">`.
 
 ## Compilação e Distribuição
 
