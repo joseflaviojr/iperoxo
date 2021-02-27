@@ -6,7 +6,7 @@ Modelo de aplicativo móvel que combina [Cordova](https://cordova.apache.org/) c
 
 ## Versão Atual
 
-1.0-A21 (Fase de Nascimento)
+1.0-A22 (Fase de Nascimento)
 
 Padrão de versionamento: [JFV](http://joseflavio.com/jfv)
 
@@ -77,7 +77,7 @@ cordova plugin add cordova-plugin-file
 cordova plugin ls
 ```
 
-Forma detalhada de instalar plugin (exemplo):
+Forma detalhada de instalar plugin (opcional):
 
 ```sh
 plugman install --platform android --project platforms/android/ --plugin cordova-plugin-file
@@ -155,9 +155,9 @@ touch www/js/index.js
 ls -lah www/
 ```
 
-O arquivo `index.html` deve receber alguns ajustes:
-
-- Habilitar a biblioteca `<script src="cordova.js">`.
+> O arquivo `index.html` deve receber alguns ajustes:
+> 
+> - Habilitar a biblioteca `<script src="cordova.js">`.
 
 ## Compilação e Distribuição
 

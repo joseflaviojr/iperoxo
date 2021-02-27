@@ -14,7 +14,7 @@ String nome      = 'Ipe-roxo'
 String descricao = 'Ipê-roxo: Modelo de software multicamada.'
 
 group   = 'com.joseflavio'
-version = '1.0-A21'
+version = '1.0-A22'
 
 //------------------------------------------------------
 

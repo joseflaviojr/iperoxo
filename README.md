@@ -14,7 +14,7 @@ O Ipê-roxo é um modelo que visa tornar mais eficiente o desenvolvimento de sof
 
 ## Versão Atual
 
-1.0-A21 (Fase de Nascimento)
+1.0-A22 (Fase de Nascimento)
 
 Padrão de versionamento: [JFV](http://joseflavio.com/jfv)
 

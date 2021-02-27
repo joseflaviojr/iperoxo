@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
          version="3.1">
 
-    <display-name>Ipê-roxo 1.0-A21</display-name>
+    <display-name>Ipê-roxo 1.0-A22</display-name>
 
     <welcome-file-list>
         <welcome-file>index.html</welcome-file>

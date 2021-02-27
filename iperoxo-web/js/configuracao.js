@@ -8,7 +8,7 @@ var configuracao = {
     /**
      * Versão do Ipê-roxo.
      */
-    iperoxo_versao                   : "1.0-A21",
+    iperoxo_versao                   : "1.0-A22",
 
     /**
      * Função que define o comportamento inicial da aplicação.

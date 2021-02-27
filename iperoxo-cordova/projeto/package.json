@@ -1,7 +1,7 @@
 {
     "name": "iperoxo",
     "displayName": "Ipê-roxo",
-    "version": "1.0-A21",
+    "version": "1.0-A22",
     "description": "Modelo de aplicação que combina Cordova com Ipê-roxo Web.",
     "main": "index.js",
     "scripts": {
