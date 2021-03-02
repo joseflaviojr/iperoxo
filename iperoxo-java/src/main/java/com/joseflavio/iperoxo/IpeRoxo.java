@@ -746,7 +746,7 @@ public final class IpeRoxo {
 	}
 	
 	/**
-	 * Obtém uma propriedade da aplicação.
+	 * Obtém uma propriedade da aplicação, comumente definida em arquivo de configuração.
 	 * @param chave Chave da propriedade.
 	 * @see Properties#getProperty(String)
 	 */
@@ -755,7 +755,7 @@ public final class IpeRoxo {
 	}
 	
 	/**
-	 * Obtém uma propriedade da aplicação.
+	 * Obtém uma propriedade da aplicação, comumente definida em arquivo de configuração.
 	 * @param chave Chave da propriedade.
 	 * @param nulo Valor a retornar, se propriedade nula ou indefinida.
 	 * @see Properties#getProperty(String)
