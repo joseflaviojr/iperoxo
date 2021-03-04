@@ -148,11 +148,26 @@ public final class IpeRoxo {
 	public static void main( String[] args ) {
 		
 		try{
+		    
+            // Inicialização ------------------------------------------------------------
+            
+            String inicializacaoNome = getPropriedade( "IpeRoxo.Inicializacao" );
+            Inicializacao inicializacao = null;
+
+            if( StringUtil.tamanho( inicializacaoNome ) > 0 ){
+                log.info( getMensagem( null, "Log.Executando.Inicializacao", inicializacaoNome ) );
+                inicializacao = (Inicializacao) Class.forName( inicializacaoNome ).getConstructor().newInstance();
+            }
+            
 
 			// Configuração básica ------------------------------------------------------
 			
-			configuracaoArquivo = args.length > 0 ? new File( args[0] ) : null;
-			
+            if( inicializacao instanceof ProgressivaInicializacao ){
+                configuracaoArquivo = ((ProgressivaInicializacao)inicializacao).validarArgumentos( args );
+            }else if( args.length > 0 ){
+                configuracaoArquivo = new File( args[0] );
+            }
+            
 			carregarConfiguracao( configuracaoArquivo, configuracao, false, false );
 
 
@@ -314,19 +329,8 @@ public final class IpeRoxo {
 
 			// Inicialização ------------------------------------------------------------
 			
-			String inicialClasseNome = getPropriedade( "IpeRoxo.Inicializacao" );
-
-			if( StringUtil.tamanho( inicialClasseNome ) > 0 ){
-
-				log.info( getMensagem( null, "Log.Executando.Inicializacao", inicialClasseNome ) );
-				
-				((Inicializacao)
-					Class
-					.forName( inicialClasseNome )
-					.getConstructor()
-					.newInstance()
-				).inicializar();
-				
+			if( inicializacao != null ) {
+			    inicializacao.inicializar();
 			}
 
 			
