@@ -48,12 +48,12 @@ import java.io.File;
 public interface ProgressivaInicializacao extends Inicializacao {
     
     /**
-     * Validar os argumentos de inicialização.
+     * Validar os argumentos de inicialização.<br>
+     * Caso um {@link File arquivo} de configuração ".properties" tenha sido indicado, mesmo inexistente,
+     * ele será o primeiro argumento (índice 0).
      * @param args Argumentos de inicialização passados para a aplicação.
-     * @return Referência para arquivo de configuração, caso indicado, mesmo inexistente.
      * @throws IllegalArgumentException Caso algum argumento ou o conjunto deles seja inválido.
-     * @see IpeRoxo#getPropriedade(String)
      */
-    File validarArgumentos( String[] args ) throws IllegalArgumentException;
+    void validarArgumentos( String[] args ) throws IllegalArgumentException;
     
 }
