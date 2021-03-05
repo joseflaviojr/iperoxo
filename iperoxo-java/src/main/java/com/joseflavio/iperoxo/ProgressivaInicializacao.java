@@ -39,22 +39,21 @@
 
 package com.joseflavio.iperoxo;
 
-import com.joseflavio.copaiba.Copaiba;
-
-import java.io.IOException;
+import java.io.File;
 
 /**
- * Inicialização da aplicação.
+ * {@link Inicializacao} progressiva, por etapas.
  * @author José Flávio de Souza Dias Júnior
- * @see ProgressivaInicializacao
  */
-public interface Inicializacao {
-	
+public interface ProgressivaInicializacao extends Inicializacao {
+    
     /**
-     * Comportamento inicial da aplicação,
-     * a ocorrer antes da {@link Copaiba#abrir() abertura} da {@link Copaiba}.
-     * @see ProgressivaInicializacao#validarArgumentos(String[])
+     * Validar os argumentos de inicialização.<br>
+     * Caso um {@link File arquivo} de configuração ".properties" tenha sido indicado, mesmo inexistente,
+     * ele será o primeiro argumento (índice 0).
+     * @param args Argumentos de inicialização passados para a aplicação.
+     * @throws IllegalArgumentException Caso algum argumento ou o conjunto deles seja inválido.
      */
-	void inicializar() throws IOException;
-
+    void validarArgumentos( String[] args ) throws IllegalArgumentException;
+    
 }

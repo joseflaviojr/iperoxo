@@ -73,6 +73,11 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.sql.DataSource;
 
+import org.apache.commons.dbcp2.BasicDataSource;
+import org.apache.commons.io.IOUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.protobuf.ByteString;
 import com.ibm.etcd.api.KeyValue;
 import com.ibm.etcd.api.RangeResponse;
@@ -89,11 +94,6 @@ import com.joseflavio.urucum.comunicacao.SocketServidor;
 import com.joseflavio.urucum.json.JSON;
 import com.joseflavio.urucum.seguranca.SegurancaUtil;
 import com.joseflavio.urucum.texto.StringUtil;
-
-import org.apache.commons.dbcp2.BasicDataSource;
-import org.apache.commons.io.IOUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Ipê-roxo: Modelo de software multicamada.
@@ -148,15 +148,28 @@ public final class IpeRoxo {
 	public static void main( String[] args ) {
 		
 		try{
+		    
+		    // Configuração básica ------------------------------------------------------
+		    
+		    if( args.length > 0 && args[0].endsWith( ".properties" ) ){
+		        configuracaoArquivo = new File( args[0] );
+		    }
+		    
+		    carregarConfiguracao( configuracaoArquivo, configuracao, false, false );
+            
+            String inicializacaoNome = getPropriedade( "IpeRoxo.Inicializacao" );
+            Inicializacao inicializacao = null;
 
-			// Configuração básica ------------------------------------------------------
-			
-			configuracaoArquivo = args.length > 0 ? new File( args[0] ) : null;
-			
-			carregarConfiguracao( configuracaoArquivo, configuracao, false, false );
+            if( StringUtil.tamanho( inicializacaoNome ) > 0 ){
+                inicializacao = (Inicializacao) Class.forName( inicializacaoNome ).getConstructor().newInstance();
+            }
+            
+            if( inicializacao instanceof ProgressivaInicializacao ){
+                ((ProgressivaInicializacao)inicializacao).validarArgumentos( args );
+            }
+            
 
-
-			// Configuração completa ----------------------------------------------------
+            // Configuração completa ----------------------------------------------------
 			
 			log.info( getMensagem( null, "Log.Inicio" ) );
 
@@ -314,19 +327,9 @@ public final class IpeRoxo {
 
 			// Inicialização ------------------------------------------------------------
 			
-			String inicialClasseNome = getPropriedade( "IpeRoxo.Inicializacao" );
-
-			if( StringUtil.tamanho( inicialClasseNome ) > 0 ){
-
-				log.info( getMensagem( null, "Log.Executando.Inicializacao", inicialClasseNome ) );
-				
-				((Inicializacao)
-					Class
-					.forName( inicialClasseNome )
-					.getConstructor()
-					.newInstance()
-				).inicializar();
-				
+			if( inicializacao != null ) {
+			    log.info( getMensagem( null, "Log.Executando.Inicializacao", inicializacaoNome ) );
+			    inicializacao.inicializar();
 			}
 
 			
@@ -746,7 +749,7 @@ public final class IpeRoxo {
 	}
 	
 	/**
-	 * Obtém uma propriedade da aplicação.
+	 * Obtém uma propriedade da aplicação, comumente definida em arquivo de configuração.
 	 * @param chave Chave da propriedade.
 	 * @see Properties#getProperty(String)
 	 */
@@ -755,7 +758,7 @@ public final class IpeRoxo {
 	}
 	
 	/**
-	 * Obtém uma propriedade da aplicação.
+	 * Obtém uma propriedade da aplicação, comumente definida em arquivo de configuração.
 	 * @param chave Chave da propriedade.
 	 * @param nulo Valor a retornar, se propriedade nula ou indefinida.
 	 * @see Properties#getProperty(String)
