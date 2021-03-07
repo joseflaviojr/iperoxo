@@ -203,6 +203,8 @@ var mensagem_ampla_texto;
 
 /**
  * Mapa que correlaciona caracteres especiais a entidades HTML.
+ * Os caracteres especiais costumam não ser aceitos de forma direta no corpo de um documento HTML,
+ * tendo de ser representados de uma forma denominada entidade.
  * @see textoHTML
  */
 var HTML_ENTIDADE = {
@@ -217,6 +219,8 @@ var HTML_ENTIDADE = {
     '\n': '<br />'
 };
 
+// Variáveis para auxílio de processamento temporário, possuindo, portanto, conteúdo volátil.
+
 var tmp_tela_ativa;
 var tmp_tela_ativa_id;
 var tmp_elemento_ativo;
@@ -225,7 +229,7 @@ var tmp_elemento_ativo_ciclo;
 //--------------------------------------------------------------------------
 
 /**
- * Atividade a ser executada quando todos os recursos, inclusive o DOM, estiverem prontos para uso.
+ * Atividade (função) a ser executada quando todos os recursos, inclusive o DOM, estiverem prontos para uso.
  * Evento $(document).ready() em jQuery ou "deviceready" em Cordova.
  */
 function pronto( atividade ) {
@@ -250,9 +254,9 @@ function inicio( atividade ) {
 //--------------------------------------------------------------------------
 
 /**
- * Gera um identificador de objeto JavaScript.
- * @param aleatorio Sufixo numérico aleatório?
- * @param supressao ID's que não devem ser retornados.
+ * Gerar um identificador (chave única) de objeto JavaScript.
+ * @param {boolean} aleatorio Sufixo numérico aleatório?
+ * @param {object}  supressao Lista de ID's que não devem ser retornados.
  */
 function gerarID( aleatorio, supressao ) {
     
@@ -275,7 +279,8 @@ function gerarID( aleatorio, supressao ) {
 //--------------------------------------------------------------------------
 
 /**
- * Normaliza um nome para que se torne um identificador JavaScript válido.
+ * Normalizar um nome para que se torne um identificador JavaScript válido.
+ * Exemplo: o nome "@stro-21" será convertido para "_stro_21".
  * @param {string} nome Nome a ser normalizado.
  * @param {RegExp} padrao Expressão regular que define os caracteres que serão substituídos. Padrão = /[-.~/\\@&#:()\[\]{}]/g
  * @param {string} subst Valor a ser utilizado em substituição. Opcional. Padrão = '_'.
@@ -289,9 +294,9 @@ function normalizarID( nome, padrao, subst ) {
 //--------------------------------------------------------------------------
 
 /**
- * Resolve uma rotina de JavaScript com {@link eval}.
+ * Resolver uma rotina de JavaScript com {@link eval}, sem disparar exceção.
  * @param rotina Rotina a resolver.
- * @returns a própria rotina se ela não for "string"; "undefined" se falhar.
+ * @returns A própria rotina se ela não for "string"; retorna "undefined" se falhar.
  */
 function js( rotina ) {
     try{
@@ -304,9 +309,9 @@ function js( rotina ) {
 //--------------------------------------------------------------------------
 
 /**
- * Executa uma função JavaScript.<br>
+ * Executar uma função JavaScript sem disparar exceção.
  * Os argumentos anônimos serão repassados para a {@linkcode funcao}.
- * @param funcao Função ou nome de função.
+ * @param funcao Função ou nome da função a executar.
  * @returns "undefined" se falhar.
  */
 function jsExec( funcao ) {
