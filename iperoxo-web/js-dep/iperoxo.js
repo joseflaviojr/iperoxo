@@ -444,6 +444,18 @@ function elementoHTML( rotulo, atributos, conteudo ) {
 //--------------------------------------------------------------------------
 
 /**
+ * Sinônimo para a função elementoHTML().
+ * Esta talvez substituirá, no futuro e de forma definitiva,
+ * a função original, pois o nome é mais curto e facilita a
+ * composição de tags conjugadas.
+ * @see elementoHTML
+ */
+function eHTML( rotulo, atributos, conteudo ) {
+    return elementoHTML( rotulo, atributos, conteudo );
+}
+
+//--------------------------------------------------------------------------
+
 /**
  * Obter o rótulo de um elemento HTML. Exemplos de rótulos: "div", "span", "img".
  * @param elemento Elemento HTML ou objeto jQuery correspondente.
@@ -1858,12 +1870,12 @@ function implantarComponentes() {
  * @see {@link html-dep/iperoxo-componentes.html}
  * @see {@link html/componentes.html}
  * @see configuracao.componentes
- * @see elementoHTML
+ * @see eHTML
  */
 function inserirComponente( destino, tipo, atributos, conteudo, posicao, renderizar ) {
 
     var raiz = jQueryObj(destino);
-    var comp = elementoHTML(tipo, atributos, conteudo);
+    var comp = eHTML(tipo, atributos, conteudo);
 
     if( posicao === "preferencia" || posicao === undefined ){
         
