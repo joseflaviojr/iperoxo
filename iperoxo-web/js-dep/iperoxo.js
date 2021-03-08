@@ -327,9 +327,11 @@ function jsExec( funcao ) {
 //--------------------------------------------------------------------------
 
 /**
- * Retorna o primeiro entre os valores passados por parâmetro que não é vazio.
- * Entende-se aqui por vazio qualquer valor igual a undefined, null ou "".
+ * Retornar o primeiro entre os valores passados por parâmetro que não é vazio.
+ * Entenda-se aqui por vazio qualquer valor igual a undefined, null ou "".
  * Valores do tipo função serão preliminarmente invocados com jsExec().
+ * @param valor1 Primeiro valor a ser verificado, opcional.
+ * @param valor2 Segundo valor a ser verificado, opcional.
  */
 function valorNaoVazio( valor1, valor2, valor3, valor4, valor5 ) {
 
@@ -356,7 +358,7 @@ function valorNaoVazio( valor1, valor2, valor3, valor4, valor5 ) {
 //--------------------------------------------------------------------------
 
 /**
- * Especifica o valor de um "cookie", seja na efetiva estrutura de Cookie HTTP, ou
+ * Especificar o valor de um "cookie", seja na efetiva estrutura de Cookie HTTP, ou
  * numa estrutura de chave/valor de um objeto-repositório.
  * @param chave Chave que identifica o cookie.
  * @param valor Valor do cookie.
@@ -382,7 +384,7 @@ function setCookie( chave, valor, minutos, repositorio ) {
 //--------------------------------------------------------------------------
 
 /**
- * Retorna o valor de um "cookie".
+ * Retornar o valor de um "cookie".
  * @param chave Chave que identifica o cookie.
  * @param repositorio Repositório de cookies. undefined == document.cookie
  * @see setCookie
@@ -407,7 +409,7 @@ function getCookie( chave, repositorio ) {
 //--------------------------------------------------------------------------
 
 /**
- * Cria um elemento HTML, na forma de objeto jQuery, para ser inserido numa página.
+ * Criar um elemento HTML, na forma de objeto jQuery, para ser inserido numa página (DOM/body).
  * @param {string} rotulo Rótulo que identifica o elemento. Exemplos: "div", "span", "img".
  * @param {object} atributos Objeto que define os atributos do elemento. Exemplo: {id:'teste', class:'textod'}
  * @param {*} conteudo Conteúdo do elemento, o qual pode ser texto ou jQuery (subelemento). Aceita-se vetor de elementos.
@@ -442,7 +444,8 @@ function elementoHTML( rotulo, atributos, conteudo ) {
 //--------------------------------------------------------------------------
 
 /**
- * Obtém o rótulo de um elemento HTML. Exemplos: "div", "span", "img".
+/**
+ * Obter o rótulo de um elemento HTML. Exemplos de rótulos: "div", "span", "img".
  * @param elemento Elemento HTML ou objeto jQuery correspondente.
  */
 function elementoRotulo( elemento ) {
