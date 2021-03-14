@@ -90,12 +90,14 @@ public abstract class BasicoServico <T extends Serializable> extends Servico<T> 
 
 			if( zid == null ) zid = IpeRoxo.getZonaTempo();
 			
-			if( is$BancoDeDados() && IpeRoxo.getEntityManagerFactory() != null ){
-				$BancoDeDados = new BancoDeDados( get$Transacoes() );
-			}
+            if( is$BancoDeDados() && IpeRoxo.getEntityManagerFactory() != null ){
+                $BancoDeDados = new BancoDeDados( get$Transacoes(), false );
+            }
 			
 			try{
-				
+			    
+			    if( $BancoDeDados != null ) $BancoDeDados.iniciar();
+			    
 				if( is$Validacao() && ! validar() ){
 					throw new IOException();
 				}
