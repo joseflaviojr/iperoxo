@@ -92,30 +92,48 @@ public class BancoDeDados implements EntityManager, EntityTransaction, Closeable
 	private int transacoes;
 	
 	/**
+	 * Preparar o {@link BancoDeDados}.
 	 * @param transacoes Número de {@link EntityTransaction#begin()} automáticas.
-	 * @see IpeRoxo#getEntityManagerFactory()
-	 * @see EntityManagerFactory#createEntityManager()
-	 * @see EntityTransaction#begin()
+	 * @param iniciar Executar {@link #iniciar()}?
 	 */
-	public BancoDeDados( int transacoes ) {
-		
-		this.em = IpeRoxo.getEntityManagerFactory().createEntityManager();
-		this.et = em.getTransaction();
-		this.transacoes = transacoes;
-		
-		if( transacoes > 0 ){
-			transacoes--;
-			et.begin();
-		}
-		
+	public BancoDeDados( int transacoes, boolean iniciar ) {
+        this.transacoes = transacoes;
+        if( iniciar ) iniciar();
 	}
 	
 	/**
-	 * {@link BancoDeDados#BancoDeDados(int)} para uma única {@link EntityTransaction} {@link EntityTransaction#begin() automática}.
+	 * {@link BancoDeDados#BancoDeDados(int, boolean)} com indicação positiva para {@link #iniciar()}.
+	 */
+	public BancoDeDados( int transacoes ) {
+	    this( transacoes, true );
+	}
+	
+	/**
+	 * {@link BancoDeDados#BancoDeDados(int, boolean)} de uma única {@link EntityTransaction} e
+	 * com indicação positiva para {@link #iniciar()}.
 	 */
 	public BancoDeDados() {
-		this( 1 );
+	    this( 1, true );
 	}
+	
+	/**
+	 * Efetivar a conexão ao {@link EntityManager} e {@link EntityTransaction#begin() iniciar}
+	 * uma {@link EntityTransaction} se necessário.
+     * @see IpeRoxo#getEntityManagerFactory()
+     * @see EntityManagerFactory#createEntityManager()
+     * @see EntityTransaction#begin()
+	 */
+    public void iniciar() {
+        
+        this.em = IpeRoxo.getEntityManagerFactory().createEntityManager();
+        this.et = em.getTransaction();
+
+        if( transacoes > 0 ){
+            transacoes--;
+            et.begin();
+        }
+        
+    }
 
 	@Override
 	public void persist( Object entity ) {
@@ -330,7 +348,7 @@ public class BancoDeDados implements EntityManager, EntityTransaction, Closeable
 	@Override
 	public void close() {
 		
-		if( et.isActive() ){
+		if( et != null && et.isActive() ){
 			try{
 				et.commit();
 			}catch( Exception e ){
@@ -338,7 +356,7 @@ public class BancoDeDados implements EntityManager, EntityTransaction, Closeable
 		}
 		
 		try{
-			em.close();
+			if( em != null ) em.close();
 		}finally{
 			em = null;
 			et = null;
