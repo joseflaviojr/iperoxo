@@ -469,10 +469,11 @@ function elementoRotulo( elemento ) {
 //--------------------------------------------------------------------------
 
 /**
- * Verifica qual é o mecanismo de definição de valor (conteúdo principal) de um elemento.
+ * Verificar qual é o mecanismo de definição de valor (conteúdo principal) de um elemento.
  * Elementos tais como "input" e "param" são definidos através do atributo "value".
  * A maioria é definida através de "html" (corpo do elemento).
  * @param elemento Elemento HTML ou objeto jQuery correspondente.
+ * @see getDefApresentacao
  */
 function getDefValor( elemento ) {
     var re = elementoRotulo(elemento);
@@ -484,10 +485,11 @@ function getDefValor( elemento ) {
 //--------------------------------------------------------------------------
 
 /**
- * Verifica qual é o mecanismo de definição de apresentação (aquilo que o usuário vê) de um elemento.
+ * Verificar qual é o mecanismo de definição de apresentação (aquilo que o usuário vê) de um elemento.
  * Elementos como o "input" são definidos através do atributo "value".
  * A maioria é definida através de "html" (corpo do elemento).
  * @param elemento Elemento HTML ou objeto jQuery correspondente.
+ * @see getDefValor
  */
 function getDefApresentacao( elemento ) {
     var re = elementoRotulo(elemento);
@@ -498,7 +500,7 @@ function getDefApresentacao( elemento ) {
 //--------------------------------------------------------------------------
 
 /**
- * Substitui caracteres especiais por entidades HTML.<br>
+ * Substituir caracteres especiais por entidades HTML.<br>
  * Exemplo: &amp; = &amp;amp;
  * @param {string} texto Texto a ser normalizado para HTML.
  * @see HTML_ENTIDADE
@@ -512,11 +514,16 @@ function textoHTML( texto ) {
 //--------------------------------------------------------------------------
 
 /**
- * Substitui as chaves indicadas pelos seus respectivos valores do dicionário.
+ * Substituir as chaves (indicadas) pelos seus respectivos valores do dicionário.
+ * Chave é um código que identifica de forma universal uma palavra ou uma frase.
+ * As palavras e frases são especificadas em dicionários de acordo com a
+ * linguagem e cultura do usuário da aplicação.
  * @param {*} chaves Uma chave ou um vetor de chaves.
  * @param {string} prefixo Prefixo das chaves a considerar no dicionário.
  * @param {string} sufixo Sufixo das chaves a considerar no dicionário.
  * @returns valores substituídos.
+ * @see dicionario
+ * @see lid
  */
 function traduzir( chaves, prefixo, sufixo ) {
     
@@ -541,7 +548,7 @@ function traduzir( chaves, prefixo, sufixo ) {
 //--------------------------------------------------------------------------
 
 /**
- * Remove uma classe de um elemento HTML, removendo o atributo "class" se este ficar vazio.
+ * Remover uma classe de um elemento HTML, removendo o atributo "class" se este ficar vazio.
  * @param elemento Elemento HTML ou objeto jQuery correspondente.
  * @param classe Nome da classe a ser removida.
  */
@@ -556,7 +563,7 @@ function removerClasse( elemento, classe ) {
 //--------------------------------------------------------------------------
 
 /**
- * Garante o tratamento de um elemento HTML como um objeto jQuery.
+ * Garantir o tratamento de um elemento HTML como um objeto jQuery.
  * @param o Elemento HTML ou objeto jQuery correspondente.
  * @returns Objeto jQuery. Se o argumento for um jQuery, ele mesmo será retornado.
  */
@@ -567,7 +574,7 @@ function jQueryObj( o ) {
 //--------------------------------------------------------------------------
 
 /**
- * Codifica uma string para o formato base64url, conforme a RFC 4648, Table 2.
+ * Codificar uma string para o formato base64url, conforme a RFC 4648, Table 2.
  */
 function codificarBase64url( str ) {
     return window.btoa(str).replace(/\+/g, "-").replace(/\//g, "_").replace(/=/g, "");
@@ -576,7 +583,7 @@ function codificarBase64url( str ) {
 //--------------------------------------------------------------------------
 
 /**
- * Decodifica uma string que está no formato base64url, conforme a RFC 4648, Table 2.
+ * Decodificar uma string que está no formato base64url, conforme a RFC 4648, Table 2.
  */
 function decodificarBase64url( base64url ) {
     return window.atob( base64url.replace(/\-/g, "+").replace(/_/g, "/") );
