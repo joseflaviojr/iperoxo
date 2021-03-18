@@ -592,7 +592,8 @@ function decodificarBase64url( base64url ) {
 //--------------------------------------------------------------------------
 
 /**
- * Obtém todos os atributos de um elemento HTML, e seus respectivos valores.
+ * Obter todos os atributos de um elemento HTML, e também seus respectivos valores.
+ * Todos os atributos e seus valores serão dispostos num objeto JavaScript, o qual será retornado.
  * @param elemento Elemento HTML ou objeto jQuery correspondente.
  * @param normalizar Função para normalizar/transformar o nome de atributo. Opcional.
  * @param manterOrig Ao normalizar o nome do atributo, manter também o nome original no resultado? Padrão: false.
@@ -622,7 +623,7 @@ function obterAtributos( elemento, normalizar, manterOrig ) {
 //--------------------------------------------------------------------------
 
 /**
- * Obtém o valor de um atributo de elemento HTML.
+ * Obter o valor de um atributo de elemento HTML.
  * @param elemento Elemento HTML ou objeto jQuery correspondente.
  * @param nome Nome do atributo desejado.
  * @param valorPadrao Valor a retornar se o atributo inexistir ou se estiver vazio.
@@ -635,8 +636,9 @@ function obterAtributo( elemento, nome, valorPadrao ) {
 //--------------------------------------------------------------------------
 
 /**
- * Obtém o nome de todos os arquivos selecionados num campo de entrada de arquivos.
+ * Obter o nome de todos os arquivos selecionados num campo de entrada de arquivos.
  * @param elemento Elemento HTML "input[type=file]" ou objeto jQuery correspondente.
+ * @returns Array com os nomes, podendo estar vazio.
  */
 function obterNomesArquivos( elemento ) {
     var lista = elemento instanceof jQuery ? elemento[0].files : elemento.files;
@@ -650,9 +652,9 @@ function obterNomesArquivos( elemento ) {
 //--------------------------------------------------------------------------
 
 /**
- * Retorna o sufixo do nome indicado, de acordo com um caractere separador.
+ * Retornar o sufixo do nome indicado, de acordo com um caractere separador.
  * @param {string} nome String que contém um sufixo.
- * @param separador Caractere separador.
+ * @param separador Caractere separador. Valor padrão: '_'
  * @returns "undefined" se sufixo inexistente.
  */
 function sufixo( nome, separador ) {
@@ -664,8 +666,8 @@ function sufixo( nome, separador ) {
 //--------------------------------------------------------------------------
 
 /**
- * Verifica se esta aplicação está rodando num navegador Web tradicional.<br>
- * Atenção: Apache Cordova é considerado navegador apenas se device.platform === "browser".
+ * Verificar se esta aplicação está rodando num navegador Web tradicional.
+ * Em ambiente Apache Cordova, será considerado navegador apenas se device.platform === "browser".
  */
 function isNavegadorWeb() {
     return typeof(cordova) === "undefined" || device.platform === "browser";
@@ -674,8 +676,8 @@ function isNavegadorWeb() {
 //--------------------------------------------------------------------------
 
 /**
- * Verifica se esta aplicação está rodando sobre a plataforma Apache Cordova nativa.<br>
- * Atenção: Apache Cordova é considerado nativo apenas se device.platform !== "browser".
+ * Verificar se esta aplicação está rodando sobre a plataforma Apache Cordova nativa.
+ * Atenção: Será considerado nativa apenas se device.platform !== "browser".
  */
 function isCordovaNativa() {
     return typeof(cordova) !== "undefined" && device.platform !== "browser";
@@ -684,8 +686,8 @@ function isCordovaNativa() {
 //--------------------------------------------------------------------------
 
 /**
- * Incrementa o número de atividades pelas quais se espera,
- * mostrando a animação de execução.
+ * Incrementar o número de atividades pelas quais se espera, comumente chamadas assíncronas.
+ * Será mostrada uma animação de espera enquanto o número de atividades for maior que zero.
  */
 function incrementarEspera() {
     animacao_espera_total++;
@@ -695,8 +697,8 @@ function incrementarEspera() {
 //--------------------------------------------------------------------------
 
 /**
- * Decrementa o número de atividades pelas quais se espera.<br>
- * Se resultar em zero, a animação de execução será removida.
+ * Decrementar o número de atividades em espera, comumente depois de retorno de chamadas assíncronas.
+ * Se resultar em zero atividades, a animação de espera será removida.
  */
 function decrementarEspera() {
     animacao_espera_total--;
