@@ -722,9 +722,10 @@ function atualizarComponentesCulturais() {
 //--------------------------------------------------------------------------
 
 /**
- * Copia os parâmetros/valores de uma URL (query) para um JSON.
+ * Copiar os parâmetros/valores de uma URL (query) para um objeto JavaScript,
+ * respeitando as regras do JSON.
  * @param {string} url URL.
- * @param {string} json JSON.
+ * @param {string} json Objeto JavaScript (JSON).
  */
 function copiarQueryParaJSON( url, json ) {
     
@@ -748,7 +749,10 @@ function copiarQueryParaJSON( url, json ) {
 //--------------------------------------------------------------------------
 
 /**
- * Altera a {@link sid} (ID da Sessão), comumente chamada de "token".
+ * Alterar a {@link sid} (ID da Sessão), comumente chamada de "token" de sessão.
+ * A {@link sid} será utilizada em conversações com serviços remotos como
+ * elemento de comprovação de autenticidade de sessão de usuário
+ * e obtenção de autorização para execução de atividades.
  * Evento a disparar no final: "iperoxo.sid" (document).
  * @param {string} nova_sid Novo valor da {@link sid}.
  * @param {function} funcExito Função a ser chamada depois de atualizarAmbiente().
@@ -763,7 +767,8 @@ function setSID( nova_sid, funcExito ) {
 //--------------------------------------------------------------------------
 
 /**
- * Altera a linguagem atual - variável {@link lid}. Padrão: "en".
+ * Alterar a linguagem atual da aplicação (variável {@link lid}), 
+ * no âmbito da internacionalização. Padrão: "en" (inglês).
  * No final, será chamada a função {@link linguagemAlterada}, se existente, que deveria chamar {@link atualizarAmbiente}.
  * Evento a disparar no final: "iperoxo.lid" (document).
  * @param {string} nome Código da linguagem desejada, preferencialmente no formato IETF BCP 47.
@@ -809,11 +814,11 @@ function setLinguagem( nome, funcExito ) {
 //--------------------------------------------------------------------------
 
 /**
- * Altera a zona de tempo corrente - variável {@link zid}. Padrão: "+00:00".
+ * Alterar a zona de tempo corrente - variável {@link zid}. Padrão: "+00:00".
  * Números inteiros representando deslocamento fixo em minutos, serão convertidos para o formato "+00:00".
  * A variável {@link zona_tempo} também será atualizada.
  * Evento a disparar no final: "iperoxo.zid" (document).
- * @param {string} zonaId Identificador da zona de tempo, podendo ser um objeto ZoneId ou um deslocamento fixo (offset). Exemplos: "America/Belem", "-03:00", -180
+ * @param {string} zonaId Identificador da zona de tempo, podendo ser um ZoneId (objeto ou string) ou um deslocamento fixo (offset). Exemplos: "America/Belem", "-03:00", -180
  * @param {function} funcExito Função a ser chamada depois de atualizarAmbiente().
  * @see https://docs.oracle.com/javase/8/docs/api/java/time/ZoneId.html#of-java.lang.String-
  * @see https://docs.oracle.com/javase/8/docs/api/java/time/ZoneId.html#getAvailableZoneIds--
