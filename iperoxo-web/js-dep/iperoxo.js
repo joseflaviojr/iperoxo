@@ -1401,7 +1401,7 @@ function atualizarTelas() {
 //--------------------------------------------------------------------------
 
 /**
- * Carrega uma tela, a qual está especificada em outra página HTML.
+ * Carregar uma tela que foi especificada numa página HTML externa.
  * @param pagina URL da página HTML que contém a tela.
  * @param autoAtivar Ativar automaticamente a tela? Padrão: true. Ver {@link ativarTela}
  * @param paginaArg Argumento (JSON ou String) a ser enviado para a página, além das "URL Query Strings".
@@ -1494,7 +1494,7 @@ function abrirTela( pagina, autoAtivar, paginaArg, funcExito, funcExitoArg ) {
 //--------------------------------------------------------------------------
 
 /**
- * Determina qual das telas deve estar visível e disponível para uso.
+ * Determinar qual das telas deve estar visível e disponível para uso imediato.
  * @param tela Elemento HTML, objeto jQuery ou identificação (tid) da tela desejada.
  */
 function ativarTela( tela ) {
@@ -1553,7 +1553,7 @@ function ativarTela( tela ) {
 //--------------------------------------------------------------------------
 
 /**
- * Verifica se a tela indicada está ativa.
+ * Verificar se a tela indicada está ativa.
  * @param tela Elemento HTML, objeto jQuery ou identificação (tid) da tela desejada.
  */
 function isTelaAtiva( tela ) {
@@ -1568,7 +1568,7 @@ function isTelaAtiva( tela ) {
 //--------------------------------------------------------------------------
 
 /**
- * Tela atualmente ativa.
+ * Obter objeto jQuery para acesso à estrutura da tela ativa, ou undefined.
  */
 function getTelaAtiva() {
     if( telas[tmp_tela_ativa_id] === undefined || tmp_tela_ativa.hasClass("d-none") ){
@@ -1581,7 +1581,7 @@ function getTelaAtiva() {
 //--------------------------------------------------------------------------
 
 /**
- * Identificação da tela atualmente ativa.
+ * Obter o código de identificação da tela ativa, ou undefined.
  */
 function getTelaAtivaId() {
     if( telas[tmp_tela_ativa_id] === undefined || tmp_tela_ativa.hasClass("d-none") ){
@@ -1594,7 +1594,8 @@ function getTelaAtivaId() {
 //--------------------------------------------------------------------------
 
 /**
- * Fecha e remove uma tela.
+ * Fechar e remover uma tela do ambiente Ipê-roxo.
+ * Caso a tela a fechar esteja ativa, em destaque, outra tela será ativada em seu lugar.
  * @param tela Elemento HTML, objeto jQuery ou identificação (tid) da tela desejada.
  */
 function fecharTela( tela ) {
@@ -1656,7 +1657,7 @@ function fecharTela( tela ) {
 //--------------------------------------------------------------------------
 
 /**
- * Fecha e remove todas as telas atuais.
+ * Fechar e remover todas as telas existentes do ambiente Ipê-roxo.
  */
 function fecharTelas() {
     for( var t in telas ){
@@ -1667,7 +1668,8 @@ function fecharTelas() {
 //--------------------------------------------------------------------------
 
 /**
- * Fecha e remove a tela ativa.
+ * Fechar e remover a tela ativa do ambiente Ipê-roxo.
+ * Outra tela será ativada em lugar da tela fechada.
  */
 function fecharTelaAtiva() {
     fecharTela( getTelaAtiva() );
