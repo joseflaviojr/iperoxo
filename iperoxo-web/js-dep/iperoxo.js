@@ -856,7 +856,7 @@ function setZonaTempo( zonaId, funcExito ) {
 //--------------------------------------------------------------------------
 
 /**
- * Retorna o Unix timestamp, milissegundos desde 01/jan/1970 00:00 UTC, do
+ * Retornar o Unix timestamp, milissegundos desde 01/jan/1970 00:00 UTC, do
  * objeto do tipo data/hora passado por parâmetro.
  * @param o Date, Instant, ZonedDateTime, LocalDateTime, LocalDate ou LocalTime.
  * @param z Zona de tempo a considerar. Opcional.
@@ -879,8 +879,8 @@ function getTimestamp( o, z ) {
 //--------------------------------------------------------------------------
 
 /**
- * Carrega o conteúdo dos elementos textuais, sensíveis à {@link lid}, que estão desatualizados.
- * Evite utilizar este método de forma direta, prefira {@link atualizarAmbiente}.
+ * Carregar o conteúdo dos elementos textuais, sensíveis à {@link lid} - linguagem, que estejam desatualizados.
+ * Nota: Evite utilizar este método de forma direta, prefira chamar {@link atualizarAmbiente}.
  */
 function carregarTextoDinamico() {
 
@@ -969,10 +969,10 @@ function carregarTextoDinamico() {
 //--------------------------------------------------------------------------
 
 /**
- * Altera o conteúdo textual de um elemento, privilegiando o mecanismo de texto dinâmico.
+ * Alterar o conteúdo textual de um elemento, privilegiando o mecanismo de texto dinâmico.
  * @param elemento Elemento HTML ou objeto jQuery correspondente.
  * @param chave Valor da "chave" ou "chaves", ou conteúdo textual direto.
- * @param carregar Executar carregarTextoDinamico()?
+ * @param carregar Executar carregarTextoDinamico() para efetivar visualmente a alteração?
  */
 function setTexto( elemento, conteudo, carregar ) {
     var obj = jQueryObj(elemento);
@@ -989,8 +989,8 @@ function setTexto( elemento, conteudo, carregar ) {
 //--------------------------------------------------------------------------
 
 /**
- * Acrescenta uma "ipe-mensagem" numa região do HTML.
- * A mensagem será inserida no primeiro descendente que contém a classe "mensagens".
+ * Acrescentar uma "ipe-mensagem" numa região/elemento do HTML.
+ * A mensagem será inserida no primeiro elemento descendente que contém a classe "mensagens".
  * Se região == null, será utilizado o elemento global que possui id = "mensagens".
  * @param {string} estilo Estilo visual da mensagem: "padrao", "primario", "secundario", "sucesso", "informacao", "atencao", "perigo", "claro" ou "escuro".
  * @param {string} texto Texto da mensagem, o qual será normalizado com {@link textoHTML}.
@@ -1005,7 +1005,7 @@ function mensagemClassificada( estilo, texto, regiao ) {
 //--------------------------------------------------------------------------
 
 /**
- * {@link mensagemClassificada} como "sucesso".
+ * Acrescentar uma {@link mensagemClassificada} como "sucesso".
  * @see mensagemClassificada
  */
 function mensagemExito( texto, regiao ) {
@@ -1013,7 +1013,7 @@ function mensagemExito( texto, regiao ) {
 }
 
 /**
- * {@link mensagemClassificada} como "informacao".
+ * Acrescentar uma {@link mensagemClassificada} como "informacao".
  * @see mensagemClassificada
  */
 function mensagemInformacao( texto, regiao ) {
@@ -1021,7 +1021,7 @@ function mensagemInformacao( texto, regiao ) {
 }
 
 /**
- * {@link mensagemClassificada} como "atencao".
+ * Acrescentar uma {@link mensagemClassificada} como "atencao".
  * @see mensagemClassificada
  */
 function mensagemAtencao( texto, regiao ) {
@@ -1029,7 +1029,7 @@ function mensagemAtencao( texto, regiao ) {
 }
 
 /**
- * {@link mensagemClassificada} como "perigo".
+ * Acrescentar uma {@link mensagemClassificada} como "perigo".
  * @see mensagemClassificada
  */
 function mensagemErro( texto, regiao ) {
@@ -1039,9 +1039,10 @@ function mensagemErro( texto, regiao ) {
 //--------------------------------------------------------------------------
 
 /**
- * Mostra o conjunto novo de mensagens provenientes de Copaíba.
- * As mensagens atualmente ativas serão removidas.
- * @param resposta {@link com.joseflavio.urucum.comunicacao.Resposta}
+ * Mostrar todas as mensagens de uma resposta obtida com Copaíba.
+ * Será utilizada a função {@link mensagemClassificada} para mostrar as mensagens indicadas.
+ * As mensagens ativas serão removidas antes.
+ * @param resposta Objeto da classe {@link com.joseflavio.urucum.comunicacao.Resposta}
  * @param regiao Região do HTML, conforme regras da função {@link mensagemClassificada}.
  * @see mensagemClassificada
  * @see mensagensAmplaCopaiba
@@ -1063,8 +1064,9 @@ function mensagensCopaiba( resposta, status, jqXHR, regiao ) {
 //--------------------------------------------------------------------------
 
 /**
- * Mostra {@link abrirMensagemAmpla amplamente} o conjunto novo de mensagens provenientes de Copaíba.
- * @param resposta {@link com.joseflavio.urucum.comunicacao.Resposta}
+ * Mostrar {@link abrirMensagemAmpla amplamente} as mensagens de uma resposta obtida com Copaíba.
+ * Será utilizada a função {@link abrirMensagemAmpla} para mostrar as mensagens indicadas.
+ * @param resposta Objeto da classe {@link com.joseflavio.urucum.comunicacao.Resposta}
  * @see abrirMensagemAmpla
  * @see extrairMensagens
  * @see mensagensCopaiba
@@ -1089,8 +1091,8 @@ function mensagemErroUxiamarelo( jqXHR, status, errorThrown, regiao ) {
 //--------------------------------------------------------------------------
 
 /**
- * Mostra as mensagens de erro HTTP recebidas do navegador/cliente, servidor Web, proxy ou Uxi-amarelo.
- * As mensagens atualmente ativas serão removidas.
+ * Mostrar as mensagens de erro HTTP recebidas do navegador/cliente, servidor Web, proxy ou Uxi-amarelo.
+ * As mensagens ativas serão removidas antes.
  * @see mensagemErro
  * @see https://tools.ietf.org/html/rfc7231#section-6.6
  * @see http://joseflavio.com/uxiamarelo
@@ -1135,7 +1137,7 @@ function mensagensErroHTTP( jqXHR, status, errorThrown, regiao ) {
 //--------------------------------------------------------------------------
 
 /**
- * Mostra {@link abrirMensagemAmpla amplamente} o conteúdo bruto de um objeto, conforme {@link JSON#stringify}.
+ * Mostrar {@link abrirMensagemAmpla amplamente} o conteúdo bruto de um objeto, conforme {@link JSON#stringify}.
  * @see abrirMensagemAmpla
  * @see JSON#stringify
  */
@@ -1146,7 +1148,8 @@ function mensagemAmplaBruta( obj ) {
 //--------------------------------------------------------------------------
 
 /**
- * Remove todas as mensagens contidas numa região do HTML.
+ * Remover todas as mensagens contidas numa região do HTML,
+ * as quais foram inseridas através da função {@link mensagemClassificada}.
  * @param regiao Região do HTML, conforme regras da função {@link mensagemClassificada}.
  * @see mensagemClassificada
  */
@@ -1158,9 +1161,11 @@ function limparMensagens( regiao ) {
 //--------------------------------------------------------------------------
 
 /**
- * Extrai as mensagens de uma {@link com.joseflavio.urucum.comunicacao.Resposta}.
- * @param resposta {@link com.joseflavio.urucum.comunicacao.Resposta}
+ * Extrair e concatenar as mensagens contidas numa {@link com.joseflavio.urucum.comunicacao.Resposta}.
+ * @param resposta Objeto da classe {@link com.joseflavio.urucum.comunicacao.Resposta}
  * @param separador Separador a utilizar entre as mensagens extraídas. Padrão: '\n'
+ * @returns string.
+ * @see http://joseflavio.com/urucum
  */
 function extrairMensagens( resposta, separador ) {
     var texto = "";
@@ -1174,8 +1179,9 @@ function extrairMensagens( resposta, separador ) {
 //--------------------------------------------------------------------------
 
 /**
- * Mostra uma mensagem textual em destaque na tela toda.
+ * Mostrar uma mensagem textual em destaque na tela toda.
  * @param {string} texto Texto a ser mostrado, o qual antes será normalizado com {@link textoHTML}.
+ * @see fecharMensagemAmpla
  */
 function abrirMensagemAmpla( texto ) {
     mensagem_ampla_texto.innerHTML = textoHTML(texto);
@@ -1185,7 +1191,9 @@ function abrirMensagemAmpla( texto ) {
 //--------------------------------------------------------------------------
 
 /**
- * Remove a mensagem textual mostrada através de {@link abrirMensagemAmpla}.
+ * Remover a mensagem textual que está em destaque na tela toda,
+ * mostrada através da função {@link abrirMensagemAmpla}.
+ * @see abrirMensagemAmpla
  */
 function fecharMensagemAmpla() {
     mensagem_ampla.style.display = "none";
@@ -1194,7 +1202,7 @@ function fecharMensagemAmpla() {
 //--------------------------------------------------------------------------
 
 /**
- * Atualiza a informação situacional.
+ * Atualizar a informação situacional (status) da aplicação.
  * @param {string} texto Texto que descreve a situação atual. Ele será normalizado com {@link textoHTML}.
  */
 function setInformacaoSituacional( texto ) {
@@ -1206,7 +1214,7 @@ function setInformacaoSituacional( texto ) {
 //--------------------------------------------------------------------------
 
 /**
- * Atualiza a informação situacional e garante sua visibilidade.
+ * Atualizar a informação situacional (status) da aplicação e garantir sua visibilidade.
  * @param {string} texto Texto que descreve a situação atual. Ele será normalizado com {@link textoHTML}.
  */
 function mostrarInformacaoSituacional( texto ) {
@@ -1218,7 +1226,7 @@ function mostrarInformacaoSituacional( texto ) {
 //--------------------------------------------------------------------------
 
 /**
- * Oculta a informação situacional.
+ * Ocultar a informação situacional (status) da aplicação.
  */
 function ocultarInformacaoSituacional() {
     informacao_situacional.tempo = undefined;
@@ -1228,9 +1236,9 @@ function ocultarInformacaoSituacional() {
 //--------------------------------------------------------------------------
 
 /**
- * Executa AJAX do tipo POST para um serviço {@link http://joseflavio.com/uxiamarelo Uxi-amarelo}.
+ * Executar AJAX do tipo POST para um serviço {@link http://joseflavio.com/uxiamarelo Uxi-amarelo}.
  * @param url URL para Uxi-amarelo.
- * @param json JSON a ser enviado através de POST.
+ * @param json Objeto JavaScript a ser enviado como JSON através de HTTP/POST.
  * @param funcExito Função a ser executada, se êxito.
  * @param funcErro Função a ser executada, se erro.
  * @param argExtra Argumento para {@linkcode funcExito} ou {@linkcode funcErro}.
@@ -1266,12 +1274,12 @@ function uxiamarelo( url, json, funcExito, funcErro, argExtra ) {
 //--------------------------------------------------------------------------
 
 /**
- * Prepara um formulário HTML para ser submetido através de AJAX a um serviço {@link http://joseflavio.com/uxiamarelo Uxi-amarelo}.
- * @param formulario Formulário HTML (objeto jQuery).
+ * Preparar um formulário HTML para ser submetido através de AJAX a um serviço {@link http://joseflavio.com/uxiamarelo Uxi-amarelo}.
+ * @param formulario Formulário HTML (objeto jQuery do elemento form).
  * @param enviarAgora Executar o AJAX imediatamente? Caso contrário, apenas habilitará o "submit" através de AJAX.
  * @param funcExito Função a ser executada, se êxito. Argumento extra: {@linkcode formulario}.
  * @param funcErro Função a ser executada, se erro. Argumento extra: {@linkcode formulario}.
- * @param funcPreEnvio Função a ser executada antes da submissão do formulário. Se retornar "false", cancela o AJAX. Argumento extra: {@linkcode formulario}.
+ * @param funcPreEnvio Função a ser executada antes da submissão do formulário. Se retornar "false", cancelará o AJAX. Argumento extra: {@linkcode formulario}.
  * @see http://joseflavio.com/uxiamarelo
  */
 function uxiamareloPreparar( formulario, enviarAgora, funcExito, funcErro, funcPreEnvio ) {
@@ -1316,9 +1324,10 @@ function uxiamareloPreparar( formulario, enviarAgora, funcExito, funcErro, funcP
 //--------------------------------------------------------------------------
 
 /**
- * Atualiza todo o ambiente Ipê-roxo, implantando novos componentes, atualizando textos dinâmicos,
- * revisando o sistema de telas, atualizando os componentes existentes, etc.
- * Para cada tela reconhecida será mantido um objeto na variável global {@link telas}.
+ * Atualizar todo o ambiente Ipê-roxo, implantando componentes adicionados,
+ * atualizando os componentes existentes e os textos dinâmicos,
+ * revisando o sistema de telas, etc.
+ * Para cada tela reconhecida, será mantido um objeto na variável global {@link telas}.
  * Evento a disparar no final: "iperoxo.ambiente" (document).
  * @see atualizarComponente
  */
@@ -1392,7 +1401,7 @@ function atualizarTelas() {
 //--------------------------------------------------------------------------
 
 /**
- * Carrega uma tela, a qual está especificada em outra página HTML.
+ * Carregar uma tela que foi especificada numa página HTML externa.
  * @param pagina URL da página HTML que contém a tela.
  * @param autoAtivar Ativar automaticamente a tela? Padrão: true. Ver {@link ativarTela}
  * @param paginaArg Argumento (JSON ou String) a ser enviado para a página, além das "URL Query Strings".
@@ -1485,7 +1494,7 @@ function abrirTela( pagina, autoAtivar, paginaArg, funcExito, funcExitoArg ) {
 //--------------------------------------------------------------------------
 
 /**
- * Determina qual das telas deve estar visível e disponível para uso.
+ * Determinar qual das telas deve estar visível e disponível para uso imediato.
  * @param tela Elemento HTML, objeto jQuery ou identificação (tid) da tela desejada.
  */
 function ativarTela( tela ) {
@@ -1544,7 +1553,7 @@ function ativarTela( tela ) {
 //--------------------------------------------------------------------------
 
 /**
- * Verifica se a tela indicada está ativa.
+ * Verificar se a tela indicada está ativa.
  * @param tela Elemento HTML, objeto jQuery ou identificação (tid) da tela desejada.
  */
 function isTelaAtiva( tela ) {
@@ -1559,7 +1568,7 @@ function isTelaAtiva( tela ) {
 //--------------------------------------------------------------------------
 
 /**
- * Tela atualmente ativa.
+ * Obter objeto jQuery para acesso à estrutura da tela ativa, ou undefined.
  */
 function getTelaAtiva() {
     if( telas[tmp_tela_ativa_id] === undefined || tmp_tela_ativa.hasClass("d-none") ){
@@ -1572,7 +1581,7 @@ function getTelaAtiva() {
 //--------------------------------------------------------------------------
 
 /**
- * Identificação da tela atualmente ativa.
+ * Obter o código de identificação da tela ativa, ou undefined.
  */
 function getTelaAtivaId() {
     if( telas[tmp_tela_ativa_id] === undefined || tmp_tela_ativa.hasClass("d-none") ){
@@ -1585,7 +1594,8 @@ function getTelaAtivaId() {
 //--------------------------------------------------------------------------
 
 /**
- * Fecha e remove uma tela.
+ * Fechar e remover uma tela do ambiente Ipê-roxo.
+ * Caso a tela a fechar esteja ativa, em destaque, outra tela será ativada em seu lugar.
  * @param tela Elemento HTML, objeto jQuery ou identificação (tid) da tela desejada.
  */
 function fecharTela( tela ) {
@@ -1647,7 +1657,7 @@ function fecharTela( tela ) {
 //--------------------------------------------------------------------------
 
 /**
- * Fecha e remove todas as telas atuais.
+ * Fechar e remover todas as telas existentes do ambiente Ipê-roxo.
  */
 function fecharTelas() {
     for( var t in telas ){
@@ -1658,7 +1668,8 @@ function fecharTelas() {
 //--------------------------------------------------------------------------
 
 /**
- * Fecha e remove a tela ativa.
+ * Fechar e remover a tela ativa do ambiente Ipê-roxo.
+ * Outra tela será ativada em lugar da tela fechada.
  */
 function fecharTelaAtiva() {
     fecharTela( getTelaAtiva() );
@@ -1667,10 +1678,10 @@ function fecharTelaAtiva() {
 //--------------------------------------------------------------------------
 
 /**
- * Executa uma ação/evento de tela.
- * A função a ser chamada deverá ter minimamente a assinatura da função {@link exemploEventoTela}.
- * Argumentos extras serão repassados para a {@linkcode funcao}, após a passagem dos argumentos padrões.
- * @param elemento Elemento HTML ou objeto jQuery da tela ou de parte dela.
+ * Executar uma ação/evento de tela.
+ * A função a ser chamada deverá ter, minimamente, a assinatura da função {@link exemploEventoTela}.
+ * Argumentos extras serão repassados para a {@linkcode funcao} indicada, após a passagem dos argumentos padrões.
+ * @param elemento Elemento HTML ou objeto jQuery da tela ou de parte dela (subelemento).
  * @param funcao Função ou nome da função a ser executada. Se a string iniciar com "_", será prefixada com o nome da tela.
  * @see exemploEventoTela
  */
@@ -1701,7 +1712,7 @@ function acaoTela( elemento, funcao ) {
  * @param tela Objeto jQuery do elemento raiz da tela.
  * @param args Argumentos passados para a tela durante a abertura.
  * @param tid Identificação da tela.
- * @param telaObj Objeto que representa a tela em {@link telas}.
+ * @param telaObj Objeto que representa a tela em {@link telas}, o qual contém todas as informações importantes dela.
  * @param funcExito Função de êxito a ser chamada se esta tiver comportamento assíncrono.
  * @param funcErro Função de erro a ser chamada se esta tiver comportamento assíncrono.
  * @returns {@linkcode false}, se esta função tem comportamento assíncrono.
@@ -1714,7 +1725,8 @@ function exemploEventoTela( tela, args, tid, telaObj, funcExito, funcErro ) {
 //--------------------------------------------------------------------------
 
 /**
- * Ajusta as rolagens horizontal e vertical da tela ativa conforme o último registro de posicionamento.
+ * Ajustar as rolagens horizontal e vertical da tela ativa conforme o último registro de posicionamento,
+ * o qual é feito de forma automática.
  */
 function ajustarRolagem() {
     var telaAtiva = getTelaAtiva();
@@ -1735,7 +1747,7 @@ function ajustarRolagem() {
 //--------------------------------------------------------------------------
 
 /**
- * Implanta todas as dicas indicadas através da classe "dica" e do atributo "dica".
+ * Implantar todas as dicas indicadas através da classe CSS "dica" e do atributo "dica".
  * Este método é chamado automaticamente por {@link atualizarAmbiente}.
  */
 function implantarDicas() {
@@ -1776,7 +1788,8 @@ function implantarDicas() {
 //--------------------------------------------------------------------------
 
 /**
- * Substitui todas as tags de componentes pelos seus respectivos códigos HTML.
+ * Substituir todas as tags de componentes pelos seus respectivos códigos HTML, isto é,
+ * transformar a definição de cada componente em código HTML válido e efetivo para uso.
  * Todo o DOM do documento é varrido, e não somente o escopo de tela.
  * Este método não garante a renderização completa do componente,
  * pois outras características precisam ser processadas.
@@ -1872,9 +1885,9 @@ function implantarComponentes() {
 //--------------------------------------------------------------------------
 
 /**
- * Cria e insere um componente numa página HTML.
+ * Criar e inserir um componente numa página HTML.
  * Pode-se optar por buscar o local mais adequado (preferência) para o componente.
- * Obs.: O método {@link atualizarAmbiente} será chamado para renderizar plenamente o componente inserido.
+ * Obs.: O método {@link atualizarAmbiente} será chamado para implantar/renderizar plenamente o componente inserido.
  * @param {jQuery} destino Destino de referência (raiz): elemento HTML ou objeto jQuery correspondente.
  * @param {string} tipo Tipo do componente. Exemplos: "ipe-texto", "ipe-arquivo", etc.
  * @param {object} atributos Atributos do componente. Exemplo: {nome:'texto', rotulo:'texto', valor:'Ipê-roxo!'}
