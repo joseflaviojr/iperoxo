@@ -1678,10 +1678,10 @@ function fecharTelaAtiva() {
 //--------------------------------------------------------------------------
 
 /**
- * Executa uma ação/evento de tela.
- * A função a ser chamada deverá ter minimamente a assinatura da função {@link exemploEventoTela}.
- * Argumentos extras serão repassados para a {@linkcode funcao}, após a passagem dos argumentos padrões.
- * @param elemento Elemento HTML ou objeto jQuery da tela ou de parte dela.
+ * Executar uma ação/evento de tela.
+ * A função a ser chamada deverá ter, minimamente, a assinatura da função {@link exemploEventoTela}.
+ * Argumentos extras serão repassados para a {@linkcode funcao} indicada, após a passagem dos argumentos padrões.
+ * @param elemento Elemento HTML ou objeto jQuery da tela ou de parte dela (subelemento).
  * @param funcao Função ou nome da função a ser executada. Se a string iniciar com "_", será prefixada com o nome da tela.
  * @see exemploEventoTela
  */
@@ -1712,7 +1712,7 @@ function acaoTela( elemento, funcao ) {
  * @param tela Objeto jQuery do elemento raiz da tela.
  * @param args Argumentos passados para a tela durante a abertura.
  * @param tid Identificação da tela.
- * @param telaObj Objeto que representa a tela em {@link telas}.
+ * @param telaObj Objeto que representa a tela em {@link telas}, o qual contém todas as informações importantes dela.
  * @param funcExito Função de êxito a ser chamada se esta tiver comportamento assíncrono.
  * @param funcErro Função de erro a ser chamada se esta tiver comportamento assíncrono.
  * @returns {@linkcode false}, se esta função tem comportamento assíncrono.
@@ -1725,7 +1725,8 @@ function exemploEventoTela( tela, args, tid, telaObj, funcExito, funcErro ) {
 //--------------------------------------------------------------------------
 
 /**
- * Ajusta as rolagens horizontal e vertical da tela ativa conforme o último registro de posicionamento.
+ * Ajustar as rolagens horizontal e vertical da tela ativa conforme o último registro de posicionamento,
+ * o qual é feito de forma automática.
  */
 function ajustarRolagem() {
     var telaAtiva = getTelaAtiva();
@@ -1746,7 +1747,7 @@ function ajustarRolagem() {
 //--------------------------------------------------------------------------
 
 /**
- * Implanta todas as dicas indicadas através da classe "dica" e do atributo "dica".
+ * Implantar todas as dicas indicadas através da classe CSS "dica" e do atributo "dica".
  * Este método é chamado automaticamente por {@link atualizarAmbiente}.
  */
 function implantarDicas() {
@@ -1787,7 +1788,8 @@ function implantarDicas() {
 //--------------------------------------------------------------------------
 
 /**
- * Substitui todas as tags de componentes pelos seus respectivos códigos HTML.
+ * Substituir todas as tags de componentes pelos seus respectivos códigos HTML, isto é,
+ * transformar a definição de cada componente em código HTML válido e efetivo para uso.
  * Todo o DOM do documento é varrido, e não somente o escopo de tela.
  * Este método não garante a renderização completa do componente,
  * pois outras características precisam ser processadas.
@@ -1883,9 +1885,9 @@ function implantarComponentes() {
 //--------------------------------------------------------------------------
 
 /**
- * Cria e insere um componente numa página HTML.
+ * Criar e inserir um componente numa página HTML.
  * Pode-se optar por buscar o local mais adequado (preferência) para o componente.
- * Obs.: O método {@link atualizarAmbiente} será chamado para renderizar plenamente o componente inserido.
+ * Obs.: O método {@link atualizarAmbiente} será chamado para implantar/renderizar plenamente o componente inserido.
  * @param {jQuery} destino Destino de referência (raiz): elemento HTML ou objeto jQuery correspondente.
  * @param {string} tipo Tipo do componente. Exemplos: "ipe-texto", "ipe-arquivo", etc.
  * @param {object} atributos Atributos do componente. Exemplo: {nome:'texto', rotulo:'texto', valor:'Ipê-roxo!'}
