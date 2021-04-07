@@ -307,24 +307,28 @@ public final class IpeRoxo {
 
 			// Copaíba: pré-inicialização -----------------------------------------------
 
-			int     copaibaPorta    = Integer.parseInt    ( getPropriedade( "Copaiba.Porta",    "8884"  ) );
-			boolean copaibaSegura   = Boolean.parseBoolean( getPropriedade( "Copaiba.Segura",   "false" ) );
+			boolean copaibaAtiva    = Boolean.parseBoolean( getPropriedade( "Copaiba.Ativa"   , "true"  ) );
+			int     copaibaPorta    = Integer.parseInt    ( getPropriedade( "Copaiba.Porta"   , "8884"  ) );
+			boolean copaibaSegura   = Boolean.parseBoolean( getPropriedade( "Copaiba.Segura"  , "false" ) );
 			boolean copaibaExpressa = Boolean.parseBoolean( getPropriedade( "Copaiba.Expressa", "true"  ) );
 		
-			copaiba = new Copaiba();
-		
-			copaiba.setPermitirAtribuicao   ( false );
-			copaiba.setPermitirLeitura      ( false );
-			copaiba.setPermitirMensagem     ( false );
-			copaiba.setPermitirRemocao      ( false );
-			copaiba.setPermitirRotina       ( false );
-			copaiba.setPermitirSolicitacao  ( true  );
-			copaiba.setPermitirTransferencia( false );
-			copaiba.setPublicarCertificados ( false );
+            if( copaibaAtiva ){
+                
+                copaiba = new Copaiba();
+                
+                copaiba.setPermitirAtribuicao   ( false );
+                copaiba.setPermitirLeitura      ( false );
+                copaiba.setPermitirMensagem     ( false );
+                copaiba.setPermitirRemocao      ( false );
+                copaiba.setPermitirRotina       ( false );
+                copaiba.setPermitirSolicitacao  ( true  );
+                copaiba.setPermitirTransferencia( false );
+                copaiba.setPublicarCertificados ( false );
+                
+                copaiba.setAuditor( new PacoteAuditor() );
+                
+            }
 			
-			copaiba.setAuditor( new PacoteAuditor() );
-	
-
 			// Inicialização ------------------------------------------------------------
 			
 			if( inicializacao != null ) {
@@ -347,13 +351,17 @@ public final class IpeRoxo {
 
 			// Copaíba: pós-inicialização -----------------------------------------------
 			
-			log.info( getMensagem( null, "Log.Iniciando.Copaiba", copaibaPorta ) );
-			
-			if( copaibaExpressa ){
-				copaiba.abrir( copaibaPorta, copaibaSegura, true );
-			}else{
-				copaiba.abrir( new SocketServidor( copaibaPorta, copaibaSegura, true ) );
-			}
+            if( copaiba != null ){
+
+                log.info( getMensagem( null, "Log.Iniciando.Copaiba", copaibaPorta ) );
+                
+                if( copaibaExpressa ){
+                    copaiba.abrir( copaibaPorta, copaibaSegura, true );
+                }else{
+                    copaiba.abrir( new SocketServidor( copaibaPorta, copaibaSegura, true ) );
+                }
+                
+            }
 			
 		}catch( Exception e ){
 			log.error( e.getMessage(), e );
