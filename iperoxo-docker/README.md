@@ -12,7 +12,7 @@ A aplicação Java/Docker (Back-End) do Ipê-roxo é responsável por gerenciar 
 
 ## Versão Atual
 
-1.0-A22 (Fase de Nascimento)
+1.0-A23 (Fase de Nascimento)
 
 Padrão de versionamento: [JFV](http://joseflavio.com/jfv)
 
@@ -64,7 +64,7 @@ gradle clean build
 Criar imagem:
 
 ```sh
-docker build --force-rm -t joseflavio/iperoxo:1.0-A22 .
+docker build --force-rm -t joseflavio/iperoxo:1.0-A23 .
 ```
 
 Criar volume de dados:
@@ -76,7 +76,7 @@ docker volume create --name iperoxo
 Executar pela primeira vez:
 
 ```sh
-docker run --name="iperoxo" -d -p 8884:8884 -e TZ=America/Belem -v iperoxo:/volume --ip=x.x.x.x --net xxxxxx --restart=unless-stopped joseflavio/iperoxo:1.0-A22
+docker run --name="iperoxo" -d -p 8884:8884 -e TZ=America/Belem -v iperoxo:/volume --ip=x.x.x.x --net xxxxxx --restart=unless-stopped joseflavio/iperoxo:1.0-A23
 ```
 
 > A aplicação Ipê-roxo será inicializada automaticamente no processo de boot, a não ser que seja voluntariamente parada: `docker stop iperoxo`.
@@ -109,5 +109,5 @@ Desinstalar a aplicação Ipê-roxo por completo:
 
 ```sh
 docker rm -f iperoxo
-docker rmi joseflavio/iperoxo:1.0-A22
+docker rmi joseflavio/iperoxo:1.0-A23
 ```
