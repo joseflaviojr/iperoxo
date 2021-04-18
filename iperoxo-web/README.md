@@ -12,7 +12,7 @@ A aplicação Web (Front-End) do Ipê-roxo é responsável por disponibilizar e 
 
 ## Versão Atual
 
-1.0-A22 (Fase de Nascimento)
+1.0-A23 (Fase de Nascimento)
 
 Padrão de versionamento: [JFV](http://joseflavio.com/jfv)
 
