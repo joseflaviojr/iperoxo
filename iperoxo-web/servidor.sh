@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 # SASS - Conversor de SCSS para CSS
 sass --watch sass:css sass-dep:css-dep &

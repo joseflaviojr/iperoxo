@@ -15,6 +15,7 @@
 
 		<properties>
 			<property name="eclipselink.target-database" value="PostgreSQL"/>
+			<!-- <property name="eclipselink.target-database" value="MySQL"/> -->
 			<!-- <property name="eclipselink.logging.level" value="FINE"/> -->
 			<!-- <property name="javax.persistence.schema-generation.database.action" value="drop-and-create" /> -->
 			<!-- <property name="javax.persistence.schema-generation.database.action" value="create" /> -->

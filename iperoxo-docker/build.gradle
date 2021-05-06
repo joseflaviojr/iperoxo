@@ -40,6 +40,7 @@ dependencies {
     implementation 'org.apache.geronimo.specs:geronimo-osgi-locator:1.1'
     implementation 'org.eclipse.persistence:eclipselink:2.7.8'
     implementation 'org.postgresql:postgresql:42.2.19'
+    implementation 'mysql:mysql-connector-java:8.0.23'
     implementation 'org.apache.logging.log4j:log4j-slf4j-impl:2.14.0'
     implementation 'com.joseflavio:iperoxo:1.0-A23'
     testImplementation 'junit:junit:4.12'
@@ -52,7 +53,7 @@ jar {
         attributes 'Implementation-Title': nome,
                    'Implementation-Version': archiveVersion,
                    'Main-Class': 'com.joseflavio.iperoxo.IpeRoxo',
-                   'Class-Path': configurations.runtimeClasspath.collect{ it.getName() }.join(' ')
+                   'Class-Path': configurations.runtimeClasspath.collect{ 'lib/' + it.getName() }.join(' ')
     }
 }
 
@@ -73,33 +74,71 @@ javadoc {
 
 //------------------------------------------------------
 
-task copiarDeps(type: Copy) {
-    from configurations.runtimeClasspath
-    into "$buildDir/deps"
+task distConf(type: Copy) {
+    from "$projectDir/src/main/resources/Configuracao.properties"
+    into "$buildDir/dist"
 }
 
-//------------------------------------------------------
-
-task distDep(type: Copy, dependsOn: [jar]) {
-    from configurations.runtimeClasspath
+task distProj(type: Copy, dependsOn: [jar]) {
     from "$projectDir/dist"
     from "$buildDir/libs/" + rootProject.name + "-" + version + ".jar"
     into "$buildDir/dist"
 }
 
-task distExe {
+task distLib(type: Copy, dependsOn: [jar]) {
+    from configurations.runtimeClasspath
+    into "$buildDir/dist/lib"
+}
+
+task distSh {
     doLast {
-        def destino = new File("build/exe")
+        def destino = new File("$buildDir/exe")
         destino.mkdirs()
-        def comando = new File("build/exe/iperoxo.sh")
         def nomeJar = rootProject.name + "-" + version + ".jar"
-        comando << "#!/bin/sh\n\n"
-        comando << "java -server -XX:+TieredCompilation "
-        comando << "-jar $nomeJar \"\$@\"\n"
+        new File("$buildDir/exe","iperoxo.sh").withWriter("utf-8") { o ->
+            o.write "#!/bin/sh\n\n"
+            o.write "java -server -XX:+TieredCompilation -jar $nomeJar \"\$@\"\n"
+        }
     }
 }
 
-task dist(type: Copy, dependsOn: [distDep, distExe]) {
+task distSh2 {
+    doLast {
+        def destino = new File("$buildDir/exe")
+        destino.mkdirs()
+        def nomeJar = rootProject.name + "-" + version + ".jar"
+        new File("$buildDir/exe", rootProject.name + ".sh").withWriter("utf-8") { o ->
+            o.write "#!/bin/sh\n\n"
+            o.write "java -server -XX:+TieredCompilation -jar $nomeJar Configuracao.properties\n"
+        }
+    }
+}
+
+task distBat {
+    doLast {
+        def destino = new File("$buildDir/exe")
+        destino.mkdirs()
+        def nomeJar = rootProject.name + "-" + version + ".jar"
+        new File("$buildDir/exe","iperoxo.bat").withWriter("utf-8") { o ->
+            o.write "@echo off\r\n\r\n"
+            o.write "java -server -XX:+TieredCompilation -jar $nomeJar %*\r\n"
+        }
+    }
+}
+
+task distBat2 {
+    doLast {
+        def destino = new File("$buildDir/exe")
+        destino.mkdirs()
+        def nomeJar = rootProject.name + "-" + version + ".jar"
+        new File("$buildDir/exe", rootProject.name + ".bat").withWriter("utf-8") { o ->
+            o.write "@echo off\r\n\r\n"
+            o.write "java -server -XX:+TieredCompilation -jar $nomeJar Configuracao.properties\r\n"
+        }
+    }
+}
+
+task dist(type: Copy, dependsOn: [distConf, distProj, distLib, distSh, distSh2, distBat, distBat2]) {
     from "$buildDir/exe"
     into "$buildDir/dist"
     fileMode 0755
