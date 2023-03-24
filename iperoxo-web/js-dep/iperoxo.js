@@ -868,10 +868,10 @@ function getTimestamp( o, z ) {
 
     if     ( o instanceof Date          ) return o.valueOf();
     else if( o instanceof Instant       ) return o.toEpochMilli();
-    else if( o instanceof ZonedDateTime ) return o.toEpochSecond() * 1000;
-    else if( o instanceof LocalDateTime ) return o.toEpochSecond(z) * 1000;
-    else if( o instanceof LocalDate     ) return o.atStartOfDay(z).toEpochSecond() * 1000;
-    else if( o instanceof LocalTime     ) return o.atDate(LocalDate.of(1970,1,1)).toEpochSecond(z) * 1000;
+    else if( o instanceof ZonedDateTime ) return o.toInstant().toEpochMilli();
+    else if( o instanceof LocalDateTime ) return o.toInstant(z).toEpochMilli();
+    else if( o instanceof LocalDate     ) return o.atStartOfDay().toInstant(z).toEpochMilli();
+    else if( o instanceof LocalTime     ) return o.atDate(LocalDate.of(1970,1,1)).toInstant(z).toEpochMilli();
     else throw new Error(typeof(o));
 
 }
