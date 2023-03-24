@@ -28,14 +28,6 @@ Manter o Cordova atualizado.
 npm update -g cordova
 ```
 
-Por questões de compatibilidade, utilizar o **Java Development Kit 8**. Isto poderá ser feito, em algumas distribuições Linux, de acordo com a indicação abaixo.
-
-```sh
-JAVA_HOME=/usr/local/java/jdk8
-update-alternatives --config java
-update-alternatives --config javac
-```
-
 Criar esqueleto de projeto Cordova e entrar no diretório dele.
 
 ```sh
@@ -69,7 +61,6 @@ cordova plugin remove cordova-plugin-whitelist
 Instalar plugins necessários.
 
 ```sh
-cordova plugin add cordova-plugin-whitelist
 cordova plugin add cordova-plugin-device
 cordova plugin add cordova-plugin-network-information
 cordova plugin add cordova-plugin-inappbrowser
@@ -157,13 +148,11 @@ ls -lah www/
 
 > O arquivo `index.html` deve receber alguns ajustes:
 > 
-> - Habilitar a biblioteca `<script src="cordova.js">`.
+> - Habilitar a biblioteca `<script src="cordova.js"></script>`.
 
 ## Compilação e Distribuição
 
 Executar as etapas de compilação conforme a plataforma desejada.
-
-Garantir o uso do **Java Development Kit 8**.
 
 ### Scripts Auxiliares
 
