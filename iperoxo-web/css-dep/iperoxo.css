@@ -213,7 +213,7 @@ img.bandeira-linguagem:hover {
 .bootstrap-select > button {
   color: #495057;
   background-color: white;
-  border-color: #ced4da;
+  border-color: rgb(206, 212, 218);
 }
 
 .media > img {
